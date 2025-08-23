@@ -1,0 +1,31 @@
+RENATO DAP
+Backend Software Engineer | Distributed Systems Developer
+Email: renatodap@example.com | Phone: 555-0100 | LinkedIn: linkedin.com/in/renatodap
+
+SUMMARY
+Backend engineer with expertise in building scalable APIs and microservices. 
+Strong experience with cloud infrastructure, databases, and system design.
+
+TECHNICAL SKILLS
+Languages: Python, Java, Go, JavaScript, SQL
+Frameworks: Django, FastAPI, Spring Boot, Express.js
+Databases: PostgreSQL, MySQL, MongoDB, Redis, Cassandra
+Cloud/DevOps: AWS, Docker, Kubernetes, CI/CD, Terraform
+
+EDUCATION
+Bachelor of Science in Computer Science | University Name | 2026
+- Focus: Distributed Systems and Database Design
+- GPA: 3.8/4.0
+
+EXPERIENCE
+Backend Engineering Intern | Tech Company | Summer 2025
+- Designed RESTful APIs handling 10K+ requests/second
+- Optimized database queries reducing latency by 40%
+- Implemented microservices architecture using Docker/Kubernetes
+
+PROJECTS
+Distributed Task Queue System
+- Built high-throughput task processing system
+- Implemented using Redis and Python with 99.9% uptime
+
+KEYWORDS: ai, cloud

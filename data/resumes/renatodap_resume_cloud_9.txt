@@ -1,0 +1,35 @@
+RENATO DAP
+Software Engineer
+Email: renatodap@example.com | Phone: 555-0100 | LinkedIn: linkedin.com/in/renatodap
+
+SUMMARY
+Versatile software engineer with experience in multiple technologies and domains.
+Strong problem-solving skills and ability to learn quickly.
+
+TECHNICAL SKILLS
+Programming: Python, Java, JavaScript, C++, SQL
+Web Technologies: React, Node.js, Django, REST APIs
+Tools & Platforms: Git, Docker, Linux, AWS, Agile
+Databases: PostgreSQL, MongoDB, MySQL, Redis
+
+EDUCATION
+Bachelor of Science in Computer Science | University Name | 2026
+- GPA: 3.8/4.0
+- Dean's List, Multiple Semesters
+
+EXPERIENCE
+Software Engineering Intern | Tech Company | Summer 2025
+- Developed and maintained software applications
+- Collaborated with team on various projects
+- Gained experience in full software development lifecycle
+
+Previous Internship | Company | Summer 2024
+- Worked on challenging technical problems
+- Contributed to team success
+
+PROJECTS
+Portfolio of diverse projects showcasing technical skills
+- Web applications, APIs, and tools
+- Available on GitHub portfolio
+
+KEYWORDS: api, ai, cloud
