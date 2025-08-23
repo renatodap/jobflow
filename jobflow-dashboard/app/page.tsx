@@ -141,7 +141,7 @@ export default function DashboardPage() {
       <div className="bg-white rounded-lg shadow-sm border p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-semibold text-gray-900">Today's Top Jobs</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Today&apos;s Top Jobs</h2>
             <p className="text-gray-600 mt-1">Perfect matches found today - apply now!</p>
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-500">
