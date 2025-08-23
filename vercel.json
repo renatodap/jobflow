@@ -1,7 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs",
-  "buildCommand": "cd jobflow-dashboard && npm install && npm run build",
-  "outputDirectory": "jobflow-dashboard/.next",
-  "installCommand": "cd jobflow-dashboard && npm install"
+  "framework": "nextjs"
 }

@@ -1,0 +1,25 @@
+# Python files
+*.py
+__pycache__/
+*.pyc
+venv/
+env/
+
+# Data directories
+data/
+logs/
+profile/
+
+# Config files
+config/
+core/
+
+# Documentation
+*.md
+!README.md
+
+# Batch files
+*.bat
+
+# Other non-Next.js files
+jobflow-dashboard/
