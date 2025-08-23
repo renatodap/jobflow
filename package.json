@@ -1,0 +1,13 @@
+{
+  "name": "jobflow-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "jobflow-dashboard"
+  ],
+  "scripts": {
+    "dev": "cd jobflow-dashboard && npm run dev",
+    "build": "cd jobflow-dashboard && npm run build",
+    "start": "cd jobflow-dashboard && npm run start"
+  }
+}

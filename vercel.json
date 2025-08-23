@@ -1,7 +1,6 @@
 {
-  "buildCommand": "cd jobflow-dashboard && npm install && npm run build",
-  "outputDirectory": "jobflow-dashboard/.next",
-  "installCommand": "cd jobflow-dashboard && npm install",
-  "devCommand": "cd jobflow-dashboard && npm run dev",
-  "framework": null
+  "framework": "nextjs",
+  "rootDirectory": "jobflow-dashboard",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install"
 }
