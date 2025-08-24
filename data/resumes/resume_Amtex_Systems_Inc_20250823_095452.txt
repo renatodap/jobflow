@@ -1,0 +1,54 @@
+
+Renato Dap
+renatodapapplications@gmail.com | +1 (812) 262-8002
+linkedin.com/in/renato-prado-82513b297 | github.com/renatodap
+
+SUMMARY
+Passionate software engineer with expertise in Python, TypeScript, JavaScript.
+NCAA Division III Tennis Player - Demonstrates discipline, competitive drive, and peak performance under pressure.
+
+EDUCATION
+Bachelor of Science in Computer Science - Rose-Hulman Institute of Technology - May 2026 (final week)
+
+EXPERIENCE
+Teaching Assistant - Rose-Hulman Institute of Technology (Aug 2024 - Present)
+• Support 30+ students in Object-Oriented Software Development using Java
+• Developed automated grading scripts reducing instructor workload by 60%
+• Mentor students on design patterns, code quality, and software architecture
+
+Investment Banking Intern - Virtus BR Partners (Summer 2024)
+• Built financial models for $50M+ renewable energy infrastructure deals
+• Automated pitch deck generation using Python, saving 15 hours weekly
+• Analyzed market trends and investment opportunities in emerging markets
+PROJECTS
+FeelSharper - AI Fitness Platform:
+• Revolutionary AI-powered fitness application using computer vision for real-time form analysis
+• Technologies: Next.js, TypeScript, FastAPI, OpenCV, MediaPipe, Claude AI, Supabase
+• Real-time pose estimation and movement analysis using computer vision
+• AI-powered workout recommendations and form corrections
+• Live MVP with user testing, demonstrates advanced AI/ML capabilities
+
+JobFlow - AI Job Search Automation:
+• Intelligent job application system with AI-generated resumes and multi-source job discovery
+• Technologies: Python, FastAPI, OpenAI API, Claude API, Next.js, PostgreSQL
+• Reduces job application time from 30 minutes to 2 minutes per application
+• AI-generated tailored resumes and cover letters with 95%+ ATS compatibility
+• Multi-source job discovery across Indeed, LinkedIn, and startup platforms
+
+StudySharper - AI Study Assistant:
+• AI-powered study platform for personalized learning and academic optimization
+• Technologies: React, Node.js, OpenAI API, MongoDB
+• Personalized study plans using AI analysis of learning patterns
+• Smart flashcard generation and spaced repetition algorithms
+• Currently in development with beta user testing planned
+SKILLS
+Languages: Python, TypeScript, JavaScript, Java, SQL
+Frameworks: React, Next.js, FastAPI, Django, Node.js, Spring Boot
+Tools: Git, GitHub, VS Code, Postman, Figma
+
+UNIQUE QUALIFICATIONS
+• NCAA Division III Tennis Player - Demonstrates discipline, competitive drive, and peak performance under pressure
+• Multi-instrumentalist (7+ instruments) - Shows creativity, pattern recognition, and dedication to mastery
+• Polyglot (4 languages) - Portuguese, English, Spanish, French - Excellent communication and international perspective
+• AI Innovation - Built FeelSharper (AI fitness platform) and JobFlow (job automation) from concept to working MVP
+• Business Acumen - Investment Banking experience in Brazil, understands how technology creates business value

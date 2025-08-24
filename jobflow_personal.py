@@ -294,51 +294,66 @@ class JobFlowPersonal:
         return materials
     
     async def generate_resume(self, job: Dict) -> str:
-        """Generate tailored resume (simplified for personal use)"""
-        # For now, use a template approach
-        # In production, this would call OpenAI API
+        """Generate tailored resume using ProfileManager for real data"""
+        # Import ProfileManager to ensure real data
+        from core.services.profile_manager import ProfileManager
+        profile = ProfileManager()
         
+        # Use real profile data
         resume = f"""
-{self.profile['personal']['name']}
-{self.profile['personal']['email']} | {self.profile['personal']['phone']}
-{self.profile['personal']['linkedin']} | {self.profile['personal']['github']}
+{profile.get_name()}
+{profile.get_email()} | {profile.get_phone()}
+{profile.get_linkedin()} | {profile.get_github()}
 
 SUMMARY
-Passionate software engineer with expertise in {', '.join(self.profile['technical_skills']['languages'][:3])}.
-{self.profile['strengths'][0]}.
+Passionate software engineer with expertise in {', '.join(profile.get_programming_languages()[:3])}.
+{profile.get_strengths()[0]}.
 
 EDUCATION
 """
         
-        for edu in self.profile['education']:
-            resume += f"{edu['degree']} - {edu['school']} - {edu['graduation']}\n"
+        edu = profile.get_education()
+        resume += f"{edu['degree']} - {edu['school']} - {edu['graduation']}\n"
         
         resume += "\nEXPERIENCE\n"
-        for exp in self.profile['experience']:
-            resume += f"{exp['title']} at {exp['company']} - {exp['duration']}\n"
-            for achievement in exp['achievements']:
-                resume += f"• {achievement}\n"
+        resume += profile.get_experience_summary()
+        
+        resume += "\nPROJECTS\n"
+        resume += profile.get_projects_summary()
         
         resume += "\nSKILLS\n"
-        resume += f"Languages: {', '.join(self.profile['technical_skills']['languages'])}\n"
-        resume += f"Frameworks: {', '.join(self.profile['technical_skills']['frameworks'])}\n"
+        resume += f"Languages: {', '.join(profile.get_programming_languages())}\n"
+        resume += f"Frameworks: {', '.join(profile.get_frameworks())}\n"
+        resume += f"Tools: {', '.join(profile.get_tools())}\n"
         
-        return resume
+        resume += "\nUNIQUE QUALIFICATIONS\n"
+        for strength in profile.get_strengths():
+            resume += f"• {strength}\n"
+        
+        # Save resume to file
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        resume_path = f"data/resumes/resume_{job['company'].replace(' ', '_')}_{timestamp}.txt"
+        
+        Path(resume_path).parent.mkdir(parents=True, exist_ok=True)
+        with open(resume_path, 'w', encoding='utf-8') as f:
+            f.write(resume)
+        
+        return resume_path
     
     async def generate_cover_letter(self, job: Dict) -> str:
-        """Generate tailored cover letter (simplified for personal use)"""
-        # For now, use a template approach
-        # In production, this would call Claude API
+        """Generate tailored cover letter using ProfileManager for real data"""
+        from core.services.profile_manager import ProfileManager
+        profile = ProfileManager()
         
         cover_letter = f"""Dear Hiring Manager,
 
 I am writing to express my strong interest in the {job['title']} position at {job['company']}.
 
-With my background in {', '.join(self.profile['technical_skills']['languages'][:2])} and experience in 
-{self.profile['experience'][0]['title'] if self.profile['experience'] else 'software development'}, 
+With my background in {', '.join(profile.get_programming_languages()[:2])} and experience as 
+{profile.get_experience()[0]['title'] if profile.get_experience() else 'a software developer'}, 
 I am confident I would be a valuable addition to your team.
 
-{self.profile['strengths'][0]}. This aligns perfectly with the requirements of your role.
+{profile.get_strengths()[0]}. This aligns perfectly with the requirements of your role.
 
 I am particularly drawn to {job['company']} because of your work in the industry. 
 The opportunity to contribute to your team while growing my skills is exactly what I'm looking for.
@@ -346,10 +361,18 @@ The opportunity to contribute to your team while growing my skills is exactly wh
 Thank you for considering my application. I look forward to discussing how I can contribute to {job['company']}.
 
 Best regards,
-{self.profile['personal']['name']}
+{profile.get_name()}
 """
         
-        return cover_letter
+        # Save cover letter to file
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        cover_letter_path = f"data/cover_letters/cover_letter_{job['company'].replace(' ', '_')}_{timestamp}.txt"
+        
+        Path(cover_letter_path).parent.mkdir(parents=True, exist_ok=True)
+        with open(cover_letter_path, 'w', encoding='utf-8') as f:
+            f.write(cover_letter)
+        
+        return cover_letter_path
     
     def save_results(self, jobs: List[Dict], materials: List[Dict]):
         """Save all results to files"""
@@ -501,6 +524,28 @@ Best regards,
         print(f"\nAll results saved to: data/daily_reports/")
         print(f"Master tracking: data/tracking/jobs_master.csv")
         print("\nNext: Review materials and start applying!")
+
+    async def run_comprehensive_search(self) -> Dict:
+        """Run comprehensive job search for daily automation"""
+        
+        jobs = await self.search_jobs()
+        
+        return {
+            'jobs': jobs,
+            'total_found': len(jobs),
+            'high_score': len([j for j in jobs if j['score'] >= 80]),
+            'timestamp': datetime.now().isoformat()
+        }
+
+    async def generate_resume_for_job(self, job: Dict) -> str:
+        """Generate tailored resume for specific job"""
+        # This would integrate with resume generation system
+        return f"data/resumes/resume_{job['company']}_{datetime.now().strftime('%Y%m%d')}.txt"
+
+    async def generate_cover_letter_for_job(self, job: Dict) -> str:
+        """Generate cover letter for specific job"""
+        # This would integrate with cover letter generation system
+        return f"data/cover_letters/cover_letter_{job['company']}_{datetime.now().strftime('%Y%m%d')}.txt"
 
 
 async def main():

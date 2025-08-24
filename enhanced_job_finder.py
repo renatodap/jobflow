@@ -132,215 +132,159 @@ class EnhancedJobFinder:
         return self.resume_types[resume_type]
     
     def create_resume_file(self, resume_name: str, resume_type: str, sample_job: Dict):
-        """Create a resume file tailored for the job type"""
+        """Create a resume file tailored for the job type using REAL profile data"""
         resume_path = Path(f'data/resumes/{resume_name}.txt')
         
-        # Resume templates based on type
-        templates = {
-            'ml': """RENATO DAP
-Machine Learning Engineer | AI Systems Developer
-Email: renatodap@example.com | Phone: 555-0100 | LinkedIn: linkedin.com/in/renatodap
-
-SUMMARY
-Passionate Machine Learning Engineer with strong foundation in deep learning, NLP, and computer vision. 
-Experience with PyTorch, TensorFlow, and scalable ML systems. Seeking to apply AI expertise to solve real-world problems.
-
-TECHNICAL SKILLS
-Languages: Python, R, SQL, Java, C++
-ML/AI: PyTorch, TensorFlow, Scikit-learn, Keras, OpenCV, NLTK, SpaCy
-Tools: Docker, Kubernetes, AWS SageMaker, MLflow, Weights & Biases
-Databases: PostgreSQL, MongoDB, Redis, Elasticsearch
-
-EDUCATION
-Bachelor of Science in Computer Science | University Name | 2026
-- Relevant Courses: Machine Learning, Deep Learning, Computer Vision, NLP
-- GPA: 3.8/4.0
-
-EXPERIENCE
-ML Engineering Intern | Tech Company | Summer 2025
-- Developed and deployed recommendation system serving 1M+ users
-- Improved model accuracy by 15% through feature engineering
-- Built data pipelines processing 100GB+ daily
-
-PROJECTS
-Neural Network Image Classifier
-- Built CNN achieving 95% accuracy on custom dataset
-- Deployed model using FastAPI and Docker
-""",
-            'backend': """RENATO DAP
-Backend Software Engineer | Distributed Systems Developer
-Email: renatodap@example.com | Phone: 555-0100 | LinkedIn: linkedin.com/in/renatodap
-
-SUMMARY
-Backend engineer with expertise in building scalable APIs and microservices. 
-Strong experience with cloud infrastructure, databases, and system design.
-
-TECHNICAL SKILLS
-Languages: Python, Java, Go, JavaScript, SQL
-Frameworks: Django, FastAPI, Spring Boot, Express.js
-Databases: PostgreSQL, MySQL, MongoDB, Redis, Cassandra
-Cloud/DevOps: AWS, Docker, Kubernetes, CI/CD, Terraform
-
-EDUCATION
-Bachelor of Science in Computer Science | University Name | 2026
-- Focus: Distributed Systems and Database Design
-- GPA: 3.8/4.0
-
-EXPERIENCE
-Backend Engineering Intern | Tech Company | Summer 2025
-- Designed RESTful APIs handling 10K+ requests/second
-- Optimized database queries reducing latency by 40%
-- Implemented microservices architecture using Docker/Kubernetes
-
-PROJECTS
-Distributed Task Queue System
-- Built high-throughput task processing system
-- Implemented using Redis and Python with 99.9% uptime
-""",
-            'frontend': """RENATO DAP
-Frontend Software Engineer | UI/UX Developer
-Email: renatodap@example.com | Phone: 555-0100 | LinkedIn: linkedin.com/in/renatodap
-
-SUMMARY
-Frontend developer passionate about creating intuitive user experiences.
-Expertise in modern JavaScript frameworks and responsive design.
-
-TECHNICAL SKILLS
-Languages: JavaScript, TypeScript, HTML5, CSS3, Python
-Frameworks: React, Vue.js, Angular, Next.js, Redux
-Tools: Webpack, Babel, Jest, Cypress, Figma, Git
-Design: Responsive Design, Accessibility (WCAG), Material-UI, Tailwind
-
-EDUCATION
-Bachelor of Science in Computer Science | University Name | 2026
-- Focus: Human-Computer Interaction
-- GPA: 3.8/4.0
-
-EXPERIENCE
-Frontend Development Intern | Tech Company | Summer 2025
-- Built responsive React components used by 100K+ users
-- Improved page load time by 50% through optimization
-- Collaborated with designers to implement pixel-perfect UIs
-
-PROJECTS
-E-commerce Platform Frontend
-- Developed full-featured shopping site with React and Redux
-- Implemented real-time updates using WebSockets
-""",
-            'fullstack': """RENATO DAP
-Full Stack Software Engineer
-Email: renatodap@example.com | Phone: 555-0100 | LinkedIn: linkedin.com/in/renatodap
-
-SUMMARY
-Full stack engineer with experience across the entire web development stack.
-Comfortable with both frontend frameworks and backend services.
-
-TECHNICAL SKILLS
-Frontend: React, TypeScript, HTML/CSS, Redux, Next.js
-Backend: Node.js, Python, Django, Express, GraphQL
-Databases: PostgreSQL, MongoDB, Redis
-DevOps: Docker, AWS, CI/CD, Nginx
-
-EDUCATION
-Bachelor of Science in Computer Science | University Name | 2026
-- Full Stack Web Development Focus
-- GPA: 3.8/4.0
-
-EXPERIENCE
-Full Stack Engineering Intern | Tech Company | Summer 2025
-- Developed end-to-end features from database to UI
-- Built RESTful APIs and React frontends
-- Deployed applications using Docker and AWS
-
-PROJECTS
-Social Media Platform Clone
-- Built Twitter-like app with React, Node.js, and PostgreSQL
-- Implemented real-time messaging with Socket.io
-""",
-            'newgrad': """RENATO DAP
-Software Engineer - New Graduate 2026
-Email: renatodap@example.com | Phone: 555-0100 | LinkedIn: linkedin.com/in/renatodap
-
-SUMMARY
-Recent Computer Science graduate with strong foundation in software engineering.
-Internship experience at leading tech companies. Eager to contribute to innovative projects.
-
-TECHNICAL SKILLS
-Languages: Python, Java, JavaScript, C++, SQL
-Web: React, Node.js, HTML/CSS, REST APIs
-Tools: Git, Docker, Linux, Agile/Scrum
-Databases: PostgreSQL, MongoDB, MySQL
-
-EDUCATION
-Bachelor of Science in Computer Science | University Name | Expected: May 2026
-- GPA: 3.8/4.0
-- Relevant Courses: Data Structures, Algorithms, Software Engineering, Databases
-
-EXPERIENCE
-Software Engineering Intern | Major Tech Company | Summer 2025
-- Developed features for product used by millions
-- Collaborated with cross-functional teams
-- Participated in code reviews and design discussions
-
-Software Development Intern | Startup | Summer 2024
-- Built full-stack web applications
-- Worked in fast-paced agile environment
-
-PROJECTS
-Multiple significant projects demonstrating various skills
-- Web applications, mobile apps, and system tools
-- Open source contributions on GitHub
-""",
-            'general': """RENATO DAP
-Software Engineer
-Email: renatodap@example.com | Phone: 555-0100 | LinkedIn: linkedin.com/in/renatodap
-
-SUMMARY
-Versatile software engineer with experience in multiple technologies and domains.
-Strong problem-solving skills and ability to learn quickly.
-
-TECHNICAL SKILLS
-Programming: Python, Java, JavaScript, C++, SQL
-Web Technologies: React, Node.js, Django, REST APIs
-Tools & Platforms: Git, Docker, Linux, AWS, Agile
-Databases: PostgreSQL, MongoDB, MySQL, Redis
-
-EDUCATION
-Bachelor of Science in Computer Science | University Name | 2026
-- GPA: 3.8/4.0
-- Dean's List, Multiple Semesters
-
-EXPERIENCE
-Software Engineering Intern | Tech Company | Summer 2025
-- Developed and maintained software applications
-- Collaborated with team on various projects
-- Gained experience in full software development lifecycle
-
-Previous Internship | Company | Summer 2024
-- Worked on challenging technical problems
-- Contributed to team success
-
-PROJECTS
-Portfolio of diverse projects showcasing technical skills
-- Web applications, APIs, and tools
-- Available on GitHub portfolio
-"""
-        }
+        # Import ProfileManager to get real candidate data
+        from core.services.profile_manager import ProfileManager
+        profile = ProfileManager()
         
-        # Get appropriate template
-        resume_content = templates.get(resume_type, templates['general'])
+        # Get keywords from the job for ATS optimization
+        keywords = self.extract_keywords_from_job(sample_job)
         
-        # Add job-specific keywords at the bottom
-        keywords = self.extract_keywords(sample_job)
-        if keywords:
-            resume_content += f"\nKEYWORDS: {', '.join(keywords)}"
+        # Header with real contact info
+        header = f"""{profile.get_name().upper()}
+{profile.get_email()} | {profile.get_phone()}
+{profile.get_github()} | {profile.get_linkedin()}"""
         
-        # Save resume
+        # Education section with real data
+        education = f"""EDUCATION
+{profile.get_degree()} | GPA: {profile.get_gpa()}
+{profile.get_school()} | Graduating {profile.get_graduation()}
+Relevant Coursework: {', '.join(profile.get_coursework()[:4])}"""
+        
+        # Experience section with real data
+        experience = f"""EXPERIENCE
+{profile.get_experience_summary()}"""
+        
+        # Projects section with real data
+        projects = f"""PROJECTS
+{profile.get_projects_summary()}"""
+        
+        # Strengths with real data
+        strengths = f"""UNIQUE QUALIFICATIONS
+{chr(10).join(f'• {strength}' for strength in profile.get_strengths())}
+• {profile.get_visa_status()}"""
+        
+        # Resume content based on type with REAL data
+        if resume_type == 'ml':
+            summary = f"Passionate Machine Learning Engineer with hands-on experience in AI/ML systems. Built FeelSharper (AI fitness platform) with computer vision for real-time form analysis. Strong foundation in {', '.join(profile.get_ai_ml_skills()[:3])}."
+            tech_skills = f"""TECHNICAL SKILLS
+Languages: {', '.join(profile.get_programming_languages())}
+AI/ML: {', '.join(profile.get_ai_ml_skills())}
+Frameworks: {', '.join(profile.get_frameworks()[:5])}
+Tools: {', '.join(profile.get_tools()[:6])}"""
+            keywords_section = f"KEYWORDS: machine learning, ai, python, {', '.join(profile.get_ai_ml_skills()[:5]).lower()}"
+        
+        elif resume_type == 'backend':
+            summary = f"Backend engineer with expertise in building scalable APIs and microservices. Built JobFlow automation system with FastAPI and created financial models automation at Virtus BR Partners."
+            tech_skills = f"""TECHNICAL SKILLS
+Languages: {', '.join(profile.get_programming_languages())}
+Backend: {', '.join([f for f in profile.get_frameworks() if f in ['FastAPI', 'Django', 'Spring Boot', 'Node.js']])}
+Databases: {', '.join(profile.get_databases())}
+Cloud: {', '.join(profile.get_cloud_skills())}
+Tools: {', '.join(profile.get_tools()[:6])}"""
+            keywords_section = f"KEYWORDS: backend, api, python, {', '.join(profile.get_databases()[:3]).lower()}, microservices"
+        
+        elif resume_type == 'frontend':
+            summary = f"Frontend developer passionate about creating exceptional user experiences. Built FeelSharper's responsive interface using Next.js and TypeScript with real-time computer vision integration."
+            tech_skills = f"""TECHNICAL SKILLS
+Frontend: React, Next.js, TypeScript, JavaScript, HTML5, CSS3
+Frameworks: {', '.join([f for f in profile.get_frameworks() if f in ['React', 'Next.js', 'Vue.js']])}
+Tools: {', '.join(profile.get_tools()[:6])}
+Design: Tailwind CSS, Responsive Design, UI/UX"""
+            keywords_section = "KEYWORDS: frontend, react, next.js, typescript, javascript, ui, ux"
+        
+        elif resume_type == 'fullstack':
+            summary = f"Full stack engineer with experience across the entire development stack. Built FeelSharper (AI fitness platform) from concept to deployment using Next.js, FastAPI, and advanced AI integration."
+            tech_skills = f"""TECHNICAL SKILLS
+Frontend: {', '.join([f for f in profile.get_frameworks() if f in ['React', 'Next.js']])}
+Backend: {', '.join([f for f in profile.get_frameworks() if f in ['FastAPI', 'Django', 'Node.js']])}
+Languages: {', '.join(profile.get_programming_languages())}
+Databases: {', '.join(profile.get_databases())}
+Tools: {', '.join(profile.get_tools()[:6])}"""
+            keywords_section = "KEYWORDS: full stack, react, next.js, python, fastapi, typescript"
+        
+        elif resume_type == 'dataeng':
+            summary = f"Data engineer with experience in building automated systems and data processing pipelines. Built JobFlow's intelligent job discovery system and automated financial model generation at Virtus BR Partners."
+            tech_skills = f"""TECHNICAL SKILLS
+Languages: {', '.join(profile.get_programming_languages())}
+Data: SQL, {', '.join(profile.get_databases())}, Data Pipelines
+Cloud: {', '.join(profile.get_cloud_skills())}
+Tools: {', '.join(profile.get_tools()[:6])}"""
+            keywords_section = f"KEYWORDS: data engineer, python, sql, {', '.join(profile.get_databases()[:3]).lower()}, etl"
+        
+        elif resume_type == 'datascience':
+            summary = f"Data scientist with strong foundation in AI/ML and statistical analysis. Built FeelSharper's computer vision system for real-time form analysis and created predictive models for investment banking."
+            tech_skills = f"""TECHNICAL SKILLS
+Languages: {', '.join(profile.get_programming_languages())}
+AI/ML: {', '.join(profile.get_ai_ml_skills())}
+Data Science: SQL, Data Analysis, Statistical Modeling
+Tools: {', '.join(profile.get_tools()[:6])}"""
+            keywords_section = f"KEYWORDS: data science, machine learning, python, {', '.join(profile.get_ai_ml_skills()[:3]).lower()}"
+        
+        elif resume_type == 'newgrad':
+            summary = f"Computer Science student graduating {profile.get_graduation()} with hands-on experience in AI/ML, full-stack development, and team leadership. Built innovative projects including FeelSharper and JobFlow while maintaining strong academic performance."
+            tech_skills = f"""TECHNICAL SKILLS
+Languages: {', '.join(profile.get_programming_languages())}
+Frameworks: {', '.join(profile.get_frameworks()[:6])}
+Tools: {', '.join(profile.get_tools()[:6])}
+Databases: {', '.join(profile.get_databases())}"""
+            keywords_section = f"KEYWORDS: new grad, software engineer, {profile.get_graduation().split()[-1]}, computer science"
+        
+        else:  # general
+            summary = f"Versatile software engineer with experience across multiple domains including AI/ML, web development, and automation. Strong problem-solving skills demonstrated through innovative projects and international business experience."
+            tech_skills = f"""TECHNICAL SKILLS
+Languages: {', '.join(profile.get_programming_languages())}
+Frameworks: {', '.join(profile.get_frameworks()[:6])}
+Tools: {', '.join(profile.get_tools()[:6])}
+Databases: {', '.join(profile.get_databases())}"""
+            keywords_section = "KEYWORDS: software engineer, python, typescript, full stack, ai"
+        
+        # Combine all sections
+        resume_content = f"""{header}
+
+SUMMARY
+{summary}
+
+{tech_skills}
+
+{education}
+
+{experience}
+
+{projects}
+
+{strengths}
+
+{keywords_section}, {', '.join(keywords[:5]).lower()}"""
+        
+        # Write the resume file
         with open(resume_path, 'w', encoding='utf-8') as f:
             f.write(resume_content)
         
-        print(f"  Created resume: {resume_name} for {resume_type} positions")
+        print(f"Created resume: {resume_name} for {resume_type} positions")
     
+    def extract_keywords_from_job(self, job: Dict) -> list:
+        """Extract keywords from job for ATS optimization"""
+        description = f"{job.get('title', '')} {job.get('description', '')}".lower()
+        
+        keywords = []
+        skill_keywords = [
+            'python', 'java', 'javascript', 'typescript', 'react', 'node.js', 'nodejs',
+            'sql', 'postgresql', 'mongodb', 'aws', 'docker', 'kubernetes', 'git',
+            'machine learning', 'ai', 'ml', 'deep learning', 'tensorflow', 'pytorch',
+            'fastapi', 'django', 'flask', 'spring', 'express', 'next.js', 'nextjs',
+            'vue', 'angular', 'html', 'css', 'sass', 'graphql', 'rest', 'api',
+            'ci/cd', 'agile', 'scrum', 'jira', 'linux', 'bash', 'cloud', 'azure', 'gcp'
+        ]
+        
+        for skill in skill_keywords:
+            if skill in description:
+                keywords.append(skill.title() if len(skill) > 3 else skill.upper())
+        
+        return keywords[:10]
+
     def extract_keywords(self, job: Dict) -> List[str]:
         """Extract relevant keywords from job posting"""
         text = f"{job.get('title', '')} {job.get('description', '')}".lower()

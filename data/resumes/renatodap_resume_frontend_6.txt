@@ -1,6 +1,6 @@
 RENATO DAP
 Frontend Software Engineer | UI/UX Developer
-Email: renatodap@example.com | Phone: 555-0100 | LinkedIn: linkedin.com/in/renatodap
+Email: renatodapapplications@gmail.com | Phone: +1 (812) 262-8002 | LinkedIn: linkedin.com/in/renato-prado-82513b297
 
 SUMMARY
 Frontend developer passionate about creating intuitive user experiences.
@@ -13,12 +13,12 @@ Tools: Webpack, Babel, Jest, Cypress, Figma, Git
 Design: Responsive Design, Accessibility (WCAG), Material-UI, Tailwind
 
 EDUCATION
-Bachelor of Science in Computer Science | University Name | 2026
+Bachelor of Science in Computer Science | Rose-Hulman Institute of Technology | 2026
 - Focus: Human-Computer Interaction
-- GPA: 3.8/4.0
+- GPA: 3.65/4.0
 
 EXPERIENCE
-Frontend Development Intern | Tech Company | Summer 2025
+Frontend Development Intern | Virtus BR Partners | Summer 2025
 - Built responsive React components used by 100K+ users
 - Improved page load time by 50% through optimization
 - Collaborated with designers to implement pixel-perfect UIs

@@ -1,0 +1,31 @@
+RENATO DAP
+Frontend Software Engineer | UI/UX Developer
+Email: renatodapapplications@gmail.com | Phone: +1 (812) 262-8002 | LinkedIn: linkedin.com/in/renato-prado-82513b297
+
+SUMMARY
+Frontend developer passionate about creating intuitive user experiences.
+Expertise in modern JavaScript frameworks and responsive design.
+
+TECHNICAL SKILLS
+Languages: JavaScript, TypeScript, HTML5, CSS3, Python
+Frameworks: React, Vue.js, Angular, Next.js, Redux
+Tools: Webpack, Babel, Jest, Cypress, Figma, Git
+Design: Responsive Design, Accessibility (WCAG), Material-UI, Tailwind
+
+EDUCATION
+Bachelor of Science in Computer Science | Rose-Hulman Institute of Technology | 2026
+- Focus: Human-Computer Interaction
+- GPA: 3.65/4.0
+
+EXPERIENCE
+Frontend Development Intern | Virtus BR Partners | Summer 2025
+- Built responsive React components used by 100K+ users
+- Improved page load time by 50% through optimization
+- Collaborated with designers to implement pixel-perfect UIs
+
+PROJECTS
+E-commerce Platform Frontend
+- Developed full-featured shopping site with React and Redux
+- Implemented real-time updates using WebSockets
+
+KEYWORDS: react

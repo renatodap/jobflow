@@ -1,0 +1,50 @@
+Subject: Daily Job Report - 2 Opportunities Found
+
+
+# Daily Job Search Report
+
+## Search Summary
+* 2 high-quality job opportunities found
+* 2 complete application packages generated  
+* Personalized learning path created
+
+## Top Opportunities Today
+
+
+### 1. Software Engineer at Tech Corp
+- **Location**: Remote
+- **Salary**: $80,000 - $120,000
+- **Match Score**: 85/100
+- **Apply**: https://example.com/job1
+- **Resume**: data/resumes/resume_software_engineer.txt
+- **Cover Letter**: data/cover_letters/cover_letter_tech_corp.txt
+
+
+### 2. Python Developer at StartupCo
+- **Location**: San Francisco
+- **Salary**: $90,000 - $130,000
+- **Match Score**: 92/100
+- **Apply**: https://example.com/job2
+- **Resume**: data/resumes/resume_python_developer.txt
+- **Cover Letter**: data/cover_letters/cover_letter_startup_co.txt
+
+
+## Learning Path for Today
+
+**Skills to focus on:**
+- React
+- Docker
+- AWS
+
+**Projects to build:**
+- E-commerce API
+- DevOps Pipeline
+
+## Next Steps
+1. Review each opportunity above
+2. Use provided resume and cover letter for applications
+3. Focus learning time on recommended skills
+4. Build suggested projects to strengthen profile
+
+---
+*This report was generated automatically by JobFlow*

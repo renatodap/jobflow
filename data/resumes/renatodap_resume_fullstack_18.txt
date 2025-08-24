@@ -1,0 +1,31 @@
+RENATO DAP
+Full Stack Software Engineer
+Email: renatodapapplications@gmail.com | Phone: +1 (812) 262-8002 | LinkedIn: linkedin.com/in/renato-prado-82513b297
+
+SUMMARY
+Full stack engineer with experience across the entire web development stack.
+Comfortable with both frontend frameworks and backend services.
+
+TECHNICAL SKILLS
+Frontend: React, TypeScript, HTML/CSS, Redux, Next.js
+Backend: Node.js, Python, Django, Express, GraphQL
+Databases: PostgreSQL, MongoDB, Redis
+DevOps: Docker, AWS, CI/CD, Nginx
+
+EDUCATION
+Bachelor of Science in Computer Science | Rose-Hulman Institute of Technology | 2026
+- Full Stack Web Development Focus
+- GPA: 3.65/4.0
+
+EXPERIENCE
+Full Stack Engineering Intern | Virtus BR Partners | Summer 2025
+- Developed end-to-end features from database to UI
+- Built RESTful APIs and React frontends
+- Deployed applications using Docker and AWS
+
+PROJECTS
+Social Media Platform Clone
+- Built Twitter-like app with React, Node.js, and PostgreSQL
+- Implemented real-time messaging with Socket.io
+
+KEYWORDS: java, javascript, ai

@@ -62,22 +62,27 @@ class AIContentGenerator:
         else:
             return self._generate_fallback_resume(job, candidate_profile)
     
-    async def _generate_resume_openai(self, job: Dict, profile: Dict) -> Dict:
+    async def _generate_resume_openai(self, job: Dict, profile_dict: Dict) -> Dict:
         """Generate resume using OpenAI GPT-4"""
+        
+        # Import and use ProfileManager to ensure real data
+        from .profile_manager import ProfileManager
+        profile = ProfileManager()
         
         # Craft optimal prompt for resume generation
         system_prompt = """You are an expert ATS-optimized resume writer specializing in tech positions for new graduates. 
         Your resumes consistently achieve 95%+ ATS scores and get interviews.
         
+        CRITICAL: You must ONLY use the real candidate information provided. NEVER create fake data, fake companies, fake experience, fake contact information, or fake achievements. If information is missing, leave it out or mark it as "Available upon request".
+        
         Key principles:
-        0. Never create fake data about the applicant
         1. Use exact keywords from the job description
         2. Quantify achievements with numbers and percentages
         3. Start bullets with strong action verbs
         4. Prioritize relevant experience and skills
         5. Keep formatting clean and ATS-friendly"""
         
-        user_prompt = f"""Create a perfectly tailored resume for this specific position.
+        user_prompt = f"""Create a perfectly tailored resume for this specific position using ONLY the real candidate data provided.
 
 JOB DETAILS:
 Company: {job.get('company', 'Unknown')}
@@ -86,32 +91,19 @@ Location: {job.get('location', 'United States')}
 Description: {job.get('description', '')[:1500]}
 Required Skills: {self._extract_skills_from_job(job)}
 
-CANDIDATE PROFILE:
-Name: {profile.get('name')}
-Education: {profile.get('degree')} from {profile.get('university')}
-Graduation: {profile.get('graduation')}
-GPA: {profile.get('gpa')}
-Visa Status: {profile.get('visa_status')}
-
-EXPERIENCE & PROJECTS:
-{profile.get('base_resume')}
-
-UNIQUE STRENGTHS:
-- NCAA Division III Tennis Player
-- Multi-instrumentalist (7+ instruments)
-- Fluent in 4 languages
-- International experience
-- Excellent communication and human skills
+{profile.get_complete_background()}
 
 INSTRUCTIONS:
-1. Analyze the job requirements and extract key technical keywords
-2. Reorganize experience to highlight most relevant items first
-3. Rewrite bullet points to include job-specific keywords naturally
-4. Emphasize projects/experience that match their tech stack
-5. Include a brief professional summary tailored to this role
-6. Format in clean markdown suitable for ATS parsing
+1. Use ONLY the real data provided above - NO fake data, companies, or experiences
+2. Analyze the job requirements and extract key technical keywords
+3. Reorganize experience to highlight most relevant items first
+4. Rewrite bullet points to include job-specific keywords naturally
+5. Emphasize projects/experience that match their tech stack
+6. Include a brief professional summary tailored to this role
+7. Use contact info exactly as provided: {profile.get_email()}, {profile.get_phone()}
+8. Format in clean markdown suitable for ATS parsing
 
-Generate a complete, tailored resume that will score 95%+ on ATS systems."""
+Generate a complete, tailored resume that will score 95%+ on ATS systems using ONLY real candidate data."""
         
         try:
             async with httpx.AsyncClient(timeout=30) as client:
@@ -157,10 +149,16 @@ Generate a complete, tailored resume that will score 95%+ on ATS systems."""
             print(f"OpenAI resume generation error: {e}")
             return self._generate_fallback_resume(job, profile)
     
-    async def _generate_resume_claude(self, job: Dict, profile: Dict) -> Dict:
+    async def _generate_resume_claude(self, job: Dict, profile_dict: Dict) -> Dict:
         """Generate resume using Claude (alternative approach)"""
         
-        prompt = f"""Create an ATS-optimized resume tailored for this specific job.
+        # Import and use ProfileManager to ensure real data
+        from .profile_manager import ProfileManager
+        profile = ProfileManager()
+        
+        prompt = f"""Create an ATS-optimized resume tailored for this specific job using ONLY real candidate data.
+
+CRITICAL: You must ONLY use the real candidate information provided below. NEVER create fake data, fake companies, fake experience, fake contact information, or fake achievements.
 
 <job_details>
 Company: {job.get('company')}
@@ -168,21 +166,20 @@ Position: {job.get('title')}
 Description: {job.get('description', '')[:1500]}
 </job_details>
 
-<candidate>
-Name: {profile.get('name')}
-Education: {profile.get('degree')} from {profile.get('university')} (Graduating {profile.get('graduation')})
-GPA: {profile.get('gpa')}
-Experience: {profile.get('base_resume')}
-</candidate>
+<real_candidate_data>
+{profile.get_complete_background()}
+</real_candidate_data>
 
 Create a tailored resume that:
-1. Uses keywords from the job description for ATS optimization
-2. Highlights relevant experience and projects
-3. Quantifies achievements
-4. Shows progression and growth
-5. Emphasizes technical skills that match requirements
+1. Uses ONLY the real data provided above
+2. Uses keywords from the job description for ATS optimization
+3. Highlights relevant experience and projects
+4. Quantifies achievements with real numbers
+5. Shows progression and growth
+6. Emphasizes technical skills that match requirements
+7. Uses exact contact info: {profile.get_email()}, {profile.get_phone()}
 
-Format in clean markdown."""
+Format in clean markdown. NO FAKE DATA ALLOWED."""
         
         try:
             async with httpx.AsyncClient(timeout=30) as client:
@@ -243,11 +240,17 @@ Format in clean markdown."""
         else:
             return self._generate_fallback_cover_letter(job, candidate_profile)
     
-    async def _generate_cover_letter_claude(self, job: Dict, profile: Dict) -> Dict:
+    async def _generate_cover_letter_claude(self, job: Dict, profile_dict: Dict) -> Dict:
         """Generate cover letter using Claude (best for creative writing)"""
         
+        # Import and use ProfileManager to ensure real data
+        from .profile_manager import ProfileManager
+        profile = ProfileManager()
+        
         # Claude excels at natural, engaging writing
-        prompt = f"""Write a compelling, authentic cover letter for this position.
+        prompt = f"""Write a compelling, authentic cover letter for this position using ONLY real candidate data.
+
+CRITICAL: You must ONLY use the real candidate information provided below. NEVER create fake data, fake companies, fake experience, or fake achievements.
 
 <job>
 Company: {job.get('company')}
@@ -257,29 +260,24 @@ Description: {job.get('description', '')[:1000]}
 Company Culture: {self._infer_company_culture(job)}
 </job>
 
-<candidate>
-Name: {profile.get('name')}
-Background: Computer Science student at Rose-Hulman, graduating {profile.get('graduation')}
-Unique Qualities:
-- NCAA Division III Tennis Player (discipline, teamwork, competitive drive)
-- Multi-instrumentalist with 7+ instruments (creativity, dedication to mastery)
-- Fluent in 4 languages (Portuguese, English, Spanish, French)
-- International perspective (Brazilian studying in US)
-- Built FeelSharper (AI fitness platform) and JobFlow (job application system)
-- Teaching Assistant experience (communication, mentorship)
-- Investment Banking internship in Brazil (business acumen)
-</candidate>
+<real_candidate_data>
+{profile.get_complete_background()}
+</real_candidate_data>
 
 <instructions>
 Write a cover letter that:
-1. Opens with a compelling hook that connects to the company's mission
-2. Tells a brief story that demonstrates problem-solving ability
-3. Connects unique background (music/tennis/international) to job requirements
-4. Shows genuine enthusiasm for the specific role and company
-5. Demonstrates research about the company
-6. Ends with confidence and clear next steps
-7. Maintains professional yet personable tone
-8. Avoids clichés and generic statements
+1. Uses ONLY the real candidate data provided above
+2. Opens with a compelling hook that connects to the company's mission
+3. Tells a brief story that demonstrates problem-solving ability using real projects/experience
+4. Connects unique background to job requirements
+5. Shows genuine enthusiasm for the specific role and company
+6. Demonstrates research about the company
+7. Ends with confidence and clear next steps
+8. Maintains professional yet personable tone
+9. Avoids clichés and generic statements
+10. Uses exact name and contact info as provided
+
+NO FAKE DATA ALLOWED - use only the authentic background provided.
 </instructions>
 
 The letter should feel authentic, memorable, and demonstrate why this candidate's unique background makes them exceptional for this role."""
@@ -517,73 +515,104 @@ Extract and return as JSON:
         else:
             return 'Mid'
     
-    def _generate_fallback_resume(self, job: Dict, profile: Dict) -> Dict:
+    def _generate_fallback_resume(self, job: Dict, profile_dict: Dict) -> Dict:
         """Generate resume without AI (enhanced template)"""
+        
+        # Import and use ProfileManager to ensure real data
+        from .profile_manager import ProfileManager
+        profile = ProfileManager()
         
         skills = self._extract_skills_from_job(job)
         
-        resume_content = f"""# {profile.get('name')}
+        resume_content = f"""# {profile.get_name()}
 **Software Engineer | AI Enthusiast | NCAA Athlete**
 
-{profile.get('email')} | {profile.get('phone')}
-{profile.get('github')} | {profile.get('linkedin')}
+{profile.get_email()} | {profile.get_phone()}
+{profile.get_github()} | {profile.get_linkedin()}
 
 ## Professional Summary
-{self._generate_summary_for_job(job, profile)}
+{self._generate_summary_for_job_real(job, profile)}
 
 ## Education
-**{profile.get('degree')}** | GPA: {profile.get('gpa')}
-{profile.get('university')} | Graduating {profile.get('graduation')}
+**{profile.get_degree()}** | GPA: {profile.get_gpa()}
+{profile.get_school()} | Graduating {profile.get_graduation()}
 
 ## Technical Skills
-**Languages**: {', '.join(skills[:5]) if skills else 'Python, TypeScript, Java'}
-**Frameworks**: React, Next.js, FastAPI, Node.js
-**Tools**: Git, Docker, AWS, PostgreSQL
+**Languages**: {', '.join(profile.get_programming_languages())}
+**Frameworks**: {', '.join(profile.get_frameworks())}
+**AI/ML**: {', '.join(profile.get_ai_ml_skills())}
+**Tools**: {', '.join(profile.get_tools())}
 
-## Experience & Projects
-{profile.get('base_resume')}
+## Experience
+{profile.get_experience_summary()}
+
+## Projects
+{profile.get_projects_summary()}
 
 ## Additional Qualifications
-- NCAA Division III Tennis Player
-- Multi-instrumentalist (7+ instruments)
-- Fluent in 4 languages
-- {profile.get('visa_status')}
+{chr(10).join(f'- {strength}' for strength in profile.get_strengths())}
+- {profile.get_visa_status()}
 """
         
         return {
             'content': resume_content,
-            'generator': 'Template Engine',
+            'generator': 'Template Engine (Real Data Only)',
             'ats_optimized': False,
             'generation_date': datetime.now().isoformat()
         }
     
-    def _generate_fallback_cover_letter(self, job: Dict, profile: Dict) -> Dict:
+    def _generate_fallback_cover_letter(self, job: Dict, profile_dict: Dict) -> Dict:
         """Generate cover letter without AI"""
+        
+        # Import and use ProfileManager to ensure real data
+        from .profile_manager import ProfileManager
+        profile = ProfileManager()
         
         cover_letter = f"""Dear Hiring Manager,
 
-I am writing to express my interest in the {job.get('title')} position at {job.get('company')}. As a Computer Science student at Rose-Hulman Institute of Technology graduating in {profile.get('graduation')}, I am excited about the opportunity to contribute to your team.
+I am writing to express my interest in the {job.get('title')} position at {job.get('company')}. As a Computer Science student at {profile.get_school()} graduating in {profile.get_graduation()}, I am excited about the opportunity to contribute to your team.
 
-{self._generate_body_paragraph(job, profile)}
+{self._generate_body_paragraph_real(job, profile)}
 
-My unique background as an NCAA tennis player and multi-instrumentalist has taught me discipline, creativity, and the value of continuous improvement. These qualities, combined with my technical skills and international perspective, position me well to contribute to {job.get('company')}'s success.
+My unique background combining the disciplines of {', '.join(profile.get_strengths()[:3])} has taught me discipline, creativity, and the value of continuous improvement. These qualities, combined with my technical skills and international perspective, position me well to contribute to {job.get('company')}'s success.
 
-I am available for full-time employment starting July 2026 and have F-1 visa status with 3 years of OPT eligibility. I would welcome the opportunity to discuss how my skills and enthusiasm can contribute to your team.
+I am available for full-time employment starting {profile.get_availability()} and have {profile.get_visa_status()}. I would welcome the opportunity to discuss how my skills and enthusiasm can contribute to your team.
 
 Thank you for your consideration.
 
 Sincerely,
-{profile.get('name')}"""
+{profile.get_name()}"""
         
         return {
             'content': cover_letter,
-            'generator': 'Template Engine',
+            'generator': 'Template Engine (Real Data Only)',
             'personalization_level': 'basic',
             'generation_date': datetime.now().isoformat()
         }
     
+    def _generate_summary_for_job_real(self, job: Dict, profile) -> str:
+        """Generate professional summary for job using real data"""
+        
+        projects_text = ', '.join([p['name'] for p in profile.get_projects()[:2]])
+        
+        if 'ai' in job.get('title', '').lower() or 'ml' in job.get('description', '').lower():
+            return f"Passionate computer science student with hands-on experience in AI/ML seeking {job.get('title')} position. Proven track record building innovative applications including {projects_text}."
+        else:
+            return f"Motivated computer science student with strong foundation in full-stack development seeking {job.get('title')} position. Built impactful projects including {projects_text}, combining technical expertise with unique perspective."
+    
+    def _generate_body_paragraph_real(self, job: Dict, profile) -> str:
+        """Generate body paragraph for cover letter using real data"""
+        
+        projects = profile.get_projects()
+        experience = profile.get_experience()
+        
+        project_examples = f"{projects[0]['name']} ({projects[0]['description']})" if projects else "innovative software projects"
+        experience_examples = f"{experience[0]['title']} at {experience[0]['company']}" if experience else "professional experience"
+        
+        return f"""Through projects like {project_examples}, I have demonstrated my ability to build scalable, user-focused applications. My experience as {experience_examples} has strengthened my technical and communication skills, while my international background brings a unique perspective to problem-solving and team collaboration."""
+    
     def _generate_summary_for_job(self, job: Dict, profile: Dict) -> str:
-        """Generate professional summary for job"""
+        """Generate professional summary for job (legacy method)"""
         
         if 'ai' in job.get('title', '').lower() or 'ml' in job.get('description', '').lower():
             return f"Passionate computer science student with hands-on experience in AI/ML seeking {job.get('title')} position. Proven track record building innovative applications including AI-powered fitness platform and intelligent job automation system."
@@ -591,7 +620,7 @@ Sincerely,
             return f"Motivated computer science student with strong foundation in full-stack development seeking {job.get('title')} position. Combining technical expertise with unique perspective from athletics and music to deliver innovative solutions."
     
     def _generate_body_paragraph(self, job: Dict, profile: Dict) -> str:
-        """Generate body paragraph for cover letter"""
+        """Generate body paragraph for cover letter (legacy method)"""
         
         return f"""Through projects like FeelSharper (an AI-powered fitness platform) and JobFlow (an intelligent job application system), I have demonstrated my ability to build scalable, user-focused applications. My experience as a Teaching Assistant has strengthened my communication skills, while my internship at Virtus BR Partners taught me to deliver business value through technology."""
     

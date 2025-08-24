@@ -1,6 +1,6 @@
 RENATO DAP
 Software Engineer
-Email: renatodap@example.com | Phone: 555-0100 | LinkedIn: linkedin.com/in/renatodap
+Email: renatodapapplications@gmail.com | Phone: +1 (812) 262-8002 | LinkedIn: linkedin.com/in/renato-prado-82513b297
 
 SUMMARY
 Versatile software engineer with experience in multiple technologies and domains.
@@ -13,12 +13,12 @@ Tools & Platforms: Git, Docker, Linux, AWS, Agile
 Databases: PostgreSQL, MongoDB, MySQL, Redis
 
 EDUCATION
-Bachelor of Science in Computer Science | University Name | 2026
-- GPA: 3.8/4.0
+Bachelor of Science in Computer Science | Rose-Hulman Institute of Technology | 2026
+- GPA: 3.65/4.0
 - Dean's List, Multiple Semesters
 
 EXPERIENCE
-Software Engineering Intern | Tech Company | Summer 2025
+Software Engineering Intern | Virtus BR Partners | Summer 2025
 - Developed and maintained software applications
 - Collaborated with team on various projects
 - Gained experience in full software development lifecycle

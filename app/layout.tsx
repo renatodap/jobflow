@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'JobFlow Dashboard',
-  description: 'AI-powered job application automation - Apply to jobs in 2 minutes',
+  title: 'JobFlow - AI-Powered Job Search Automation',
+  description: 'Transform your job search from 30 minutes to 2 minutes per application with AI-generated resumes, cover letters, and targeted outreach.',
 }
 
 export default function RootLayout({
