@@ -7,7 +7,7 @@
  */
 
 import { NextRequest } from 'next/server'
-import { GET, PUT } from '@/app/api/settings/route'
+import { GET, PATCH } from '@/app/api/settings/route'
 
 describe('/api/settings', () => {
   describe('GET', () => {
@@ -65,14 +65,14 @@ describe('/api/settings', () => {
     })
   })
 
-  describe('PUT', () => {
+  describe('PATCH', () => {
     it('returns 401 when no authorization header', async () => {
       const request = new NextRequest('http://localhost:3000/api/settings', {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify({ job_titles: ['Engineer'] })
       })
       
-      const response = await PUT(request)
+      const response = await PATCH(request)
       const data = await response.json()
       
       expect(response.status).toBe(401)
@@ -89,7 +89,7 @@ describe('/api/settings', () => {
       }
       
       const request = new NextRequest('http://localhost:3000/api/settings', {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'authorization': 'Bearer test-token'
         },
@@ -99,7 +99,7 @@ describe('/api/settings', () => {
       // Mock request.json()
       request.json = jest.fn().mockResolvedValue(settingsData)
       
-      const response = await PUT(request)
+      const response = await PATCH(request)
       const data = await response.json()
       
       expect(response.status).toBe(200)
@@ -114,7 +114,7 @@ describe('/api/settings', () => {
       }
       
       const request = new NextRequest('http://localhost:3000/api/settings', {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'authorization': 'Bearer test-token'
         }
@@ -124,7 +124,7 @@ describe('/api/settings', () => {
       
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation()
       
-      await PUT(request)
+      await PATCH(request)
       
       expect(consoleSpy).toHaveBeenCalledWith('Saving settings:', settingsData)
       
@@ -133,7 +133,7 @@ describe('/api/settings', () => {
 
     it('handles errors during save', async () => {
       const request = new NextRequest('http://localhost:3000/api/settings', {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'authorization': 'Bearer test-token'
         }
@@ -144,7 +144,7 @@ describe('/api/settings', () => {
       
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
       
-      const response = await PUT(request)
+      const response = await PATCH(request)
       const data = await response.json()
       
       expect(response.status).toBe(500)

@@ -36,6 +36,28 @@ Object.defineProperty(window, 'localStorage', {
 // Mock fetch
 global.fetch = jest.fn() as jest.MockedFunction<typeof fetch>
 
+// Helper to create mock Response objects
+function createMockResponse(data: any, options: { ok?: boolean; status?: number } = {}): Response {
+  const { ok = true, status = 200 } = options
+  return {
+    ok,
+    status,
+    statusText: ok ? 'OK' : 'Error',
+    headers: new Headers(),
+    redirected: false,
+    type: 'basic' as ResponseType,
+    url: '',
+    clone: jest.fn(),
+    body: null,
+    bodyUsed: false,
+    arrayBuffer: jest.fn(),
+    blob: jest.fn(),
+    formData: jest.fn(),
+    json: jest.fn().mockResolvedValue(data),
+    text: jest.fn().mockResolvedValue(JSON.stringify(data)),
+  } as Response
+}
+
 // Mock user data
 const mockUserProfile = {
   id: '1',
@@ -71,16 +93,10 @@ describe('SettingsPage', () => {
     // Setup fetch responses
     ;(global.fetch as jest.MockedFunction<typeof fetch>).mockImplementation((url: any) => {
       if (url.includes('/api/profile')) {
-        return Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve(mockUserProfile),
-        })
+        return Promise.resolve(createMockResponse(mockUserProfile))
       }
       if (url.includes('/api/settings')) {
-        return Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve(mockSearchSettings),
-        })
+        return Promise.resolve(createMockResponse(mockSearchSettings))
       }
       return Promise.reject(new Error('Unknown endpoint'))
     })
@@ -138,10 +154,9 @@ describe('SettingsPage', () => {
       await user.clear(nameInput)
       await user.type(nameInput, 'Updated Name')
       
-      ;(global.fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ success: true }),
-      })
+      ;(global.fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce(
+        createMockResponse({ success: true })
+      )
       
       const saveButton = screen.getByRole('button', { name: /save profile/i })
       await user.click(saveButton)
@@ -244,10 +259,9 @@ describe('SettingsPage', () => {
         expect(screen.getByText('Software Engineer')).toBeInTheDocument()
       })
       
-      ;(global.fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ success: true }),
-      })
+      ;(global.fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce(
+        createMockResponse({ success: true })
+      )
       
       const saveButton = screen.getByRole('button', { name: /save search settings/i })
       await user.click(saveButton)
@@ -274,16 +288,10 @@ describe('SettingsPage', () => {
       const activeProfile = { ...mockUserProfile, search_active: true }
       ;(global.fetch as jest.MockedFunction<typeof fetch>).mockImplementation((url: any) => {
         if (url.includes('/api/profile')) {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(activeProfile),
-          })
+          return Promise.resolve(createMockResponse(activeProfile))
         }
         if (url.includes('/api/settings')) {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(mockSearchSettings),
-          })
+          return Promise.resolve(createMockResponse(mockSearchSettings))
         }
         return Promise.reject(new Error('Unknown endpoint'))
       })
@@ -326,15 +334,9 @@ describe('SettingsPage', () => {
       const unapprovedProfile = { ...mockUserProfile, approved: false }
       ;(global.fetch as jest.MockedFunction<typeof fetch>).mockImplementation((url: any) => {
         if (url.includes('/api/profile')) {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(unapprovedProfile),
-          })
+          return Promise.resolve(createMockResponse(unapprovedProfile))
         }
-        return Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve(mockSearchSettings),
-        })
+        return Promise.resolve(createMockResponse(mockSearchSettings))
       })
       
       render(<SettingsPage />)
