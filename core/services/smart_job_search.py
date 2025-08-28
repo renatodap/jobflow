@@ -5,21 +5,20 @@ Combines multiple free APIs, smart filtering, and query optimization
 
 import requests
 import feedparser
-import json
-from typing import List, Dict, Set
-from datetime import datetime, timedelta
+from typing import List, Dict
+from datetime import datetime
 import re
 import time
-from concurrent.futures import ThreadPoolExecutor
 import hashlib
+
 
 class SmartJobSearchEngine:
     """Enhanced job search with real, working improvements"""
-    
+
     def __init__(self, adzuna_app_id: str = None, adzuna_api_key: str = None):
         self.adzuna_app_id = adzuna_app_id
         self.adzuna_api_key = adzuna_api_key
-        
+
         # Free job sources that ACTUALLY work
         self.free_sources = {
             'remoteok': {
@@ -38,7 +37,7 @@ class SmartJobSearchEngine:
                 'auth': True,  # Need email as User-Agent
             }
         }
-        
+
         # RSS feeds that work
         self.rss_feeds = [
             'https://stackoverflow.com/jobs/feed',
@@ -47,15 +46,15 @@ class SmartJobSearchEngine:
             'https://jobs.github.com/positions.atom',  # If still active
             'https://news.ycombinator.com/jobs.rss'
         ]
-        
+
         # Cache to avoid duplicates
         self.seen_jobs = set()
-        
+
     def generate_smart_queries(self, profile: Dict) -> List[str]:
         """Generate 50+ intelligent search queries based on profile"""
-        
+
         queries = []
-        
+
         # Base queries for new grads
         base_templates = [
             "{year} graduate software engineer",
@@ -69,15 +68,15 @@ class SmartJobSearchEngine:
             "associate software engineer",
             "rotational program {year} tech"
         ]
-        
+
         # Years to search
         years = ['2025', '2026', '2027']  # Include next year too
-        
+
         # Generate year-based queries
         for template in base_templates:
             for year in years:
                 queries.append(template.format(year=year))
-        
+
         # Add skill-specific queries
         if 'technical_skills' in profile:
             for language in profile['technical_skills'].get('languages', [])[:3]:
@@ -87,47 +86,47 @@ class SmartJobSearchEngine:
                     f"{language} new grad 2026",
                     f"entry level {language}"
                 ])
-            
+
             for framework in profile['technical_skills'].get('frameworks', [])[:3]:
                 queries.extend([
                     f"{framework} developer junior",
                     f"{framework} engineer entry level",
                     f"{framework} new grad"
                 ])
-        
+
         # Add special interest queries (music, AI, sports for Renato)
         special_interests = {
             'music': ['music tech software engineer', 'audio software developer', 'spotify engineer'],
             'ai': ['ML engineer new grad', 'AI engineer entry level', 'computer vision junior'],
             'sports': ['sports tech developer', 'fitness app engineer', 'athletic performance software']
         }
-        
+
         for interest, interest_queries in special_interests.items():
             queries.extend(interest_queries)
-        
+
         # Location-specific queries
         for location in profile.get('preferences', {}).get('locations', []):
             queries.append(f"software engineer {location} new grad")
             queries.append(f"junior developer {location}")
-        
+
         # Remove duplicates and return
         return list(set(queries))
-    
+
     def smart_filter_jobs(self, jobs: List[Dict]) -> List[Dict]:
         """Filter out fake entry-level jobs and score remaining ones"""
-        
+
         filtered_jobs = []
-        
+
         for job in jobs:
             # Skip if we've seen this job before
             job_hash = self._get_job_hash(job)
             if job_hash in self.seen_jobs:
                 continue
             self.seen_jobs.add(job_hash)
-            
+
             description = str(job.get('description', '')).lower()
             title = str(job.get('title', '')).lower()
-            
+
             # RED FLAGS - Skip these jobs
             red_flags = [
                 '5+ years', '7+ years', '10+ years', '8+ years',
@@ -136,10 +135,10 @@ class SmartJobSearchEngine:
                 'expert', 'architect', 'seasoned',
                 '5 years', '7 years', '10 years'
             ]
-            
+
             if any(flag in description or flag in title for flag in red_flags):
                 continue  # Skip this job
-            
+
             # GREEN FLAGS - Boost score for these
             green_flags = {
                 'new grad': 25,
@@ -161,20 +160,20 @@ class SmartJobSearchEngine:
                 'graduate program': 20,
                 'early career': 15
             }
-            
+
             # Calculate relevance score
             score = 50  # Base score
             for flag, points in green_flags.items():
                 if flag in description or flag in title:
                     score += points
-            
+
             # Check salary if available
             if job.get('salary_min'):
                 if job['salary_min'] >= 80000:
                     score += 10
                 if job['salary_min'] >= 100000:
                     score += 10
-            
+
             # Freshness bonus
             if job.get('created'):
                 try:
@@ -186,39 +185,39 @@ class SmartJobSearchEngine:
                         score += 10
                     elif days_old <= 14:
                         score += 5
-                except:
+                except Exception:
                     pass
-            
+
             job['relevance_score'] = min(100, score)
-            
+
             # Only include jobs with reasonable scores
             if score >= 40:
                 filtered_jobs.append(job)
-        
+
         # Sort by relevance score
         filtered_jobs.sort(key=lambda x: x['relevance_score'], reverse=True)
-        
+
         return filtered_jobs
-    
+
     def _get_job_hash(self, job: Dict) -> str:
         """Create unique hash for job to avoid duplicates"""
         unique_string = f"{job.get('company', '')}{job.get('title', '')}{job.get('location', '')}"
         return hashlib.md5(unique_string.encode()).hexdigest()
-    
+
     def search_remoteok(self, query: str = None) -> List[Dict]:
         """Search RemoteOK API (completely free, no auth)"""
-        
+
         jobs = []
         try:
             response = requests.get(self.free_sources['remoteok']['api'], timeout=10)
             if response.status_code == 200:
                 data = response.json()
-                
+
                 for job in data[1:50]:  # Skip first item (metadata), limit to 50
                     # Filter for software jobs
-                    if any(tag in str(job.get('tags', [])).lower() 
+                    if any(tag in str(job.get('tags', [])).lower()
                            for tag in ['engineer', 'developer', 'programming', 'software']):
-                        
+
                         formatted_job = {
                             'title': job.get('position', ''),
                             'company': job.get('company', ''),
@@ -232,22 +231,22 @@ class SmartJobSearchEngine:
                             'tags': job.get('tags', [])
                         }
                         jobs.append(formatted_job)
-                        
+
         except Exception as e:
             print(f"RemoteOK search error: {e}")
-        
+
         return jobs
-    
+
     def search_hackernews(self) -> List[Dict]:
         """Search HackerNews Who's Hiring (free, high quality)"""
-        
+
         jobs = []
         try:
             # Get latest job story IDs
             response = requests.get(self.free_sources['hackernews']['api'], timeout=10)
             if response.status_code == 200:
                 job_ids = response.json()[:30]  # Get latest 30 job posts
-                
+
                 # Fetch each job
                 for job_id in job_ids:
                     try:
@@ -257,33 +256,33 @@ class SmartJobSearchEngine:
                         )
                         if job_response.status_code == 200:
                             job_data = job_response.json()
-                            
+
                             if job_data and job_data.get('text'):
                                 # Parse the text for job info
                                 formatted_job = self._parse_hn_job(job_data)
                                 if formatted_job:
                                     jobs.append(formatted_job)
-                        
+
                         time.sleep(0.1)  # Be respectful
-                        
-                    except:
+
+                    except Exception:
                         continue
-                        
+
         except Exception as e:
             print(f"HackerNews search error: {e}")
-        
+
         return jobs
-    
+
     def _parse_hn_job(self, job_data: Dict) -> Dict:
         """Parse HackerNews job posting"""
-        
+
         text = job_data.get('text', '')
-        
+
         # Try to extract company name (usually first line or bold)
         lines = text.split('\n')
         company = lines[0].strip() if lines else 'Unknown'
         company = re.sub(r'<[^>]+>', '', company)  # Remove HTML
-        
+
         # Look for location
         location = 'Not specified'
         if 'remote' in text.lower():
@@ -292,7 +291,7 @@ class SmartJobSearchEngine:
             location = 'San Francisco'
         elif 'new york' in text.lower():
             location = 'New York'
-        
+
         return {
             'title': job_data.get('title', 'Software Engineer'),
             'company': company[:100],  # Limit length
@@ -303,16 +302,16 @@ class SmartJobSearchEngine:
             'source': 'HackerNews',
             'high_quality': True  # HN jobs are typically high quality
         }
-    
+
     def search_rss_feeds(self) -> List[Dict]:
         """Aggregate jobs from RSS feeds"""
-        
+
         jobs = []
-        
+
         for feed_url in self.rss_feeds:
             try:
                 feed = feedparser.parse(feed_url)
-                
+
                 for entry in feed.entries[:20]:  # Limit to 20 per feed
                     job = {
                         'title': entry.get('title', ''),
@@ -324,22 +323,22 @@ class SmartJobSearchEngine:
                         'source': f'RSS: {feed_url.split("/")[2]}'
                     }
                     jobs.append(job)
-                    
+
             except Exception as e:
                 print(f"RSS feed error for {feed_url}: {e}")
                 continue
-        
+
         return jobs
-    
+
     def search_all_sources(self, profile: Dict, max_results: int = 100) -> List[Dict]:
         """Search all available sources with smart filtering"""
-        
+
         print("Generating smart search queries...")
         queries = self.generate_smart_queries(profile)
         print(f"Generated {len(queries)} search variations")
-        
+
         all_jobs = []
-        
+
         # Search Adzuna with multiple queries (if available)
         if self.adzuna_app_id and self.adzuna_api_key:
             print("Searching Adzuna...")
@@ -350,31 +349,31 @@ class SmartJobSearchEngine:
                     time.sleep(0.5)  # Rate limit
                 except Exception as e:
                     print(f"Adzuna error: {e}")
-        
+
         # Search free sources
         print("Searching RemoteOK...")
         all_jobs.extend(self.search_remoteok())
-        
+
         print("Searching HackerNews...")
         all_jobs.extend(self.search_hackernews())
-        
+
         print("Searching RSS feeds...")
         all_jobs.extend(self.search_rss_feeds())
-        
+
         # Apply smart filtering
         print(f"Found {len(all_jobs)} total jobs, applying smart filters...")
         filtered_jobs = self.smart_filter_jobs(all_jobs)
-        
+
         print(f"After filtering: {len(filtered_jobs)} relevant jobs")
-        
+
         # Return top results
         return filtered_jobs[:max_results]
-    
+
     def _search_adzuna(self, query: str, location: str = 'us') -> List[Dict]:
         """Search Adzuna API"""
-        
+
         jobs = []
-        
+
         try:
             url = f"https://api.adzuna.com/v1/api/jobs/{location}/search/1"
             params = {
@@ -384,11 +383,11 @@ class SmartJobSearchEngine:
                 'what': query,
                 'max_days_old': 30
             }
-            
+
             response = requests.get(url, params=params, timeout=10)
             if response.status_code == 200:
                 data = response.json()
-                
+
                 for job in data.get('results', []):
                     formatted_job = {
                         'title': job.get('title', ''),
@@ -402,15 +401,15 @@ class SmartJobSearchEngine:
                         'source': 'Adzuna'
                     }
                     jobs.append(formatted_job)
-                    
+
         except Exception as e:
             print(f"Adzuna search error: {e}")
-        
+
         return jobs
-    
+
     def get_search_analytics(self, jobs: List[Dict]) -> Dict:
         """Analyze search results for insights"""
-        
+
         analytics = {
             'total_jobs': len(jobs),
             'sources': {},

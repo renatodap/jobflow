@@ -296,7 +296,7 @@ ACHIEVEMENTS:"""
     def add_project(self, name: str, description: str, technologies: List[str], 
                    github: str = "", highlights: List[str] = None) -> None:
         """Add new project to profile"""
-        
+
         project = {
             'name': name,
             'description': description,
@@ -304,55 +304,55 @@ ACHIEVEMENTS:"""
             'github': github,
             'highlights': highlights or []
         }
-        
+
         self.profile_data['projects'].append(project)
         print(f"[OK] Added project: {name}")
 
 
 def test_profile_manager():
     """Test the profile manager"""
-    
+
     print("=" * 60)
     print("TESTING PROFILE MANAGER")
     print("=" * 60)
-    
+
     # Test profile loading and validation
     profile = ProfileManager()
-    
-    print(f"\n👤 PERSONAL INFO:")
+
+    print("\n👤 PERSONAL INFO:")
     print(f"Name: {profile.get_name()}")
     print(f"Email: {profile.get_email()}")
     print(f"Phone: {profile.get_phone()}")
     print(f"Location: {profile.get_location()}")
     print(f"GitHub: {profile.get_github()}")
-    
-    print(f"\n🎓 EDUCATION:")
+
+    print("\n🎓 EDUCATION:")
     print(f"Degree: {profile.get_degree()}")
     print(f"School: {profile.get_school()}")
     print(f"Graduation: {profile.get_graduation()}")
     print(f"GPA: {profile.get_gpa()}")
-    
+
     print(f"\n💪 STRENGTHS ({len(profile.get_strengths())}):")
     for i, strength in enumerate(profile.get_strengths(), 1):
         print(f"{i}. {strength}")
-    
-    print(f"\n🔧 TECHNICAL SKILLS:")
+
+    print("\n🔧 TECHNICAL SKILLS:")
     print(f"Languages: {', '.join(profile.get_programming_languages())}")
     print(f"Frameworks: {', '.join(profile.get_frameworks()[:5])}")  # Top 5
     print(f"AI/ML: {', '.join(profile.get_ai_ml_skills())}")
-    
-    print(f"\n🎯 JOB SEARCH:")
+
+    print("\n🎯 JOB SEARCH:")
     print(f"Target Roles: {len(profile.get_target_roles())}")
     print(f"Target Companies: {len(profile.get_target_companies())}")
     print(f"Dream Roles: {', '.join(profile.get_dream_roles())}")
-    
+
     print(f"\n🔍 SEARCH QUERIES ({len(profile.get_job_search_queries())}):")
     for i, query in enumerate(profile.get_job_search_queries()[:10], 1):
         print(f"{i}. {query}")
-    
-    print(f"\n[OK] Profile manager test complete!")
-    print(f"[OK] Zero fake data confirmed")
-    
+
+    print("\n[OK] Profile manager test complete!")
+    print("[OK] Zero fake data confirmed")
+
     return profile
 
 

@@ -39,7 +39,7 @@ global.fetch = jest.fn() as jest.MockedFunction<typeof fetch>
 // Helper to create mock Response objects
 function createMockResponse(data: any, options: { ok?: boolean; status?: number } = {}): Response {
   const { ok = true, status = 200 } = options
-  return {
+  const response = {
     ok,
     status,
     statusText: ok ? 'OK' : 'Error',
@@ -55,7 +55,9 @@ function createMockResponse(data: any, options: { ok?: boolean; status?: number 
     formData: jest.fn(),
     json: jest.fn().mockResolvedValue(data),
     text: jest.fn().mockResolvedValue(JSON.stringify(data)),
-  } as Response
+    bytes: jest.fn().mockResolvedValue(new Uint8Array()),
+  } as unknown as Response
+  return response
 }
 
 // Mock user data
@@ -311,10 +313,9 @@ describe('SettingsPage', () => {
         expect(screen.getByRole('button', { name: /activate search/i })).toBeInTheDocument()
       })
       
-      ;(global.fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ active: true }),
-      })
+      ;(global.fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce(
+        createMockResponse({ active: true })
+      )
       
       const toggleButton = screen.getByRole('button', { name: /activate search/i })
       await user.click(toggleButton)
