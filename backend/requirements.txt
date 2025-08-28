@@ -51,6 +51,3 @@ sentry-sdk[fastapi]==1.39.1
 
 # Rate Limiting
 slowapi==0.1.9
-
-# CORS Support
-python-cors==1.0.1
