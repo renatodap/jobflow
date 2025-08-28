@@ -333,13 +333,13 @@ export default function ProfileSetupPage() {
       case 1:
         return <PersonalInfoStep formData={formData} onChange={handleInputChange} errors={errors} />
       case 2:
-        return <EducationStep formData={formData} onChange={handleArrayItemChange} onAdd={() => addArrayItem('education')} onRemove={(i) => removeArrayItem('education', i)} errors={errors} />
+        return <EducationStep formData={formData} onChange={handleArrayItemChange} onAdd={() => addArrayItem('education')} onRemove={(i: number) => removeArrayItem('education', i)} errors={errors} />
       case 3:
-        return <ExperienceStep formData={formData} onChange={handleArrayItemChange} onAdd={() => addArrayItem('experience')} onRemove={(i) => removeArrayItem('experience', i)} errors={errors} />
+        return <ExperienceStep formData={formData} onChange={handleArrayItemChange} onAdd={() => addArrayItem('experience')} onRemove={(i: number) => removeArrayItem('experience', i)} errors={errors} />
       case 4:
         return <SkillsStep formData={formData} onChange={handleInputChange} errors={errors} />
       case 5:
-        return <ProjectsStep formData={formData} onChange={handleArrayItemChange} onAdd={() => addArrayItem('projects')} onRemove={(i) => removeArrayItem('projects', i)} errors={errors} />
+        return <ProjectsStep formData={formData} onChange={handleArrayItemChange} onAdd={() => addArrayItem('projects')} onRemove={(i: number) => removeArrayItem('projects', i)} errors={errors} />
       case 6:
         return <PreferencesStep formData={formData} onChange={handleInputChange} errors={errors} />
       default:

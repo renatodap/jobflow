@@ -7,7 +7,7 @@
  */
 
 import { NextRequest } from 'next/server'
-import { GET, PUT } from './route'
+import { GET, PUT } from '@/app/api/settings/route'
 
 describe('/api/settings', () => {
   describe('GET', () => {

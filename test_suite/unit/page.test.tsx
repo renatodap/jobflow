@@ -10,7 +10,31 @@
 import React from 'react'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import SettingsPage from './page'
+import SettingsPage from '@/app/settings/page'
+
+// Mock localStorage
+const localStorageMock = (() => {
+  let store: Record<string, string> = {}
+  return {
+    getItem: jest.fn((key: string) => store[key] || null),
+    setItem: jest.fn((key: string, value: string) => {
+      store[key] = value.toString()
+    }),
+    removeItem: jest.fn((key: string) => {
+      delete store[key]
+    }),
+    clear: jest.fn(() => {
+      store = {}
+    })
+  }
+})()
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock
+})
+
+// Mock fetch
+global.fetch = jest.fn() as jest.MockedFunction<typeof fetch>
 
 // Mock user data
 const mockUserProfile = {
@@ -42,10 +66,10 @@ const mockSearchSettings = {
 describe('SettingsPage', () => {
   beforeEach(() => {
     // Setup localStorage
-    localStorage.getItem.mockReturnValue('mock-token')
+    localStorageMock.getItem.mockReturnValue('mock-token')
     
     // Setup fetch responses
-    global.fetch.mockImplementation((url) => {
+    ;(global.fetch as jest.MockedFunction<typeof fetch>).mockImplementation((url: any) => {
       if (url.includes('/api/profile')) {
         return Promise.resolve({
           ok: true,
@@ -64,7 +88,7 @@ describe('SettingsPage', () => {
 
   describe('Authentication', () => {
     it('redirects to login if no token', async () => {
-      localStorage.getItem.mockReturnValue(null)
+      localStorageMock.getItem.mockReturnValue(null)
       const mockPush = jest.fn()
       require('next/navigation').useRouter.mockReturnValue({ push: mockPush })
       
@@ -114,7 +138,7 @@ describe('SettingsPage', () => {
       await user.clear(nameInput)
       await user.type(nameInput, 'Updated Name')
       
-      global.fetch.mockResolvedValueOnce({
+      ;(global.fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({ success: true }),
       })
@@ -220,7 +244,7 @@ describe('SettingsPage', () => {
         expect(screen.getByText('Software Engineer')).toBeInTheDocument()
       })
       
-      global.fetch.mockResolvedValueOnce({
+      ;(global.fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({ success: true }),
       })
@@ -248,7 +272,7 @@ describe('SettingsPage', () => {
   describe('Search Activation', () => {
     it('shows active search status for approved users', async () => {
       const activeProfile = { ...mockUserProfile, search_active: true }
-      global.fetch.mockImplementation((url) => {
+      ;(global.fetch as jest.MockedFunction<typeof fetch>).mockImplementation((url: any) => {
         if (url.includes('/api/profile')) {
           return Promise.resolve({
             ok: true,
@@ -279,7 +303,7 @@ describe('SettingsPage', () => {
         expect(screen.getByRole('button', { name: /activate search/i })).toBeInTheDocument()
       })
       
-      global.fetch.mockResolvedValueOnce({
+      ;(global.fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({ active: true }),
       })
@@ -300,7 +324,7 @@ describe('SettingsPage', () => {
 
     it('shows pending approval message for unapproved users', async () => {
       const unapprovedProfile = { ...mockUserProfile, approved: false }
-      global.fetch.mockImplementation((url) => {
+      ;(global.fetch as jest.MockedFunction<typeof fetch>).mockImplementation((url: any) => {
         if (url.includes('/api/profile')) {
           return Promise.resolve({
             ok: true,
@@ -353,7 +377,7 @@ describe('SettingsPage', () => {
 
   describe('Error Handling', () => {
     it('displays error when profile fails to load', async () => {
-      global.fetch.mockRejectedValueOnce(new Error('Network error'))
+      ;(global.fetch as jest.MockedFunction<typeof fetch>).mockRejectedValueOnce(new Error('Network error'))
       
       render(<SettingsPage />)
       
@@ -370,7 +394,7 @@ describe('SettingsPage', () => {
         expect(screen.getByDisplayValue('Test User')).toBeInTheDocument()
       })
       
-      global.fetch.mockRejectedValueOnce(new Error('Save failed'))
+      ;(global.fetch as jest.MockedFunction<typeof fetch>).mockRejectedValueOnce(new Error('Save failed'))
       
       const saveButton = screen.getByRole('button', { name: /save profile/i })
       await user.click(saveButton)

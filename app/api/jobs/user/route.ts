@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Format response
-    const formattedApplications = applications?.map(app => ({
+    const formattedApplications = applications?.map((app: any) => ({
       id: app.id,
       job_id: app.job_id,
       status: app.status || 'pending',
