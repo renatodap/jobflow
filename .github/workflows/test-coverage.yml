@@ -1,0 +1,129 @@
+name: Test Coverage
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  frontend-tests:
+    name: Frontend Tests & Coverage
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run type checking
+      run: npm run typecheck
+    
+    - name: Run linting
+      run: npm run lint
+    
+    - name: Run tests with coverage
+      run: npm run test:coverage
+    
+    - name: Upload frontend coverage
+      uses: actions/upload-artifact@v3
+      with:
+        name: frontend-coverage
+        path: coverage/
+    
+    - name: Check coverage threshold
+      run: |
+        coverage=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
+        echo "Frontend coverage: $coverage%"
+        if (( $(echo "$coverage < 80" | bc -l) )); then
+          echo "Coverage below 80% threshold"
+          exit 1
+        fi
+
+  python-tests:
+    name: Python Tests & Coverage
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r backend/requirements.txt
+        pip install -r requirements-test.txt
+    
+    - name: Run flake8 linting
+      run: flake8 core/ backend/ --max-line-length=120 --exclude=venv,__pycache__
+    
+    - name: Run tests with coverage
+      run: pytest tests/ --cov=core --cov=backend --cov-report=xml --cov-report=term
+    
+    - name: Upload Python coverage
+      uses: actions/upload-artifact@v3
+      with:
+        name: python-coverage
+        path: htmlcov/
+    
+    - name: Check coverage threshold
+      run: |
+        coverage report --fail-under=80
+
+  combined-coverage:
+    name: Combined Coverage Report
+    needs: [frontend-tests, python-tests]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Download frontend coverage
+      uses: actions/download-artifact@v3
+      with:
+        name: frontend-coverage
+        path: coverage/
+    
+    - name: Download Python coverage
+      uses: actions/download-artifact@v3
+      with:
+        name: python-coverage
+        path: htmlcov/
+    
+    - name: Generate combined report
+      run: |
+        echo "## Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Frontend Coverage" >> $GITHUB_STEP_SUMMARY
+        echo "- Statements: Check artifacts" >> $GITHUB_STEP_SUMMARY
+        echo "- Branches: Check artifacts" >> $GITHUB_STEP_SUMMARY
+        echo "- Functions: Check artifacts" >> $GITHUB_STEP_SUMMARY
+        echo "- Lines: Check artifacts" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Python Coverage" >> $GITHUB_STEP_SUMMARY
+        echo "- Check artifacts for detailed report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ All tests passed with >80% coverage" >> $GITHUB_STEP_SUMMARY
+    
+    - name: Comment on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '✅ All tests passed with coverage above 80% threshold!'
+          })

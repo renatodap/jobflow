@@ -1,0 +1,71 @@
+{
+  "activeUsers": [
+    {
+      "id": "1",
+      "email": "john.doe@example.com",
+      "full_name": "John Doe",
+      "phone": "+1 555-0123",
+      "location": "San Francisco, CA",
+      "linkedin": "https://linkedin.com/in/johndoe",
+      "github": "https://github.com/johndoe",
+      "website": "https://johndoe.dev",
+      "approved": true,
+      "subscription_status": "active",
+      "search_active": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "settings": {
+        "job_titles": ["Software Engineer", "Full Stack Developer", "Backend Engineer"],
+        "locations": ["San Francisco, CA", "Remote", "New York, NY"],
+        "min_salary": 120000,
+        "remote_only": false,
+        "job_types": ["full-time"],
+        "email_frequency": "daily",
+        "max_jobs_per_email": 20,
+        "include_resume": true,
+        "include_cover_letter": true
+      }
+    },
+    {
+      "id": "2",
+      "email": "jane.smith@example.com",
+      "full_name": "Jane Smith",
+      "phone": "+1 555-0124",
+      "location": "Austin, TX",
+      "approved": true,
+      "subscription_status": "active",
+      "search_active": false,
+      "created_at": "2024-01-05T00:00:00Z",
+      "settings": {
+        "job_titles": ["Frontend Developer", "React Developer"],
+        "locations": ["Austin, TX", "Remote"],
+        "min_salary": 100000,
+        "remote_only": true,
+        "job_types": ["full-time", "contract"],
+        "email_frequency": "weekly",
+        "max_jobs_per_email": 30,
+        "include_resume": true,
+        "include_cover_letter": false
+      }
+    }
+  ],
+  "pendingUsers": [
+    {
+      "id": "3",
+      "email": "bob.wilson@example.com",
+      "full_name": "Bob Wilson",
+      "phone": "+1 555-0125",
+      "location": "Seattle, WA",
+      "approved": false,
+      "subscription_status": "trial",
+      "created_at": "2024-01-10T00:00:00Z"
+    }
+  ],
+  "adminUser": {
+    "id": "admin",
+    "email": "admin@jobflow.ai",
+    "full_name": "Admin User",
+    "is_admin": true,
+    "approved": true,
+    "subscription_status": "active"
+  }
+}

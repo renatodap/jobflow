@@ -43,8 +43,16 @@ export default function SignupPage() {
         throw new Error(data.error || 'Signup failed')
       }
 
-      // Move to payment step
-      setStep(2)
+      // Store email for pending approval page
+      localStorage.setItem('userEmail', formData.email)
+      
+      // Store session if provided
+      if (data.session?.access_token) {
+        localStorage.setItem('token', data.session.access_token)
+      }
+      
+      // Redirect to pending approval (no payment required initially)
+      window.location.href = '/pending-approval'
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Signup failed')
     } finally {

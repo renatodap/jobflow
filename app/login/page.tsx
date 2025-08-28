@@ -38,14 +38,20 @@ export default function LoginPage() {
         throw new Error(data.error || 'Login failed')
       }
 
-      // Store token and redirect
-      localStorage.setItem('token', data.access_token)
+      // Store session and redirect based on user status
+      if (data.session?.access_token) {
+        localStorage.setItem('token', data.session.access_token)
+      }
       
-      // Check if profile setup is complete
-      if (data.needs_profile_setup) {
-        window.location.href = '/profile/setup'
+      // Check user approval and redirect accordingly
+      if (!data.user?.approved) {
+        window.location.href = '/pending-approval'
+      } else if (!data.user?.full_name) {
+        window.location.href = '/settings'
+      } else if (data.user?.is_admin) {
+        window.location.href = '/admin'
       } else {
-        window.location.href = '/dashboard'
+        window.location.href = '/settings'
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')

@@ -1,32 +1,77 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8000'
+import { createRouteHandlerClient } from '@/lib/supabase/server'
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    const { email, password, full_name, phone, location } = await request.json()
     
-    // Forward request to FastAPI backend
-    const response = await fetch(`${API_BASE_URL}/auth/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body)
-    })
-
-    const data = await response.json()
-
-    if (!response.ok) {
+    // Validate required fields
+    if (!email || !password || !full_name) {
       return NextResponse.json(
-        { error: data.detail || 'Signup failed' },
-        { status: response.status }
+        { error: 'Email, password, and full name are required' },
+        { status: 400 }
       )
     }
-
-    return NextResponse.json(data)
+    
+    // Create Supabase client
+    const supabase = createRouteHandlerClient()
+    
+    // Sign up user with Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name,
+          phone,
+          location
+        }
+      }
+    })
+    
+    if (authError) {
+      return NextResponse.json(
+        { error: authError.message },
+        { status: 400 }
+      )
+    }
+    
+    if (!authData.user) {
+      return NextResponse.json(
+        { error: 'Failed to create user' },
+        { status: 400 }
+      )
+    }
+    
+    // Update profile with additional information
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .update({
+        full_name,
+        phone,
+        location
+      })
+      .eq('id', authData.user.id)
+    
+    if (profileError) {
+      console.error('Profile update error:', profileError)
+    }
+    
+    // Return success response with session
+    return NextResponse.json({
+      success: true,
+      message: 'Account created successfully. Pending admin approval.',
+      user: {
+        id: authData.user.id,
+        email: authData.user.email,
+        full_name,
+        approved: false
+      },
+      session: authData.session
+    })
+    
   } catch (error) {
-    console.error('Signup API error:', error)
+    console.error('Signup error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

@@ -1,36 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8000'
+import { createRouteHandlerClient } from '@/lib/supabase/server'
 
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization')
+    // Create Supabase client
+    const supabase = createRouteHandlerClient()
     
-    if (!authHeader) {
+    // Get authenticated user
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    
+    if (userError || !user) {
       return NextResponse.json(
-        { error: 'Authorization header required' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
-
-    // Forward request to FastAPI backend
-    const response = await fetch(`${API_BASE_URL}/profile`, {
-      method: 'GET',
-      headers: {
-        'Authorization': authHeader,
-      }
-    })
-
-    const data = await response.json()
-
-    if (!response.ok) {
+    
+    // Get user profile
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single()
+    
+    if (profileError) {
+      console.error('Profile fetch error:', profileError)
       return NextResponse.json(
-        { error: data.detail || 'Failed to get profile' },
-        { status: response.status }
+        { error: 'Failed to fetch profile' },
+        { status: 500 }
       )
     }
-
-    return NextResponse.json(data)
+    
+    return NextResponse.json({
+      success: true,
+      profile
+    })
   } catch (error) {
     console.error('Profile API error:', error)
     return NextResponse.json(
@@ -42,36 +46,59 @@ export async function GET(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization')
     const body = await request.json()
     
-    if (!authHeader) {
+    // Create Supabase client
+    const supabase = createRouteHandlerClient()
+    
+    // Get authenticated user
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    
+    if (userError || !user) {
       return NextResponse.json(
-        { error: 'Authorization header required' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
+    
+    // Allowed fields to update
+    const allowedFields = [
+      'full_name', 'phone', 'location', 'linkedin', 'github', 'website',
+      'current_title', 'years_experience', 'education', 'work_experience',
+      'projects', 'skills', 'certifications', 'ai_notes'
+    ]
 
-    // Forward request to FastAPI backend
-    const response = await fetch(`${API_BASE_URL}/profile`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': authHeader,
-      },
-      body: JSON.stringify(body)
-    })
-
-    const data = await response.json()
-
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: data.detail || 'Failed to update profile' },
-        { status: response.status }
-      )
+    // Filter body to only include allowed fields
+    const updateData: any = {}
+    for (const key of allowedFields) {
+      if (key in body) {
+        updateData[key] = body[key]
+      }
     }
 
-    return NextResponse.json(data)
+    // Update user profile
+    const { data: updatedProfile, error: updateError } = await supabase
+      .from('profiles')
+      .update({
+        ...updateData,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', user.id)
+      .select()
+      .single()
+    
+    if (updateError) {
+      console.error('Profile update error:', updateError)
+      return NextResponse.json(
+        { error: 'Failed to update profile' },
+        { status: 500 }
+      )
+    }
+    
+    return NextResponse.json({
+      success: true,
+      profile: updatedProfile
+    })
   } catch (error) {
     console.error('Profile update API error:', error)
     return NextResponse.json(

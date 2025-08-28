@@ -1,42 +1,87 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8000'
+import { createRouteHandlerClient, createAdminClient } from '@/lib/supabase/server'
 
 export async function POST(
   request: NextRequest,
   { params }: { params: { userId: string } }
 ) {
   try {
-    const authHeader = request.headers.get('authorization')
-    const { userId } = params
+    // Create Supabase client
+    const supabase = createRouteHandlerClient()
     
-    if (!authHeader) {
+    // Get authenticated user
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    
+    if (userError || !user) {
       return NextResponse.json(
-        { error: 'Authorization header required' },
+        { error: 'Not authenticated' },
         { status: 401 }
       )
     }
-
-    // Forward request to FastAPI backend
-    const response = await fetch(`${API_BASE_URL}/admin/approve-user/${userId}`, {
-      method: 'POST',
-      headers: {
-        'Authorization': authHeader,
-      }
-    })
-
-    const data = await response.json()
-
-    if (!response.ok) {
+    
+    // Check if user is admin
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', user.id)
+      .single()
+    
+    if (profileError || !profile?.is_admin) {
       return NextResponse.json(
-        { error: data.detail || 'Failed to approve user' },
-        { status: response.status }
+        { error: 'Admin access required' },
+        { status: 403 }
       )
     }
-
-    return NextResponse.json(data)
+    
+    // Get admin client for full access
+    const adminSupabase = createAdminClient()
+    
+    // Approve the user
+    const { data: approvedUser, error: approveError } = await adminSupabase
+      .from('profiles')
+      .update({
+        approved: true,
+        subscription_status: 'trial', // Start with trial
+        trial_ends_at: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days from now
+        searches_remaining: 5,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', params.userId)
+      .select()
+      .single()
+    
+    if (approveError) {
+      console.error('Error approving user:', approveError)
+      return NextResponse.json(
+        { error: 'Failed to approve user' },
+        { status: 500 }
+      )
+    }
+    
+    // Log admin activity
+    await adminSupabase
+      .from('admin_activities')
+      .insert({
+        admin_id: user.id,
+        action: 'approve_user',
+        target_user_id: params.userId,
+        details: {
+          approved_at: new Date().toISOString(),
+          trial_days: 3
+        }
+      })
+    
+    // TODO: Send welcome email to approved user
+    // This would trigger the email service to send a welcome email
+    
+    return NextResponse.json({
+      success: true,
+      message: 'User approved successfully',
+      user: approvedUser
+    })
+    
   } catch (error) {
-    console.error('Admin approve user API error:', error)
+    console.error('User approval error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

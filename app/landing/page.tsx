@@ -39,9 +39,9 @@ export default function LandingPage() {
             <span className="text-blue-600 block mt-2">30 Minutes to 2 Minutes</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            AI-powered job search automation that generates perfect resumes, cover letters, 
-            and LinkedIn outreach for every job opportunity. Get 20 tailored applications 
-            delivered to your inbox daily.
+            Set your preferences once and receive perfectly matched job opportunities 
+            with tailored resumes and cover letters delivered to your inbox daily. 
+            No dashboards, no complexity - just opportunities.
           </p>
           
           {/* Pricing Highlight */}

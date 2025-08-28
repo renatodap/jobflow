@@ -1,0 +1,121 @@
+{
+  "jobs": [
+    {
+      "id": "1",
+      "job_hash": "abc123",
+      "title": "Senior Software Engineer",
+      "company": "TechCorp Inc",
+      "location": "San Francisco, CA",
+      "salary_min": 150000,
+      "salary_max": 200000,
+      "days_old": 2,
+      "score": 95,
+      "url": "https://example.com/jobs/1",
+      "contract_type": "full-time",
+      "category": "Engineering",
+      "description": "We are looking for a Senior Software Engineer to join our growing team. You will be working on cutting-edge technologies and building scalable systems.",
+      "requirements": [
+        "5+ years of experience",
+        "Strong Python/JavaScript skills",
+        "Experience with cloud platforms"
+      ],
+      "discovered_at": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": "2",
+      "job_hash": "def456",
+      "title": "Full Stack Developer",
+      "company": "StartupXYZ",
+      "location": "Remote",
+      "salary_min": 120000,
+      "salary_max": 160000,
+      "days_old": 1,
+      "score": 92,
+      "url": "https://example.com/jobs/2",
+      "contract_type": "full-time",
+      "category": "Engineering",
+      "description": "Join our fast-growing startup as a Full Stack Developer. Work with React, Node.js, and modern web technologies.",
+      "requirements": [
+        "3+ years of experience",
+        "React and Node.js expertise",
+        "Startup experience preferred"
+      ],
+      "discovered_at": "2024-01-16T10:00:00Z"
+    },
+    {
+      "id": "3",
+      "job_hash": "ghi789",
+      "title": "Backend Engineer",
+      "company": "Enterprise Corp",
+      "location": "New York, NY",
+      "salary_min": 130000,
+      "salary_max": 170000,
+      "days_old": 5,
+      "score": 88,
+      "url": "https://example.com/jobs/3",
+      "contract_type": "full-time",
+      "category": "Engineering",
+      "description": "Looking for a Backend Engineer to work on our microservices architecture.",
+      "requirements": [
+        "4+ years of backend experience",
+        "Microservices and API design",
+        "Go or Java experience"
+      ],
+      "discovered_at": "2024-01-12T10:00:00Z"
+    },
+    {
+      "id": "4",
+      "job_hash": "jkl012",
+      "title": "Frontend Developer",
+      "company": "Design Studio",
+      "location": "Los Angeles, CA",
+      "salary_min": 100000,
+      "salary_max": 140000,
+      "days_old": 3,
+      "score": 85,
+      "url": "https://example.com/jobs/4",
+      "contract_type": "full-time",
+      "category": "Engineering",
+      "description": "Frontend Developer needed for our creative team. Focus on building beautiful, responsive web applications.",
+      "requirements": [
+        "3+ years frontend experience",
+        "Expert in React/Vue",
+        "Strong CSS/Design skills"
+      ],
+      "discovered_at": "2024-01-14T10:00:00Z"
+    },
+    {
+      "id": "5",
+      "job_hash": "mno345",
+      "title": "DevOps Engineer",
+      "company": "Cloud Solutions Inc",
+      "location": "Seattle, WA",
+      "salary_min": 140000,
+      "salary_max": 180000,
+      "days_old": 7,
+      "score": 82,
+      "url": "https://example.com/jobs/5",
+      "contract_type": "full-time",
+      "category": "DevOps",
+      "description": "DevOps Engineer to manage our cloud infrastructure and CI/CD pipelines.",
+      "requirements": [
+        "5+ years DevOps experience",
+        "AWS/GCP expertise",
+        "Kubernetes and Docker"
+      ],
+      "discovered_at": "2024-01-10T10:00:00Z"
+    }
+  ],
+  "lowScoreJobs": [
+    {
+      "id": "6",
+      "title": "Junior Developer",
+      "company": "Small Startup",
+      "location": "Remote",
+      "salary_min": 60000,
+      "salary_max": 80000,
+      "score": 65,
+      "days_old": 10
+    }
+  ]
+}
