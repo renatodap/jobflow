@@ -243,19 +243,19 @@ class StartupOpportunitiesFinder:
                 'value': equity_percentage * company_valuation * 50 / 100
             }
         }
-        
+
         expected_value = sum(s['value'] * s['probability'] for s in scenarios.values())
-        
+
         return {
             'scenarios': scenarios,
             'expected_value': expected_value,
             'years_to_exit': years_to_exit,
             'annual_expected_value': expected_value / years_to_exit
         }
-    
+
     def generate_startup_strategy(self, user_profile: Dict) -> Dict:
         """Generate personalized startup job search strategy"""
-        
+
         strategy = {
             'target_stages': [],
             'focus_areas': [],
@@ -263,21 +263,21 @@ class StartupOpportunitiesFinder:
             'application_approach': '',
             'networking_strategy': ''
         }
-        
+
         # For new grad
         if 'new grad' in str(user_profile.get('experience_level', '')).lower():
             strategy['target_stages'] = ['Series A', 'Series B']
-            strategy['equity_vs_salary'] = 'Optimize for learning and equity (accept $20-30k lower salary for 2x equity)'
+            strategy['equity_vs_salary'] = 'Optimize for learning and equity (accept $20-30k lower for 2x equity)'
             strategy['application_approach'] = 'Apply to 10-15 carefully selected startups, not 100s'
-            
+
         # AI/ML interest
         if any('AI' in proj or 'ML' in proj for proj in str(user_profile.get('projects', []))):
             strategy['focus_areas'].append('AI/ML startups - hottest market, highest valuations')
-        
+
         # Music background
         if 'music' in str(user_profile.get('interests', [])).lower():
             strategy['focus_areas'].append('Music tech startups - unique differentiator')
-        
+
         strategy['networking_strategy'] = """
         1. Find founders on Twitter, engage with their content
         2. Build something using their product, share publicly
@@ -285,21 +285,21 @@ class StartupOpportunitiesFinder:
         4. Reach out to other new grads at target startups
         5. Share your projects on HackerNews/ProductHunt
         """
-        
+
         return strategy
 
 
 def test_startup_finder():
     """Test startup opportunities finder"""
-    
+
     finder = StartupOpportunitiesFinder()
-    
+
     print("="*60)
     print("FRESHLY FUNDED STARTUPS (Actively Hiring!)")
     print("="*60)
-    
+
     funded = finder.find_freshly_funded_startups(funding_stage='all')
-    
+
     for startup in funded[:3]:
         print(f"\n{startup['company']}")
         print(f"Funding: {startup['funding_amount']} {startup['stage']} ({startup['funding_date']})")
@@ -308,46 +308,47 @@ def test_startup_finder():
         print(f"Open Roles: {', '.join(startup['open_roles'])}")
         print(f"Compensation: {startup['salary_range']} + {startup['equity_range']} equity")
         print(f"Opportunity Score: {startup['opportunity_score']}/100")
-    
+
     print("\n" + "="*60)
     print("EQUITY VALUE CALCULATOR")
     print("="*60)
-    
+
     # Example: 0.1% equity in a $500M company
     equity_calc = finder.calculate_equity_value(
         equity_percentage=0.1,
         company_valuation=500_000_000,
         years_to_exit=4
     )
-    
+
     print("\nExample: 0.1% equity in a $500M valuation startup")
     print(f"Expected Value: ${equity_calc['expected_value']:,.0f}")
     print(f"Annual Expected Value: ${equity_calc['annual_expected_value']:,.0f}/year")
     print("\nScenarios:")
     for name, scenario in equity_calc['scenarios'].items():
-        print(f"  {name.capitalize()} ({scenario['multiple']}x): ${scenario['value']:,.0f} ({scenario['probability']*100:.0f}% chance)")
-    
+        prob = scenario['probability'] * 100
+        print(f"  {name.capitalize()} ({scenario['multiple']}x): ${scenario['value']:,.0f} ({prob:.0f}% chance)")
+
     print("\n" + "="*60)
     print("HOT YC STARTUPS")
     print("="*60)
-    
+
     for startup in finder.hot_yc_startups[:3]:
         print(f"\n{startup['company']} ({startup['batch']})")
         print(f"What: {startup['description']}")
         print(f"Funding: {startup['funding']}")
         print(f"Why Hot: {startup['why_hot']}")
         print(f"Apply: {startup['careers']}")
-    
+
     print("\n" + "="*60)
     print("YOUR PERSONALIZED STARTUP STRATEGY")
     print("="*60)
-    
+
     user_profile = {
         'experience_level': 'new grad',
         'projects': ['AI fitness app', 'ML project'],
         'interests': ['music', 'AI']
     }
-    
+
     strategy = finder.generate_startup_strategy(user_profile)
     print(f"\nTarget Stages: {', '.join(strategy['target_stages'])}")
     print(f"Focus Areas: {', '.join(strategy['focus_areas'])}")
