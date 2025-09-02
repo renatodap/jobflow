@@ -1,0 +1,60 @@
+Home Page contents
+
+Accumulate Lite Client
+Capstone
+Live Music Stuff -> Charlies
+Tennis Season
+
+Software:
+Accumulate Lite Client
+Captsone - All About Food
+
+Other Projects: 
+Digital Media Library Desktop App
+Game Tracker Web App
+Pipelined Processor Design
+Java Linter & Static Analysis Tool
+OS Design
+Jetpack (220)
+
+Music: 
+Live Music Stuff
+Youtube Covers
+Spotify Original Releases
+
+Write about relationship with music
+Learning instruments - self-taught
+
+
+
+
+
+
+
+
+
+
+
+
+I want to finish the home page for my personal website. 
+The main goal of my website is to show all aspects of my life. However, more specifically I want to start applying to jobs soon
+and I'm going to start applying in the fall of 2025.
+Since that is my focus right now, my website should be mostly directed to hiring managers for technology
+and Software Engineering positions.
+The home page should reflect the most important things to me at the moment. A few things come to mind.
+
+1: Capstone. Throughout my senior year I'll be working on the AllAboutFood AI Recipe Webstie
+2: Accumulate Lite Client: In the summer I did my internship with Accumulate
+3: AI classes. I'll be taking 2 AI classes in the fall
+4: Tennis Season. There is a tennis season in the fall
+5: Live Music. I play at an open mic at a bar every now and then.
+
+That will be the focus of my attention in the fall. And I'll be applying to jobs and potentially doing
+other projects to help my job applications. (maybe) 
+
+Please help me define the content of my home page. I want the home page to be like Apple where
+the main thing is displayed full width and then the rest of the things might have half screen (horizontally) 
+when displayed further down if they're less important. 
+
+First: Output an overview of every single dimension of my request. Find points of uncertainty. Then, ask me as many clarifying questions as possible
+

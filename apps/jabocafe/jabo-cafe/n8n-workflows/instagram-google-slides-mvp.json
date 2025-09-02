@@ -1,0 +1,561 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -368,
+        -128
+      ],
+      "id": "83625809-8cf4-4bf9-9614-34c5db2e81cd",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "'1sEVJdn45cpFInOvZAe4SkplNaBAVShcY' in parents and mimeType contains 'image/'",
+        "returnAll": true,
+        "filter": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -144,
+        -128
+      ],
+      "id": "c46bc7cf-800f-489f-b6b6-bfe59c537182",
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "6ZpeouIlVkFHa2eK",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const files = items.map(i => i.json);\nconst pick = files[Math.floor(Math.random() * files.length)];\nreturn [{\n  json: {\n    fileId: pick.id,\n    fileName: pick.name,\n    webContentLink: pick.webContentLink, // usable direct link\n    webViewLink: pick.webViewLink\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        -128
+      ],
+      "id": "afcda035-b153-4cfe-9591-56aaa3c2d5e8",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.fileId }}",
+          "mode": "id"
+        },
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        304,
+        -128
+      ],
+      "id": "ff90eadb-9e35-4826-b36a-8d36c662e211",
+      "name": "Download file",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "6ZpeouIlVkFHa2eK",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        96
+      ],
+      "id": "988b54ac-db88-408e-a2a4-ff8e7e850d5b",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsCode": "// === Utilidades ===\nconst resp = $json.responses?.[0] || {};\nconst labelsAll = (resp.labelAnnotations || [])\n  .map(l => ({ d: (l.description || '').toLowerCase().trim(), s: l.score || 0 }))\n  .sort((a,b)=> b.s - a.s)\n  .map(x => x.d);\n\nconst uniq = arr => [...new Set(arr.filter(Boolean))];\nconst stripAccents = s => s.normalize('NFD').replace(/[\\u0300-\\u036f]/g,'');\nconst toHash = s => '#'+ stripAccents(s).toLowerCase().replace(/\\s+/g,'');\n\n// === Palavras-chave de café (inglês + pt) ===\nconst coffeeKW = [\n  'coffee','café','cafe','bean','beans','grão','grãos','espresso',\n  'latte','cappuccino','mocha','barista','crema','grinder','moedor',\n  'roast','torra','roasted coffee','filter coffee','café filtrado',\n  'pour over','pour-over','coador manual','coador','chemex','v60',\n  'aeropress','french press','prensa francesa','moka','moka pot',\n  'portafilter','portafiltro','milk foam','espuma de leite','xícara','mug','cup','cafeteira'\n];\n\n// Seleciona rótulos relevantes a café\nconst uniqueLabels = uniq(labelsAll);\nconst coffeeHits = uniqueLabels.filter(l => coffeeKW.some(k => l.includes(k)));\n\n// Foco nos termos\nconst focus = coffeeHits.length ? coffeeHits.slice(0, 8) : uniqueLabels.slice(0, 8);\n\n// Resumo em pt-BR\nconst summaryPT = coffeeHits.length\n  ? `Elementos de café detectados: ${focus.join(', ')}.`\n  : `Elementos visuais relevantes: ${focus.join(', ')} (sem itens de café claros; conecte ao ritual do café).`;\n\n// Hashtags candidatas em pt-BR (curadas + derivadas)\nconst curated = [\n  '#jabocafe','#cafebrasileiro','#cafesespeciais','#graoscafe',\n  '#moagem','#espressoperfeito','#coadormanual','#torra','#barista'\n];\nconst derived = focus.map(toHash);\nconst candTags = uniq([...curated, ...derived]).slice(0, 10);\n\nreturn [{\n  json: {\n    image_summary_pt: `${summaryPT} Tom: acolhedor, artesanal, brasileiro.`,\n    image_labels_raw: uniqueLabels,\n    coffee_terms: coffeeHits,\n    image_candidate_hashtags: candTags\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        96
+      ],
+      "id": "c232aafe-7991-4111-88a8-d00fc9171b65",
+      "name": "Summarize Image"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCs7FM7mLsVBdJuQFb8rRM_OYge9vL_V6A",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": [\n    {\n      \"image\": { \"content\": \"{{ $json.data }}\" },\n      \"features\": [\n        { \"type\": \"LABEL_DETECTION\", \"maxResults\": 12 }\n      ]\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -112,
+        96
+      ],
+      "id": "de174816-173a-40d2-8076-b6dfe376d4fb",
+      "name": "Analyze Image"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama3-70b-8192\",\n  \"temperature\": 0.6,\n  \"max_tokens\": 600,\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Você é um redator conciso e brand-safe para Instagram da marca Jabô Café (Brasil). Responda SEMPRE apenas com JSON válido, sem texto extra.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Gere conteúdo em português (pt-BR) COERENTE com a foto descrita abaixo. Não invente objetos que não aparecem.\\n\\nRESUMO DA IMAGEM: {{$json.image_summary_pt}}\\nTERMOS DE CAFÉ DETECTADOS: {{$json.coffee_terms.join(', ')}}\\nHASHTAGS CANDIDATAS (pt): {{$json.image_candidate_hashtags.join(' ')}}\\n\\nContexto de marca/produto:\\n- Jabô Café — cafés especiais brasileiros.\\n- Objetivo: estimular a compra de pacotes 250g (moído ou em grãos) de forma sutil, sem preço e sem link.\\n- Tom: acolhedor, especialista, moderno; celebre o ritual do café.\\n\\nRegras de estilo e conversão:\\n- Linguagem 100% pt-BR.\\n- Título: até 5 palavras (reflete o que há na foto).\\n- Subtítulo: até 10 palavras (complementa o título).\\n- Caption: até 150 palavras; inclua emojis pertinentes ao universo do café; finalize com 3–5 hashtags em minúsculas (pt), preferindo as candidatas fornecidas e variações; sem URLs; sem preço.\\n- CTA sutil no final (ex.: "experimente nosso 250g em grãos ou moído" ou "descubra em casa o aroma do Jabô Café").\\n- Evite linguagem agressiva de venda; foque benefícios sensoriais, preparo e ritual.\\n\\nRetorne JSON EXATO neste esquema e nada além disso:\\n{\\n  \\\"title\\\": \\\"string (≤5 palavras)\\\",\\n  \\\"subtitle\\\": \\\"string (≤10 palavras)\\\",\\n  \\\"body_text\\\": \\\"1–2 frases em pt-BR, sem hashtags\\\",\\n  \\\"caption\\\": \\\"≤150 palavras, pt-BR, com emojis e 3–5 hashtags (pt) no final\\\"\\n}\\n\"\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        336,
+        96
+      ],
+      "id": "dc1e82d4-849e-4fa1-9b91-14ad8c86392c",
+      "name": "Groq",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "yzQEQmhgW45x1Ow3",
+          "name": "Header Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.choices?.[0]?.message?.content;\nif (!raw) throw new Error('Groq vazio');\nlet c;\ntry { c = JSON.parse(raw); } catch { throw new Error('JSON inválido do Groq'); }\n\n// Limites\nconst words = s => (s||'').trim().split(/\\s+/).filter(Boolean);\nif (words(c.title).length > 5) c.title = words(c.title).slice(0,5).join(' ');\nif (words(c.subtitle).length > 10) c.subtitle = words(c.subtitle).slice(0,10).join(' ');\n\n// Caption ~150 palavras (tolerância)\nconst capWords = words(c.caption);\nif (capWords.length > 160) c.caption = capWords.slice(0,150).join(' ');\n\n// Hashtags no final (3–5, minúsculas)\nconst tags = (c.caption.match(/#[\\p{L}\\p{N}_]+/gu) || []);\nif (tags.length < 3) throw new Error('Menos de 3 hashtags');\nif (tags.length > 6) {\n  // corta para 5\n  const textoSemTags = c.caption.replace(/#[\\p{L}\\p{N}_]+/gu, '').trim();\n  c.caption = `${textoSemTags}\\n\\n${tags.slice(0,5).join(' ')}`;\n}\n// Força minúsculas nas hashtags\nc.caption = c.caption.replace(/#[\\p{L}\\p{N}_]+/gu, m => m.toLowerCase());\n\nreturn [{ json: c }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -336,
+        320
+      ],
+      "id": "f63bae95-6135-4d5a-bec2-3f3fd4780e38",
+      "name": "Generate JSON"
+    },
+    {
+      "parameters": {
+        "operation": "copy",
+        "fileId": {
+          "__rl": true,
+          "value": "1ettYmjZ01cc0UBFfPyFetbC3HAuoitlHj1bCsLSu_-E",
+          "mode": "id"
+        },
+        "name": "=Jabo_IG_{{$now}}.gslides",
+        "options": {
+          "description": ""
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "name": "Drive: Copy Template",
+      "position": [
+        -112,
+        320
+      ],
+      "id": "05c493b8-90ea-4200-a9e4-2c418d29dada",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "6ZpeouIlVkFHa2eK",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://slides.googleapis.com/v1/presentations/{{$node[\"Drive: Copy Template\"].json.id}}:batchUpdate\n",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "sendBody": true,
+        "contentType": "raw",
+        "body": "={{ JSON.stringify({ requests: $node[\"Build Slides Request\"].json.requests }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "name": "Slides: batchUpdate",
+      "position": [
+        336,
+        320
+      ],
+      "id": "67f7da1e-97c6-47ef-8a63-6bc672561b5e",
+      "credentials": {
+        "googleOAuth2Api": {
+          "id": "ym0xMB5qM3buNG75",
+          "name": "Google account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://slides.googleapis.com/v1/presentations/{{$node[\"Drive: Copy Template\"].json.id}}?fields=slides(objectId)",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "name": "Slides: get slides",
+      "position": [
+        -352,
+        528
+      ],
+      "id": "a6626158-4c0c-4237-a92b-77434199ff04",
+      "credentials": {
+        "googleOAuth2Api": {
+          "id": "ym0xMB5qM3buNG75",
+          "name": "Google account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const slides =  $input.first().json.slides|| [];\nif (!slides.length) throw new Error('No slides found');\n\nconst presentationId = $node['Drive: Copy Template'].json.id;   // ou $('Drive: Copy Template').json.id\n\nreturn [{\n  json: {\n    presentationId,\n    pageId: slides[0].objectId\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "name": "Pick first pageId",
+      "position": [
+        -128,
+        528
+      ],
+      "id": "c3327253-b5c2-4695-ac5d-6291bdd75168"
+    },
+    {
+      "parameters": {
+        "url": "=https://slides.googleapis.com/v1/presentations/{{ $json.presentationId }}/pages/{{ $json.pageId }}/thumbnail?thumbnailProperties.mimeType=PNG&thumbnailProperties.thumbnailSize=LARGE",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "name": "Slides: get thumbnail",
+      "position": [
+        96,
+        528
+      ],
+      "id": "a5b7ea62-5731-4a23-b57a-79db010d87c0",
+      "credentials": {
+        "googleOAuth2Api": {
+          "id": "ym0xMB5qM3buNG75",
+          "name": "Google account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{$json.contentUrl}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "name": "HTTP: fetch PNG",
+      "position": [
+        320,
+        528
+      ],
+      "id": "a857280c-c949-4c14-9485-dfdc001f71db"
+    },
+    {
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1Gi2XpS2qWP2V7Lj3tPd27kIaz-H4XdPl",
+          "mode": "list",
+          "cachedResultName": "instagram-posts-png",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1Gi2XpS2qWP2V7Lj3tPd27kIaz-H4XdPl"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "name": "Drive: Upload Render",
+      "position": [
+        544,
+        528
+      ],
+      "id": "8b75a8a3-732a-4960-9838-5a60b22a279a",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "6ZpeouIlVkFHa2eK",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "design_fileId",
+              "value": "={{$json.id}}"
+            },
+            {
+              "name": "design_url",
+              "value": "={{`https://drive.google.com/uc?export=download&id=${$json.id}`}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "name": "Build design_url",
+      "position": [
+        768,
+        528
+      ],
+      "id": "bd703c08-8ca6-4f54-868a-21fc6062bf84"
+    },
+    {
+      "parameters": {
+        "jsCode": "const title = $('Generate JSON').first().json.title || '';\nconst subtitle = $('Generate JSON').first().json.subtitle|| '';\nconst body = $('Generate JSON').first().json.body_text || '';\nconst fileId = $('Code').first().json.fileId;\nconst imageUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;\n\nreturn [{\n  json: {\n    requests: [\n      { replaceAllText: {\n          containsText: { text: '[[TITLE]]', matchCase: false },\n          replaceText: title\n      }},\n      { replaceAllText: {\n          containsText: { text: '[[SUBTITLE]]', matchCase: false },\n          replaceText: subtitle\n      }},\n      { replaceAllText: {\n          containsText: { text: '[[BODY]]', matchCase: false },\n          replaceText: body\n      }},\n      { replaceAllShapesWithImage: {\n          imageUrl,\n          imageReplaceMethod: 'CENTER_INSIDE',\n          containsText: { text: '[[IMAGE]]', matchCase: false }\n      }}\n    ]\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        320
+      ],
+      "id": "e5a514ef-bc0e-41ac-8fa7-d8af32a81e3a",
+      "name": "Build Slides Request"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Analyze Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize Image": {
+      "main": [
+        [
+          {
+            "node": "Groq",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Image": {
+      "main": [
+        [
+          {
+            "node": "Summarize Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq": {
+      "main": [
+        [
+          {
+            "node": "Generate JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate JSON": {
+      "main": [
+        [
+          {
+            "node": "Drive: Copy Template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Drive: Copy Template": {
+      "main": [
+        [
+          {
+            "node": "Build Slides Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slides: batchUpdate": {
+      "main": [
+        [
+          {
+            "node": "Slides: get slides",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slides: get slides": {
+      "main": [
+        [
+          {
+            "node": "Pick first pageId",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick first pageId": {
+      "main": [
+        [
+          {
+            "node": "Slides: get thumbnail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slides: get thumbnail": {
+      "main": [
+        [
+          {
+            "node": "HTTP: fetch PNG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP: fetch PNG": {
+      "main": [
+        [
+          {
+            "node": "Drive: Upload Render",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Drive: Upload Render": {
+      "main": [
+        [
+          {
+            "node": "Build design_url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Slides Request": {
+      "main": [
+        [
+          {
+            "node": "Slides: batchUpdate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6dc8e3091922948a5460cea302157b06ec1fadae9d9a2311c61766821dd87a4b"
+  }
+}

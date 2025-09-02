@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse Daily - The Content Creator's Secret Weapon</title>
+    <meta name="description" content="Discover what's trending before it goes viral. Premium intelligence for content creators, marketers, and influencers. Join 10,000+ creators staying ahead.">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Pulse Daily - The Content Creator's Secret Weapon">
+    <meta property="og:description" content="Discover what's trending before it goes viral. Premium intelligence and content ideas for creators who dominate social media.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pulsedaily.co">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pulse Daily - The Content Creator's Secret Weapon">
+    <meta name="twitter:description" content="Discover what's trending before it goes viral. Premium intelligence and content ideas for creators who dominate social media.">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Header -->
+    <header class="container mx-auto px-4 py-6">
+        <nav class="flex justify-between items-center">
+            <div class="text-2xl font-bold text-indigo-600">
+                Pulse Daily
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#features" class="text-gray-600 hover:text-indigo-600 transition-colors">Features</a>
+                <a href="#pricing" class="text-gray-600 hover:text-indigo-600 transition-colors">Pricing</a>
+                <a href="#examples" class="text-gray-600 hover:text-indigo-600 transition-colors">Examples</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="container mx-auto px-4 py-16 text-center">
+        <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            Know What's Trending<br>
+            <span class="text-indigo-600">Before Everyone Else</span>
+        </h1>
+        
+        <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            Get early access to breaking trends and viral content ideas before they explode. 
+            Premium intelligence delivered daily to serious content creators. Stay ahead of the curve.
+        </p>
+        
+        <!-- Waitlist Form -->
+        <div class="max-w-md mx-auto mb-8">
+            <form id="waitlistForm" class="flex flex-col sm:flex-row gap-4">
+                <input 
+                    type="email" 
+                    id="email" 
+                    placeholder="Enter your email" 
+                    required
+                    class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg"
+                >
+                <button 
+                    type="submit"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors text-lg"
+                    id="submitButton"
+                >
+                    Get Early Access
+                </button>
+            </form>
+            
+            <!-- FAKE DOOR - Pre-order CTA -->
+            <div class="mt-6">
+                <button 
+                    onclick="openPreOrder()"
+                    class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 px-12 rounded-lg transition-all text-lg shadow-lg transform hover:scale-105"
+                    id="preOrderButton"
+                >
+                    💎 Get Founder Access - $49 (Save 60%)
+                </button>
+                <p class="text-xs text-gray-500 mt-2">Limited to first 100 members • Usually $129</p>
+            </div>
+            <p class="text-sm text-gray-500 mt-2">Join 10,000+ content creators • No spam, ever</p>
+            
+            <!-- Success Message -->
+            <div id="successMessage" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mt-4">
+                🎉 Welcome to the waitlist! We'll notify you when Pulse Daily launches.
+            </div>
+            
+            <!-- Error Message -->
+            <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mt-4">
+                Something went wrong. Please try again or email us at hello@pulsedaily.co
+            </div>
+        </div>
+        
+        <!-- Social Proof -->
+        <div class="flex flex-wrap justify-center items-center gap-8 opacity-60">
+            <div class="text-sm text-gray-500">Used by creators from:</div>
+            <div class="text-sm font-medium text-gray-600">TikTok</div>
+            <div class="text-sm font-medium text-gray-600">YouTube</div>
+            <div class="text-sm font-medium text-gray-600">Twitter</div>
+            <div class="text-sm font-medium text-gray-600">Instagram</div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="bg-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">
+                    The Creator Intelligence Gap
+                </h2>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="p-6">
+                        <div class="text-4xl mb-4">📈</div>
+                        <h3 class="font-semibold mb-2">Late to Trends</h3>
+                        <p class="text-gray-600">By the time you discover what's hot, everyone else is already posting about it.</p>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="text-4xl mb-4">🔍</div>
+                        <h3 class="font-semibold mb-2">Information Overload</h3>
+                        <p class="text-gray-600">Scanning 20+ sources daily to find the next viral moment is time-consuming.</p>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h3 class="font-semibold mb-2">No Content Strategy</h3>
+                        <p class="text-gray-600">You know what's trending but struggle to turn insights into engaging content.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="features" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                    Premium Intelligence for Elite Creators
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Curated insights, ready-to-use content ideas, and trend alerts delivered daily to your inbox.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="space-y-8">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-indigo-100 text-indigo-600 rounded-full p-2 flex-shrink-0">
+                                <div class="w-6 h-6 flex items-center justify-center font-bold">1</div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-2">Early Trend Detection</h3>
+                                <p class="text-gray-600">Get alerts on emerging trends 6-12 hours before they hit mainstream.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-indigo-100 text-indigo-600 rounded-full p-2 flex-shrink-0">
+                                <div class="w-6 h-6 flex items-center justify-center font-bold">2</div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-2">Content Ideas & Scripts</h3>
+                                <p class="text-gray-600">Proven content formats, hooks, and viral templates for each trend.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-indigo-100 text-indigo-600 rounded-full p-2 flex-shrink-0">
+                                <div class="w-6 h-6 flex items-center justify-center font-bold">3</div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-2">Performance Insights</h3>
+                                <p class="text-gray-600">See which formats and platforms work best for each type of content.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <div class="text-sm text-gray-500 mb-4">📧 Today's Pulse Daily Brief</div>
+                    <div class="border rounded-lg overflow-hidden">
+                        <div class="bg-gradient-to-r from-emerald-500 to-blue-600 text-white p-6">
+                            <h3 class="text-lg font-bold mb-2">🚨 Breaking: AI Chatbot Glitch</h3>
+                            <p class="text-sm opacity-90 mb-3">ChatGPT going down sparks 2.3M+ mentions in 4 hours. Here's your content angle...</p>
+                            <div class="bg-white/20 rounded p-2 text-xs">
+                                "Thread hook: When AI breaks, humans win. Here's what this teaches us 🧵👇"
+                            </div>
+                        </div>
+                        <div class="p-4 text-xs text-gray-600">
+                            📊 Viral potential: 94/100<br>
+                            📱 Best platforms: Twitter, LinkedIn<br>
+                            ⏰ Peak engagement: Next 6 hours
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Preview -->
+    <section id="pricing" class="py-16 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">
+                Simple Pricing That Scales With You
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                <div class="border rounded-lg p-6">
+                    <h3 class="font-semibold text-lg mb-2">Free</h3>
+                    <div class="text-3xl font-bold mb-4">$0</div>
+                    <ul class="text-left space-y-2 text-sm text-gray-600">
+                        <li>✓ 2 active pages</li>
+                        <li>✓ Basic templates</li>
+                        <li>✓ PageCraft branding</li>
+                    </ul>
+                </div>
+                
+                <div class="border-2 border-indigo-600 rounded-lg p-6 relative">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white px-4 py-1 rounded-full text-sm">
+                        Most Popular
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Pro</h3>
+                    <div class="text-3xl font-bold mb-4">$19<span class="text-lg text-gray-500">/mo</span></div>
+                    <ul class="text-left space-y-2 text-sm text-gray-600">
+                        <li>✓ Unlimited pages</li>
+                        <li>✓ Premium templates</li>
+                        <li>✓ Custom domains</li>
+                        <li>✓ Advanced analytics</li>
+                    </ul>
+                </div>
+                
+                <div class="border rounded-lg p-6">
+                    <h3 class="font-semibold text-lg mb-2">Business</h3>
+                    <div class="text-3xl font-bold mb-4">$49<span class="text-lg text-gray-500">/mo</span></div>
+                    <ul class="text-left space-y-2 text-sm text-gray-600">
+                        <li>✓ Everything in Pro</li>
+                        <li>✓ A/B testing</li>
+                        <li>✓ Priority support</li>
+                        <li>✓ Team collaboration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-indigo-600 py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-white mb-4">
+                Ready to 10x Your Landing Page Speed?
+            </h2>
+            <p class="text-xl text-indigo-100 mb-8">
+                Join the waitlist and be among the first to try PageCraft AI
+            </p>
+            
+            <form id="bottomWaitlistForm" class="max-w-md mx-auto flex flex-col sm:flex-row gap-4">
+                <input 
+                    type="email" 
+                    placeholder="Enter your email" 
+                    required
+                    class="flex-1 px-4 py-3 border border-transparent rounded-lg focus:ring-2 focus:ring-white focus:border-transparent text-lg"
+                >
+                <button 
+                    type="submit"
+                    class="bg-white text-indigo-600 hover:bg-gray-100 font-semibold py-3 px-8 rounded-lg transition-colors text-lg"
+                >
+                    Join Waitlist
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-2xl font-bold text-white mb-4 md:mb-0">
+                    Pulse Daily
+                </div>
+                <div class="text-sm">
+                    © 2025 Pulse Daily. Premium intelligence for content creators.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Pre-order Modal -->
+    <div id="preOrderModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <div class="text-center">
+                <h2 class="text-2xl font-bold mb-4">🎯 Founder Access</h2>
+                <p class="text-gray-600 mb-6">Get exclusive access to Pulse Daily's intelligence reports before anyone else.</p>
+                
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg mb-6">
+                    <div class="text-3xl font-bold text-green-600">$49</div>
+                    <div class="text-sm text-gray-500 line-through">Usually $129</div>
+                    <div class="text-sm text-green-700 font-semibold">Save 60% as founder</div>
+                </div>
+                
+                <div class="text-left mb-6 space-y-2">
+                    <div class="flex items-center text-sm">
+                        <span class="text-green-500 mr-2">✓</span>
+                        Daily trend intelligence reports
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-green-500 mr-2">✓</span>
+                        Content templates & viral hooks
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-green-500 mr-2">✓</span>
+                        6-12 hours before mainstream
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-green-500 mr-2">✓</span>
+                        Lifetime founder pricing lock
+                    </div>
+                </div>
+                
+                <button 
+                    onclick="processPreOrder()"
+                    class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold py-3 px-6 rounded-lg mb-4"
+                    id="checkoutButton"
+                >
+                    Secure My Founder Access - $49
+                </button>
+                
+                <button 
+                    onclick="closePreOrder()"
+                    class="text-gray-500 text-sm hover:text-gray-700"
+                >
+                    Maybe later
+                </button>
+                
+                <p class="text-xs text-gray-400 mt-4">30-day money-back guarantee</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Email validation
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Handle form submissions
+        function handleFormSubmit(formId) {
+            const form = document.getElementById(formId);
+            const emailInput = form.querySelector('input[type="email"]');
+            const submitButton = form.querySelector('button[type="submit"]');
+            
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const email = emailInput.value.trim();
+                
+                if (!validateEmail(email)) {
+                    showMessage('errorMessage', 'Please enter a valid email address.');
+                    return;
+                }
+                
+                // Disable button
+                submitButton.disabled = true;
+                submitButton.textContent = 'Joining...';
+                
+                // Track analytics event
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'waitlist_signup', {
+                        'email': email,
+                        'source': formId
+                    });
+                }
+                
+                // Simulate API call (replace with actual endpoint)
+                try {
+                    // In a real implementation, this would call your backend
+                    await simulateAPICall(email);
+                    
+                    // Store email locally for now
+                    const emails = JSON.parse(localStorage.getItem('waitlist_emails') || '[]');
+                    if (!emails.includes(email)) {
+                        emails.push(email);
+                        localStorage.setItem('waitlist_emails', JSON.stringify(emails));
+                    }
+                    
+                    showMessage('successMessage');
+                    emailInput.value = '';
+                    
+                } catch (error) {
+                    showMessage('errorMessage', 'Something went wrong. Please try again.');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = formId === 'waitlistForm' ? 'Get Early Access' : 'Join Waitlist';
+                }
+            });
+        }
+        
+        function simulateAPICall(email) {
+            return new Promise((resolve) => {
+                setTimeout(resolve, 1000); // Simulate network delay
+            });
+        }
+        
+        function showMessage(messageId, customText) {
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            // Hide both messages first
+            successMsg.classList.add('hidden');
+            errorMsg.classList.add('hidden');
+            
+            // Show the appropriate message
+            const targetMsg = document.getElementById(messageId);
+            if (customText && messageId === 'errorMessage') {
+                targetMsg.textContent = customText;
+            }
+            targetMsg.classList.remove('hidden');
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                targetMsg.classList.add('hidden');
+            }, 5000);
+        }
+        
+        // Pre-order Modal Functions
+        function openPreOrder() {
+            document.getElementById('preOrderModal').classList.remove('hidden');
+            
+            // Track fake door click - REINFORCEMENT LEARNING DATA
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'fake_door_click', {
+                    'button_text': 'Get Founder Access',
+                    'price': 49,
+                    'discount': '60%'
+                });
+            }
+            
+            // Store in localStorage for analysis
+            const clickData = {
+                timestamp: new Date().toISOString(),
+                event: 'fake_door_click',
+                source: 'hero_section',
+                price: 49
+            };
+            
+            const clicks = JSON.parse(localStorage.getItem('fake_door_clicks') || '[]');
+            clicks.push(clickData);
+            localStorage.setItem('fake_door_clicks', JSON.stringify(clicks));
+        }
+        
+        function closePreOrder() {
+            document.getElementById('preOrderModal').classList.add('hidden');
+            
+            // Track modal close - BOUNCE DATA
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'modal_close', {
+                    'reason': 'maybe_later'
+                });
+            }
+        }
+        
+        function processPreOrder() {
+            // Track purchase intent - HIGHEST VALUE SIGNAL
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'purchase_intent', {
+                    'value': 49,
+                    'currency': 'USD',
+                    'item_name': 'Founder Access'
+                });
+            }
+            
+            // FAKE DOOR - Show "coming soon" instead of real payment
+            alert('🎉 Thank you for your interest! Pulse Daily launches in 2 weeks. We\'ll email you a special founder discount code.');
+            
+            // Store pre-order intent
+            const preOrderData = {
+                timestamp: new Date().toISOString(),
+                event: 'pre_order_intent',
+                amount: 49,
+                source: 'fake_door_modal'
+            };
+            
+            const preOrders = JSON.parse(localStorage.getItem('pre_orders') || '[]');
+            preOrders.push(preOrderData);
+            localStorage.setItem('pre_orders', JSON.stringify(preOrders));
+            
+            closePreOrder();
+        }
+
+        // Initialize forms
+        document.addEventListener('DOMContentLoaded', () => {
+            handleFormSubmit('waitlistForm');
+            handleFormSubmit('bottomWaitlistForm');
+            
+            // Track page view with new branding
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'page_view', {
+                    'page_title': 'Pulse Daily Landing Page',
+                    'page_location': window.location.href
+                });
+            }
+            
+            // Initialize reinforcement learning tracking
+            console.log('📊 RL Tracking initialized - monitoring all interactions');
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

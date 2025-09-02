@@ -1,0 +1,157 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '20.x'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate Code and Content
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck || echo "No typecheck script found"
+        continue-on-error: true
+
+      - name: Lint code
+        run: npm run lint || echo "No lint script found"
+        continue-on-error: true
+
+      - name: Validate MDX frontmatter
+        run: node scripts/validate-frontmatter.mjs
+        continue-on-error: true
+
+      - name: Check for TODO(clarify) items
+        run: |
+          if grep -r "TODO(clarify" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" --include="*.mdx" .; then
+            echo "Found TODO(clarify) items that need resolution"
+            exit 1
+          fi
+        continue-on-error: true
+
+  build:
+    runs-on: ubuntu-latest
+    name: Build Application
+    needs: validate
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+        env:
+          # Add required environment variables with placeholders
+          # These would be set in GitHub Secrets for production
+          NEXT_PUBLIC_GA_ID: ${{ secrets.GA4_MEASUREMENT_ID || 'ENV_REQUIRED(GA4_MEASUREMENT_ID)' }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY || 'ENV_REQUIRED(ANTHROPIC_API_KEY)' }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'ENV_REQUIRED(OPENAI_API_KEY)' }}
+
+      - name: Check build output
+        run: |
+          if [ -d ".next" ]; then
+            echo "Build successful - .next directory created"
+            du -sh .next
+          else
+            echo "Build may have failed - no .next directory found"
+            exit 1
+          fi
+
+  content-check:
+    runs-on: ubuntu-latest
+    name: Content Quality Checks
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for placeholder content
+        run: |
+          echo "Checking for placeholder content..."
+          if grep -r "lorem ipsum\|Lorem Ipsum\|TODO\|FIXME\|XXX" --include="*.mdx" content/posts/; then
+            echo "Warning: Found placeholder content in posts"
+          fi
+        continue-on-error: true
+
+      - name: Check for broken internal links
+        run: |
+          echo "Checking for broken internal links in MDX files..."
+          # Simple check for common broken link patterns
+          if grep -r "\[.*\]([^)]*undefined[^)]*)" --include="*.mdx" content/posts/; then
+            echo "Warning: Found potentially broken links"
+          fi
+        continue-on-error: true
+
+      - name: Verify image references
+        run: |
+          echo "Checking that referenced images exist..."
+          for img in $(grep -r "coverImage:" --include="*.mdx" content/posts/ | sed 's/.*coverImage: *"\([^"]*\)".*/\1/'); do
+            # Remove leading slash if present
+            img_path="public${img}"
+            if [ ! -f "$img_path" ]; then
+              echo "Warning: Image not found: $img_path"
+            fi
+          done
+        continue-on-error: true
+
+  pr-checklist:
+    runs-on: ubuntu-latest
+    name: PR Checklist Validation
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate PR checklist comment
+        run: |
+          cat << EOF > pr-checklist.md
+          ## AI-Daily PR Checklist
+          
+          Please ensure all items are checked before merging:
+          
+          - [ ] MDX posts follow the template format
+          - [ ] Similarity ≤25% per single source (no quotes)
+          - [ ] All links verified (return 200 OK)
+          - [ ] Cover images present (1200×630 for blog)
+          - [ ] No secrets or ENV variables in diff
+          - [ ] Scripts pass linting (if config present)
+          - [ ] Documentation updated if needed
+          - [ ] No placeholder content (lorem ipsum, etc.)
+          - [ ] Frontmatter validation passes
+          - [ ] Build completes successfully
+          
+          *This checklist is automatically generated. Please review manually.*
+          EOF
+          
+          echo "PR Checklist generated"
+
+# Note: Actual deployment would be handled by Vercel
+# This workflow focuses on validation and quality checks

@@ -1,0 +1,194 @@
+{
+  "files": {
+    "docs/brand/00_audit_and_gaps.md": {
+      "hash": "7a2c75280f8f0e3ceb42e71a16413ff0cf2afbdd",
+      "headings": [
+        "00 — Brand Audit & Gaps",
+        "Findings — What’s Defined",
+        "Gaps — What’s Missing",
+        "Risks & Contradictions",
+        "Prioritized Open Questions",
+        "First-Pass Brand Architecture (Mermaid)",
+        "Decision Blocks",
+        "[Decision] Brand Model (Masterbrand vs Endorsed)",
+        "[Decision] Domain & URL Strategy"
+      ]
+    },
+    "docs/brand/00_overview.md": {
+      "hash": "40c4439ae214bb4c026c8542e8665ce1a2bb268c",
+      "headings": [
+        "Sharpened Brand Overview",
+        "Brand Pyramid",
+        "Umbrella vs Product Brands",
+        "Decision Blocks",
+        "[Decision] Brand Model (Masterbrand vs Endorsed)",
+        "Open Questions"
+      ]
+    },
+    "docs/brand/01_positioning.md": {
+      "hash": "db059ff033e7df5099ef0fbe42b3b13cecf63f97",
+      "headings": [
+        "01 — Positioning",
+        "Category & Frame of Reference",
+        "Target Audience (Umbrella)",
+        "Unique Value (Umbrella)",
+        "Reasons to Believe (RTBs)",
+        "Proof Points",
+        "Messaging — Options (A/B/C)",
+        "[Decision] Core Positioning Angle",
+        "Elevator Pitch (Umbrella)",
+        "Taglines (Umbrella)",
+        "Competitive Frame Highlights",
+        "Open Questions"
+      ]
+    },
+    "docs/brand/02_architecture.md": {
+      "hash": "d425bfc3531cc06692c9d44b40f3860abcd31328",
+      "headings": [
+        "02 — Brand Architecture",
+        "Model",
+        "Naming Rules",
+        "Taxonomy & IA",
+        "Decision Blocks",
+        "[Decision] Endorsement Line Usage",
+        "[Decision] Sub-Brand Accent Palette",
+        "Open Questions"
+      ]
+    },
+    "docs/brand/03_audience_personas.md": {
+      "hash": "a18f986d2da4c3a114df6250d8bc3e3678c0cbf2",
+      "headings": [
+        "03 — Audience Personas",
+        "Persona A — The Hybrid Athlete (FeelSharper)",
+        "Persona B — The Exam Sprinter (StudySharper)",
+        "Persona C — The Lifelong Learner (Umbrella)",
+        "Persona D — The Time-Pressed Pro (WorkSharper, future)",
+        "Decision Blocks",
+        "[Decision] Primary Launch Persona per Vertical",
+        "Open Questions"
+      ]
+    },
+    "docs/brand/04_messaging_matrix.md": {
+      "hash": "001b707640315cbeb8787352fb1c89fa2dba9eb0",
+      "headings": [
+        "04 — Messaging Matrix",
+        "Core Story (Umbrella)",
+        "Elevator Pitch (3 variants)",
+        "Taglines (restate)",
+        "Value Props by Persona",
+        "Channel Cut (Examples)",
+        "Decision Blocks",
+        "[Decision] Umbrella CTA Language",
+        "Open Questions"
+      ]
+    },
+    "docs/brand/05_voice_tone.md": {
+      "hash": "fd256b60d0e76f8f074cadfb240b808843024976",
+      "headings": [
+        "05 — Voice & Tone",
+        "Traits",
+        "Do / Don’t",
+        "Examples",
+        "Decision Blocks",
+        "[Decision] Voice Strictness",
+        "Open Questions"
+      ]
+    },
+    "docs/brand/06_visual_identity.md": {
+      "hash": "b43570eed130dd108452647f2ca35d0d18ccfde7",
+      "headings": [
+        "06 — Visual Identity",
+        "Palette",
+        "Typography",
+        "Layout & Spacing",
+        "Motion",
+        "Accessibility",
+        "Design Tokens",
+        "Usage Do / Don’t",
+        "Decision Blocks",
+        "[Decision] Token Source of Truth",
+        "Open Questions"
+      ]
+    },
+    "docs/brand/BRAND_ADR/0001-brand-architecture.md": {
+      "hash": "b6aa7b717622c3b38e1f8837263ae119e896bc4c",
+      "headings": [
+        "ADR 0001 — Brand Architecture",
+        "Context",
+        "Decision",
+        "Alternatives Considered",
+        "Consequences",
+        "Status"
+      ]
+    },
+    "docs/brand/plans/000_recon.md": {
+      "hash": "04f46b1864bac7f50c7bb77c20e1fdf1cf65f527",
+      "headings": [
+        "Plan — 000 Recon",
+        "Scope",
+        "Tasks",
+        "Acceptance Criteria"
+      ]
+    },
+    "docs/brand/plans/001_positioning.md": {
+      "hash": "5f92aeb1579cc719cc45b8997c27ad7a4a88fdb0",
+      "headings": [
+        "Plan — 001 Positioning",
+        "Scope",
+        "Tasks",
+        "Acceptance Criteria"
+      ]
+    },
+    "docs/brand/plans/002_architecture.md": {
+      "hash": "49ed2e294cd2b8c5d6624717621aebb7b7f37f9d",
+      "headings": [
+        "Plan — 002 Brand Architecture",
+        "Scope",
+        "Tasks",
+        "Acceptance Criteria"
+      ]
+    },
+    "docs/brand/plans/003_audience_personas.md": {
+      "hash": "4009dc04fe3368fb6cf2d9eea78a86f162f05412",
+      "headings": [
+        "Plan — 003 Audience Personas",
+        "Scope",
+        "Tasks",
+        "Acceptance Criteria"
+      ]
+    },
+    "docs/brand/plans/004_messaging_matrix.md": {
+      "hash": "ba9776f8fc73c59316f04278fc1b491927f3be02",
+      "headings": [
+        "Plan — 004 Messaging Matrix",
+        "Scope",
+        "Tasks",
+        "Acceptance Criteria"
+      ]
+    },
+    "docs/brand/plans/005_voice_tone.md": {
+      "hash": "d88b7e2de32e2b62b46bf8529a252bb957fc33d3",
+      "headings": [
+        "Plan — 005 Voice & Tone",
+        "Scope",
+        "Tasks",
+        "Acceptance Criteria"
+      ]
+    },
+    "docs/brand/plans/006_visual_identity.md": {
+      "hash": "6573bff191415c025b1d92eb1d21dc91231f60b2",
+      "headings": [
+        "Plan — 006 Visual Identity",
+        "Scope",
+        "Tasks",
+        "Acceptance Criteria"
+      ]
+    },
+    "docs/brand/REVIEW_CHECKLIST.md": {
+      "hash": "0f9493c2cfc762a9989c8b0344470270ba082e99",
+      "headings": [
+        "Review Checklist (v0)"
+      ]
+    }
+  }
+}

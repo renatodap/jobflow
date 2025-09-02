@@ -1,0 +1,300 @@
+{
+  "keyboards": {
+    "approval": {
+      "type": "content_approval",
+      "layout": [
+        [
+          {
+            "text": "✅ Approve",
+            "callback_data": {
+              "action": "approve",
+              "id": "{{BRIEF_ID}}",
+              "timestamp": "{{TIMESTAMP}}"
+            }
+          },
+          {
+            "text": "✏️ Tweak",
+            "callback_data": {
+              "action": "tweak",
+              "id": "{{BRIEF_ID}}",
+              "timestamp": "{{TIMESTAMP}}"
+            }
+          }
+        ],
+        [
+          {
+            "text": "❌ Decline",
+            "callback_data": {
+              "action": "decline",
+              "id": "{{BRIEF_ID}}",
+              "timestamp": "{{TIMESTAMP}}"
+            }
+          },
+          {
+            "text": "📊 Details",
+            "url": "https://renatodap.me/admin/brief/{{BRIEF_ID}}"
+          }
+        ]
+      ]
+    },
+    "tweak_options": {
+      "type": "tweak_selection",
+      "layout": [
+        [
+          {
+            "text": "🎯 Change angle",
+            "callback_data": {
+              "action": "tweak_angle",
+              "id": "{{BRIEF_ID}}"
+            }
+          },
+          {
+            "text": "📝 Adjust tone",
+            "callback_data": {
+              "action": "tweak_tone",
+              "id": "{{BRIEF_ID}}"
+            }
+          }
+        ],
+        [
+          {
+            "text": "📏 Change length",
+            "callback_data": {
+              "action": "tweak_length",
+              "id": "{{BRIEF_ID}}"
+            }
+          },
+          {
+            "text": "🎨 New hook",
+            "callback_data": {
+              "action": "tweak_hook",
+              "id": "{{BRIEF_ID}}"
+            }
+          }
+        ],
+        [
+          {
+            "text": "💬 Custom note",
+            "callback_data": {
+              "action": "tweak_custom",
+              "id": "{{BRIEF_ID}}"
+            }
+          }
+        ]
+      ]
+    },
+    "buffer_warning": {
+      "type": "buffer_management",
+      "layout": [
+        [
+          {
+            "text": "🚀 Scout More",
+            "callback_data": {
+              "action": "scout_urgent",
+              "priority": "high"
+            }
+          },
+          {
+            "text": "♻️ Recycle Best",
+            "callback_data": {
+              "action": "recycle_top",
+              "count": "5"
+            }
+          }
+        ],
+        [
+          {
+            "text": "⚡ Lower Threshold",
+            "callback_data": {
+              "action": "threshold_lower",
+              "new_value": "65"
+            }
+          },
+          {
+            "text": "✍️ Manual Write",
+            "callback_data": {
+              "action": "manual_mode"
+            }
+          }
+        ]
+      ]
+    },
+    "metrics_navigation": {
+      "type": "metrics_view",
+      "layout": [
+        [
+          {
+            "text": "📈 Today",
+            "callback_data": {
+              "action": "metrics",
+              "period": "today"
+            }
+          },
+          {
+            "text": "📊 Week",
+            "callback_data": {
+              "action": "metrics",
+              "period": "week"
+            }
+          },
+          {
+            "text": "📉 Month",
+            "callback_data": {
+              "action": "metrics",
+              "period": "month"
+            }
+          }
+        ],
+        [
+          {
+            "text": "🏆 Top Posts",
+            "callback_data": {
+              "action": "top_posts",
+              "limit": "10"
+            }
+          },
+          {
+            "text": "💔 Worst Posts",
+            "callback_data": {
+              "action": "worst_posts",
+              "limit": "5"
+            }
+          }
+        ]
+      ]
+    },
+    "confirmation": {
+      "type": "action_confirmation",
+      "layout": [
+        [
+          {
+            "text": "✅ Yes, proceed",
+            "callback_data": {
+              "action": "confirm",
+              "original_action": "{{ACTION}}",
+              "id": "{{ID}}"
+            }
+          },
+          {
+            "text": "❌ Cancel",
+            "callback_data": {
+              "action": "cancel",
+              "return_to": "main"
+            }
+          }
+        ]
+      ]
+    },
+    "schedule_picker": {
+      "type": "schedule_selection",
+      "layout": [
+        [
+          {
+            "text": "🌅 Tomorrow 8AM",
+            "callback_data": {
+              "action": "schedule",
+              "time": "tomorrow_8am",
+              "id": "{{BRIEF_ID}}"
+            }
+          },
+          {
+            "text": "📅 In 2 days",
+            "callback_data": {
+              "action": "schedule",
+              "time": "2_days",
+              "id": "{{BRIEF_ID}}"
+            }
+          }
+        ],
+        [
+          {
+            "text": "📆 In 3 days",
+            "callback_data": {
+              "action": "schedule",
+              "time": "3_days",
+              "id": "{{BRIEF_ID}}"
+            }
+          },
+          {
+            "text": "🗓️ Next week",
+            "callback_data": {
+              "action": "schedule",
+              "time": "next_week",
+              "id": "{{BRIEF_ID}}"
+            }
+          }
+        ],
+        [
+          {
+            "text": "⏰ Custom time",
+            "callback_data": {
+              "action": "schedule_custom",
+              "id": "{{BRIEF_ID}}"
+            }
+          }
+        ]
+      ]
+    }
+  },
+  "callback_handlers": {
+    "approve": {
+      "workflow": "approval_processor",
+      "response": "✅ Approved! Publishing at {{SCHEDULED_TIME}}",
+      "actions": [
+        "update_status",
+        "queue_generation",
+        "schedule_publishing",
+        "update_buffer_count"
+      ]
+    },
+    "tweak": {
+      "workflow": "tweak_processor",
+      "response": "✏️ What would you like to adjust?",
+      "show_keyboard": "tweak_options"
+    },
+    "decline": {
+      "workflow": "decline_processor",
+      "response": "❌ Declined. Will recycle with new angle in 14 days.",
+      "actions": [
+        "update_status",
+        "schedule_recycle",
+        "trigger_scout_if_low_buffer"
+      ]
+    },
+    "scout_urgent": {
+      "workflow": "scout_ingest",
+      "response": "🚀 Emergency scout initiated. Results in ~5 minutes.",
+      "parameters": {
+        "priority": "urgent",
+        "threshold_override": 65
+      }
+    },
+    "metrics": {
+      "workflow": "metrics_reporter",
+      "response": "📊 Gathering {{PERIOD}} metrics...",
+      "return_type": "formatted_message"
+    }
+  },
+  "response_templates": {
+    "approval_with_buffer_warning": "✅ Approved!\n\n⚠️ Buffer now at {{BUFFER}} days (below target)\nConsider approving second brief.",
+    "tweak_confirmation": "✏️ Tweak noted: {{TWEAK_TYPE}}\nRegenerating with adjustments...",
+    "decline_with_reason": "❌ Declined: {{REASON}}\nScheduled for recycle on {{RECYCLE_DATE}}",
+    "error_generic": "❌ Error processing request. Try email approval.",
+    "rate_limit": "⏳ Too many requests. Please wait 30 seconds.",
+    "unknown_command": "❓ Unknown command. Type /help for options."
+  },
+  "validation_rules": {
+    "callback_data_max_length": 64,
+    "button_text_max_length": 20,
+    "keyboard_max_rows": 10,
+    "row_max_buttons": 8,
+    "url_must_be_https": true,
+    "callback_data_format": "action_id_timestamp"
+  },
+  "serialization": {
+    "format": "JSON",
+    "encoding": "UTF-8",
+    "compression": "none",
+    "max_size_bytes": 4096
+  }
+}

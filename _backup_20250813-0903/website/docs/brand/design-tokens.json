@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json.schemastore.org/design-tokens",
+  "meta": {
+    "status": "DRAFT",
+    "lastUpdated": "2025-08-12",
+    "source": "brand.md + tailwind.config.js + src/lib/brand.ts"
+  },
+  "color": {
+    "core": {
+      "charcoal": { "value": "#0D0D0D" },
+      "deepGray": { "value": "#1A1A1A" },
+      "white": { "value": "#FFFFFF" },
+      "electricBlue": { "value": "#1479FF" }
+    },
+    "products": {
+      "feelSharper": { "value": "#FF4A4A" },
+      "studySharper": { "value": "#00D0FF" },
+      "workSharper": { "value": "#FFC93C" },
+      "mindSharper": { "value": "#00BFA6" },
+      "skillSharper": { "value": "#22C55E" }
+    }
+  },
+  "spacing": {
+    "base": { "value": 4 },
+    "scale": { "value": [4, 8, 16, 24, 32, 48, 64] }
+  },
+  "radii": {
+    "card": { "value": 8 },
+    "button": { "value": 8 },
+    "chip": { "value": 9999 }
+  },
+  "typography": {
+    "fontFamily": { "value": "Inter, system-ui, sans-serif" },
+    "sizes": {
+      "xs": { "value": 12 },
+      "sm": { "value": 14 },
+      "base": { "value": 16 },
+      "md": { "value": 18 },
+      "lg": { "value": 20 },
+      "xl": { "value": 24 },
+      "2xl": { "value": 32 },
+      "3xl": { "value": 40 },
+      "4xl": { "value": 56 },
+      "5xl": { "value": 72 }
+    }
+  }
+}

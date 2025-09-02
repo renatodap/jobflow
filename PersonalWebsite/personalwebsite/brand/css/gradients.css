@@ -1,0 +1,269 @@
+/**
+ * AI-Daily Brand Gradients
+ * Custom CSS properties for consistent gradient application
+ */
+
+:root {
+  /* Brand Colors */
+  --color-teal-300: #2DD4BF;
+  --color-teal-500: #14B8A6;
+  --color-indigo-500: #6366F1;
+  --color-indigo-700: #4338CA;
+  --color-deep-indigo: #312E81;
+  --color-charcoal: #0F172A;
+  --color-off-white: #F8FAFC;
+  --color-accent-lime: #A3E635;
+  
+  /* G1: Hero Gradient (18° angle) */
+  --gradient-g1: linear-gradient(
+    18deg,
+    var(--color-teal-500) 0%,
+    var(--color-indigo-700) 100%
+  );
+  
+  /* G1 Reversed */
+  --gradient-g1-reverse: linear-gradient(
+    198deg,
+    var(--color-indigo-700) 0%,
+    var(--color-teal-500) 100%
+  );
+  
+  /* G2: Vertical Flow */
+  --gradient-g2: linear-gradient(
+    180deg,
+    var(--color-teal-300) 0%,
+    var(--color-indigo-500) 100%
+  );
+  
+  /* G2 Horizontal */
+  --gradient-g2-horizontal: linear-gradient(
+    90deg,
+    var(--color-teal-300) 0%,
+    var(--color-indigo-500) 100%
+  );
+  
+  /* G3: Subtle Radial */
+  --gradient-g3: radial-gradient(
+    circle at 30% 50%,
+    var(--color-indigo-500) 0%,
+    var(--color-deep-indigo) 100%
+  );
+  
+  /* G3 Centered */
+  --gradient-g3-center: radial-gradient(
+    circle at center,
+    var(--color-indigo-500) 0%,
+    var(--color-deep-indigo) 100%
+  );
+  
+  /* Subtle Overlays (for hover states) */
+  --gradient-overlay-light: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  
+  --gradient-overlay-dark: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  
+  /* Accent Gradients (use sparingly) */
+  --gradient-lime-accent: linear-gradient(
+    135deg,
+    var(--color-accent-lime) 0%,
+    #84CC16 100%
+  );
+  
+  /* Text Gradients (accessibility warning: use carefully) */
+  --gradient-text-hero: linear-gradient(
+    90deg,
+    var(--color-teal-500) 0%,
+    var(--color-indigo-700) 100%
+  );
+  
+  /* Mesh Gradients (complex backgrounds) */
+  --gradient-mesh: 
+    radial-gradient(at 40% 20%, var(--color-teal-300) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, var(--color-indigo-500) 0px, transparent 50%),
+    radial-gradient(at 10% 50%, var(--color-teal-500) 0px, transparent 50%),
+    radial-gradient(at 80% 80%, var(--color-indigo-700) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, var(--color-deep-indigo) 0px, transparent 50%);
+}
+
+/* Utility Classes */
+
+.gradient-g1 {
+  background: var(--gradient-g1);
+}
+
+.gradient-g2 {
+  background: var(--gradient-g2);
+}
+
+.gradient-g3 {
+  background: var(--gradient-g3);
+}
+
+.gradient-hero {
+  background: var(--gradient-g1);
+  position: relative;
+  overflow: hidden;
+}
+
+.gradient-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-overlay-light);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gradient-hero:hover::before {
+  opacity: 1;
+}
+
+/* Card Gradients */
+.gradient-card {
+  background: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.gradient-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--gradient-g1);
+}
+
+.gradient-card-left::before {
+  width: 2px;
+  height: 100%;
+}
+
+/* Button Gradients */
+.btn-gradient-primary {
+  background: var(--gradient-g1);
+  color: white;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.btn-gradient-primary:hover {
+  transform: translateY(-1px);
+}
+
+.btn-gradient-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-overlay-dark);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.btn-gradient-primary:hover::after {
+  opacity: 1;
+}
+
+/* Text Gradient (use sparingly for accessibility) */
+.text-gradient {
+  background: var(--gradient-text-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+/* Animated Gradients */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-animated {
+  background: linear-gradient(
+    -45deg,
+    var(--color-teal-300),
+    var(--color-teal-500),
+    var(--color-indigo-500),
+    var(--color-indigo-700)
+  );
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+/* Gradient Borders */
+.gradient-border {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--gradient-g1);
+  border-radius: 8px;
+  z-index: -1;
+}
+
+/* Responsive Gradient Adjustments */
+@media (max-width: 768px) {
+  :root {
+    /* Simplify gradients on mobile for performance */
+    --gradient-mesh: var(--gradient-g2);
+  }
+  
+  .gradient-animated {
+    animation: none;
+    background: var(--gradient-g1);
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .gradient-card {
+    background: var(--color-charcoal);
+  }
+  
+  .gradient-hero::before {
+    background: var(--gradient-overlay-dark);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .gradient-g1,
+  .gradient-g2,
+  .gradient-g3,
+  .gradient-hero,
+  .gradient-animated {
+    background: var(--color-teal-500) !important;
+  }
+}

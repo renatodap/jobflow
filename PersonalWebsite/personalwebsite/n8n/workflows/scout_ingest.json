@@ -1,0 +1,145 @@
+{
+  "name": "AI-Daily Scout Ingest",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "id": "cron-trigger",
+      "name": "Every 6 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.perplexity.ai/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$credentials.perplexityApi.apiKey}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "latest AI tools automation machine learning releases past 24 hours"
+            }
+          ]
+        }
+      },
+      "id": "perplexity-search",
+      "name": "Perplexity Scout",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Score each discovered item\nconst items = $input.all();\nconst scored = [];\n\nfor (const item of items) {\n  const data = item.json;\n  \n  // Calculate scores\n  const freshness = calculateFreshness(data.date);\n  const replicability = analyzeReplicability(data.content);\n  const impact = estimateImpact(data.content);\n  const gap = checkContentGap(data.title);\n  \n  const totalScore = freshness + replicability + impact + gap;\n  \n  if (totalScore >= 70) {\n    scored.push({\n      json: {\n        ...data,\n        scores: { freshness, replicability, impact, gap, total: totalScore },\n        briefId: generateBriefId(),\n        timestamp: new Date().toISOString()\n      }\n    });\n  }\n}\n\nreturn scored;\n\n// Helper functions\nfunction calculateFreshness(date) {\n  // TODO: Implement actual date comparison\n  return 20;\n}\n\nfunction analyzeReplicability(content) {\n  // TODO: Check for actionable steps\n  return 20;\n}\n\nfunction estimateImpact(content) {\n  // TODO: Analyze time/cost savings\n  return 20;\n}\n\nfunction checkContentGap(title) {\n  // TODO: Check against recent posts\n  return 15;\n}\n\nfunction generateBriefId() {\n  const date = new Date().toISOString().split('T')[0];\n  const random = Math.floor(Math.random() * 100);\n  return `${date}_${random.toString().padStart(2, '0')}`;\n}"
+      },
+      "id": "score-content",
+      "name": "Score Content",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetId": "{{$credentials.googleSheets.spreadsheetId}}",
+        "range": "Briefs!A:Z",
+        "options": {
+          "valueInputMode": "USER_ENTERED"
+        }
+      },
+      "id": "sheets-append",
+      "name": "Save to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "={{$credentials.telegram.chatId}}",
+        "text": "=📊 Scout Complete\\n\\nFound: {{$node['score-content'].outputDataLength}} items\\nQualified: {{$node['sheets-append'].outputDataLength}} items\\nTop score: {{$node['score-content'].item.json.scores.total}}\\n\\nBuffer: {{$node['buffer-check'].json.days}} days",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "telegram-notify",
+      "name": "Notify Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [1050, 300]
+    }
+  ],
+  "connections": {
+    "Every 6 Hours": {
+      "main": [
+        [
+          {
+            "node": "Perplexity Scout",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Perplexity Scout": {
+      "main": [
+        [
+          {
+            "node": "Score Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Content": {
+      "main": [
+        [
+          {
+            "node": "Save to Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to Sheets": {
+      "main": [
+        [
+          {
+            "node": "Notify Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Indiana/Indianapolis",
+    "errorWorkflow": "error-handler"
+  },
+  "staticData": null,
+  "tags": ["content-pipeline", "scout"],
+  "updatedAt": "2025-01-27T10:00:00.000Z"
+}

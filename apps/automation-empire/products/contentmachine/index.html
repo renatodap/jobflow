@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContentMachine - One Content, Five Platforms</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3/dist/cdn.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div x-data="contentMachine()" class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b">
+            <div class="max-w-6xl mx-auto px-4 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold gradient-text">ContentMachine</h1>
+                        <p class="text-sm text-gray-600">Transform one idea into viral content across 5 platforms</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-500">Credits: <span class="font-semibold">100</span></span>
+                        <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                            Upgrade to Pro
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-6xl mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Input Section -->
+                <div class="space-y-6">
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h2 class="text-lg font-semibold mb-4">Create Your Content</h2>
+                        
+                        <!-- Content Type Selector -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Content Type</label>
+                            <select x-model="contentType" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                                <option value="announcement">Product Announcement</option>
+                                <option value="tip">Educational Tip</option>
+                                <option value="story">Success Story</option>
+                                <option value="promotion">Promotion/Sale</option>
+                                <option value="engagement">Engagement Post</option>
+                            </select>
+                        </div>
+
+                        <!-- Main Content Input -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Your Message</label>
+                            <textarea 
+                                x-model="mainContent"
+                                placeholder="Write your main content here... This will be adapted for each platform automatically."
+                                class="w-full px-3 py-2 border rounded-lg h-32 focus:ring-2 focus:ring-indigo-500"
+                            ></textarea>
+                            <div class="mt-1 text-right">
+                                <span class="text-xs" :class="mainContent.length > 280 ? 'text-red-500' : 'text-gray-500'">
+                                    <span x-text="mainContent.length"></span>/280
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Additional Details -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Key Points (optional)</label>
+                            <input 
+                                x-model="keyPoints"
+                                type="text"
+                                placeholder="Feature 1, Feature 2, Feature 3"
+                                class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                            />
+                        </div>
+
+                        <!-- Hashtags -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Hashtags</label>
+                            <input 
+                                x-model="hashtags"
+                                type="text"
+                                placeholder="#startup #automation #productivity"
+                                class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                            />
+                        </div>
+
+                        <!-- Media Upload -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Media (optional)</label>
+                            <div class="border-2 border-dashed rounded-lg p-4 text-center hover:border-indigo-500 transition cursor-pointer">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 48 48">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <p class="mt-2 text-sm text-gray-600">Click to upload image or video</p>
+                                <p class="text-xs text-gray-500">PNG, JPG, MP4 up to 10MB</p>
+                            </div>
+                        </div>
+
+                        <!-- Generate Button -->
+                        <button 
+                            @click="generateContent()"
+                            class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition"
+                        >
+                            Generate Platform Content 🚀
+                        </button>
+                    </div>
+
+                    <!-- Platform Settings -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-semibold mb-4">Platform Settings</h3>
+                        <div class="space-y-3">
+                            <template x-for="platform in platforms" :key="platform.name">
+                                <label class="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" x-model="platform.enabled" class="mr-3">
+                                        <span x-text="platform.name" class="font-medium"></span>
+                                        <span x-text="platform.emoji" class="ml-2"></span>
+                                    </div>
+                                    <span class="text-xs text-gray-500" x-text="platform.charLimit + ' chars'"></span>
+                                </label>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Section -->
+                <div class="space-y-6">
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h2 class="text-lg font-semibold mb-4">Platform Previews</h2>
+                        
+                        <div x-show="!generated" class="text-center py-12 text-gray-400">
+                            <svg class="mx-auto h-24 w-24 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <p>Your platform-optimized content will appear here</p>
+                        </div>
+
+                        <div x-show="generated" class="space-y-4">
+                            <template x-for="platform in platforms" :key="platform.name">
+                                <div x-show="platform.enabled" class="border rounded-lg p-4 hover:shadow-md transition">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="flex items-center">
+                                            <span x-text="platform.emoji" class="text-2xl mr-2"></span>
+                                            <h4 x-text="platform.name" class="font-semibold"></h4>
+                                        </div>
+                                        <button class="text-indigo-600 text-sm hover:text-indigo-700">
+                                            Copy
+                                        </button>
+                                    </div>
+                                    <p x-text="platform.content" class="text-sm text-gray-700 whitespace-pre-wrap"></p>
+                                    <div class="mt-2 flex items-center justify-between">
+                                        <span class="text-xs text-gray-500">
+                                            <span x-text="platform.content.length"></span>/<span x-text="platform.charLimit"></span> chars
+                                        </span>
+                                        <div class="flex space-x-2">
+                                            <button class="text-xs text-gray-500 hover:text-gray-700">Edit</button>
+                                            <button class="text-xs text-gray-500 hover:text-gray-700">Regenerate</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Schedule Section -->
+                    <div x-show="generated" class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-semibold mb-4">Publishing Options</h3>
+                        <div class="space-y-4">
+                            <button class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+                                Publish Now to All Platforms
+                            </button>
+                            <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                                Schedule for Later
+                            </button>
+                            <button class="w-full border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition">
+                                Save as Draft
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function contentMachine() {
+            return {
+                contentType: 'announcement',
+                mainContent: '',
+                keyPoints: '',
+                hashtags: '',
+                generated: false,
+                platforms: [
+                    {
+                        name: 'Twitter/X',
+                        emoji: '🐦',
+                        enabled: true,
+                        charLimit: 280,
+                        content: ''
+                    },
+                    {
+                        name: 'LinkedIn',
+                        emoji: '💼',
+                        enabled: true,
+                        charLimit: 3000,
+                        content: ''
+                    },
+                    {
+                        name: 'Facebook',
+                        emoji: '👥',
+                        enabled: true,
+                        charLimit: 63206,
+                        content: ''
+                    },
+                    {
+                        name: 'Instagram',
+                        emoji: '📸',
+                        enabled: true,
+                        charLimit: 2200,
+                        content: ''
+                    },
+                    {
+                        name: 'TikTok',
+                        emoji: '🎵',
+                        enabled: true,
+                        charLimit: 150,
+                        content: ''
+                    }
+                ],
+                
+                generateContent() {
+                    // Simulate content generation for each platform
+                    this.platforms.forEach(platform => {
+                        if (platform.enabled) {
+                            platform.content = this.adaptContentForPlatform(platform.name);
+                        }
+                    });
+                    this.generated = true;
+                },
+
+                adaptContentForPlatform(platformName) {
+                    const base = this.mainContent;
+                    const tags = this.hashtags;
+                    
+                    switch(platformName) {
+                        case 'Twitter/X':
+                            return `${base}\n\n${tags}`.slice(0, 280);
+                        
+                        case 'LinkedIn':
+                            return `🎯 ${this.getTitle()}\n\n${base}\n\n${this.getKeyPointsList()}\n\n${tags}\n\n💬 What are your thoughts?`;
+                        
+                        case 'Facebook':
+                            return `${this.getTitle()}\n\n${base}\n\n${this.getKeyPointsList()}\n\n${tags}`;
+                        
+                        case 'Instagram':
+                            return `${base}\n.\n.\n.\n${tags}\n\n📲 Link in bio for more details!`;
+                        
+                        case 'TikTok':
+                            return `${base.slice(0, 100)}... ${tags}`;
+                        
+                        default:
+                            return base;
+                    }
+                },
+
+                getTitle() {
+                    const titles = {
+                        'announcement': '🚀 Exciting News!',
+                        'tip': '💡 Pro Tip',
+                        'story': '📖 Success Story',
+                        'promotion': '🎁 Special Offer',
+                        'engagement': '🤔 Question for You'
+                    };
+                    return titles[this.contentType] || '📢 Update';
+                },
+
+                getKeyPointsList() {
+                    if (!this.keyPoints) return '';
+                    const points = this.keyPoints.split(',').map(p => p.trim());
+                    return points.map(p => `✅ ${p}`).join('\n');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

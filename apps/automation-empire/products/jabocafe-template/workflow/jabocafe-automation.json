@@ -1,0 +1,322 @@
+{
+  "name": "Business Content Automation - JaboCafe Template",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-368, -128],
+      "id": "83625809-8cf4-4bf9-9614-34c5db2e81cd",
+      "name": "Daily Content Trigger"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "'{{FOLDER_ID}}' in parents and mimeType contains 'image/'",
+        "returnAll": true,
+        "filter": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [-144, -128],
+      "id": "c46bc7cf-800f-489f-b6b6-bfe59c537182",
+      "name": "Get Brand Images"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Select random image from folder\nconst files = items.map(i => i.json);\nif (files.length === 0) {\n  throw new Error('No images found in folder');\n}\nconst pick = files[Math.floor(Math.random() * files.length)];\nreturn [{\n  json: {\n    fileId: pick.id,\n    fileName: pick.name,\n    webContentLink: pick.webContentLink,\n    webViewLink: pick.webViewLink\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [80, -128],
+      "id": "afcda035-b153-4cfe-9591-56aaa3c2d5e8",
+      "name": "Select Random Image"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.fileId }}",
+          "mode": "id"
+        },
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [304, -128],
+      "id": "ff90eadb-9e35-4826-b36a-8d36c662e211",
+      "name": "Download Image"
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [-336, 96],
+      "id": "988b54ac-db88-408e-a2a4-ff8e7e850d5b",
+      "name": "Convert to Base64"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://vision.googleapis.com/v1/images:annotate?key={{GOOGLE_VISION_API_KEY}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": [\n    {\n      \"image\": { \"content\": \"{{ $json.data }}\" },\n      \"features\": [\n        { \"type\": \"LABEL_DETECTION\", \"maxResults\": 12 },\n        { \"type\": \"TEXT_DETECTION\", \"maxResults\": 10 }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-112, 96],
+      "id": "de174816-173a-40d2-8076-b6dfe376d4fb",
+      "name": "Analyze Image Content"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process Vision API results\nconst resp = $json.responses?.[0] || {};\nconst labels = (resp.labelAnnotations || [])\n  .map(l => l.description.toLowerCase())\n  .slice(0, 8);\n\nconst text = resp.textAnnotations?.[0]?.description || '';\n\n// Industry-specific keywords (customize per client)\nconst industryKeywords = [\n  // Add client-specific keywords here\n];\n\nconst relevantLabels = labels.filter(l => \n  industryKeywords.some(k => l.includes(k))\n).concat(labels).slice(0, 8);\n\nreturn [{\n  json: {\n    image_labels: relevantLabels,\n    detected_text: text,\n    image_summary: `Visual elements: ${relevantLabels.join(', ')}`,\n    industry_context: 'Business content suitable for social media'\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [112, 96],
+      "id": "c232aafe-7991-4111-88a8-d00fc9171b65",
+      "name": "Process Image Data"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama3-70b-8192\",\n  \"temperature\": 0.7,\n  \"max_tokens\": 600,\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a professional social media content creator. Create engaging, brand-appropriate content. Always respond with valid JSON only.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Create social media content based on this image analysis:\\n\\nIMAGE LABELS: {{$json.image_labels.join(', ')}}\\nDETECTED TEXT: {{$json.detected_text}}\\n\\nBrand Context:\\n- Business: {{BUSINESS_NAME}}\\n- Industry: {{INDUSTRY}}\\n- Tone: {{BRAND_TONE}}\\n- Goals: {{MARKETING_GOALS}}\\n\\nCreate content that:\\n1. Relates to the image\\n2. Maintains brand voice\\n3. Encourages engagement\\n4. Includes relevant hashtags\\n\\nReturn JSON with this exact structure:\\n{\\n  \\\"title\\\": \\\"string (5 words max)\\\",\\n  \\\"subtitle\\\": \\\"string (10 words max)\\\",\\n  \\\"body_text\\\": \\\"string (2-3 sentences)\\\",\\n  \\\"caption\\\": \\\"string (150 words max with 3-5 hashtags)\\\",\\n  \\\"hashtags\\\": [\\\"array\\\", \\\"of\\\", \\\"hashtags\\\"]\\n}\"\n    }\n  ]\n}"
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [336, 96],
+      "id": "dc1e82d4-849e-4fa1-9b91-14ad8c86392c",
+      "name": "Generate AI Content"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse and validate AI response\nconst raw = $json.choices?.[0]?.message?.content;\nif (!raw) throw new Error('AI response empty');\n\nlet content;\ntry {\n  content = JSON.parse(raw);\n} catch {\n  throw new Error('Invalid JSON from AI');\n}\n\n// Validate content structure\nif (!content.title || !content.caption) {\n  throw new Error('Missing required content fields');\n}\n\n// Ensure hashtags are formatted correctly\nif (content.hashtags && Array.isArray(content.hashtags)) {\n  content.hashtags = content.hashtags.map(tag => \n    tag.startsWith('#') ? tag : `#${tag}`\n  );\n}\n\nreturn [{ json: content }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-336, 320],
+      "id": "f63bae95-6135-4d5a-bec2-3f3fd4780e38",
+      "name": "Validate Content"
+    },
+    {
+      "parameters": {
+        "operation": "copy",
+        "fileId": {
+          "__rl": true,
+          "value": "{{TEMPLATE_FILE_ID}}",
+          "mode": "id"
+        },
+        "name": "=Post_{{$now.format('YYYY-MM-DD_HH-mm')}}",
+        "options": {
+          "parents": "{{OUTPUT_FOLDER_ID}}"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "name": "Copy Design Template",
+      "position": [-112, 320],
+      "id": "05c493b8-90ea-4200-a9e4-2c418d29dada"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build Google Slides update requests\nconst title = $('Validate Content').first().json.title || '';\nconst subtitle = $('Validate Content').first().json.subtitle || '';\nconst body = $('Validate Content').first().json.body_text || '';\nconst fileId = $('Select Random Image').first().json.fileId;\nconst imageUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;\n\nreturn [{\n  json: {\n    requests: [\n      {\n        replaceAllText: {\n          containsText: { text: '{{TITLE}}', matchCase: false },\n          replaceText: title\n        }\n      },\n      {\n        replaceAllText: {\n          containsText: { text: '{{SUBTITLE}}', matchCase: false },\n          replaceText: subtitle\n        }\n      },\n      {\n        replaceAllText: {\n          containsText: { text: '{{BODY}}', matchCase: false },\n          replaceText: body\n        }\n      },\n      {\n        replaceAllShapesWithImage: {\n          imageUrl,\n          imageReplaceMethod: 'CENTER_INSIDE',\n          containsText: { text: '{{IMAGE}}', matchCase: false }\n        }\n      }\n    ]\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [112, 320],
+      "id": "e5a514ef-bc0e-41ac-8fa7-d8af32a81e3a",
+      "name": "Build Design Updates"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://slides.googleapis.com/v1/presentations/{{$node[\"Copy Design Template\"].json.id}}:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "sendBody": true,
+        "contentType": "raw",
+        "body": "={{ JSON.stringify({ requests: $json.requests }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "name": "Apply Design Updates",
+      "position": [336, 320],
+      "id": "67f7da1e-97c6-47ef-8a63-6bc672561b5e"
+    },
+    {
+      "parameters": {
+        "url": "=https://slides.googleapis.com/v1/presentations/{{$node[\"Copy Design Template\"].json.id}}?fields=slides(objectId)",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "name": "Get Slide Info",
+      "position": [-352, 528],
+      "id": "a6626158-4c0c-4237-a92b-77434199ff04"
+    },
+    {
+      "parameters": {
+        "url": "=https://slides.googleapis.com/v1/presentations/{{ $node[\"Copy Design Template\"].json.id }}/pages/{{ $json.slides[0].objectId }}/thumbnail?thumbnailProperties.mimeType=PNG&thumbnailProperties.thumbnailSize=LARGE",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "name": "Generate Thumbnail",
+      "position": [96, 528],
+      "id": "a5b7ea62-5731-4a23-b57a-79db010d87c0"
+    },
+    {
+      "parameters": {
+        "url": "={{$json.contentUrl}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "name": "Download Final Image",
+      "position": [320, 528],
+      "id": "a857280c-c949-4c14-9485-dfdc001f71db"
+    },
+    {
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "{{FINAL_OUTPUT_FOLDER}}",
+          "mode": "list"
+        },
+        "options": {
+          "fileName": "=post_{{$now.format('YYYY-MM-DD_HH-mm')}}.png"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "name": "Save Final Post",
+      "position": [544, 528],
+      "id": "8b75a8a3-732a-4960-9838-5a60b22a279a"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "post_url",
+              "value": "={{`https://drive.google.com/uc?export=download&id=${$json.id}`}}"
+            },
+            {
+              "name": "caption",
+              "value": "={{$node[\"Validate Content\"].json.caption}}"
+            },
+            {
+              "name": "hashtags",
+              "value": "={{$node[\"Validate Content\"].json.hashtags.join(' ')}}"
+            },
+            {
+              "name": "created_at",
+              "value": "={{$now.format('YYYY-MM-DD HH:mm:ss')}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "name": "Format Output",
+      "position": [768, 528],
+      "id": "bd703c08-8ca6-4f54-868a-21fc6062bf84"
+    }
+  ],
+  "connections": {
+    "Daily Content Trigger": {
+      "main": [[{"node": "Get Brand Images", "type": "main", "index": 0}]]
+    },
+    "Get Brand Images": {
+      "main": [[{"node": "Select Random Image", "type": "main", "index": 0}]]
+    },
+    "Select Random Image": {
+      "main": [[{"node": "Download Image", "type": "main", "index": 0}]]
+    },
+    "Download Image": {
+      "main": [[{"node": "Convert to Base64", "type": "main", "index": 0}]]
+    },
+    "Convert to Base64": {
+      "main": [[{"node": "Analyze Image Content", "type": "main", "index": 0}]]
+    },
+    "Analyze Image Content": {
+      "main": [[{"node": "Process Image Data", "type": "main", "index": 0}]]
+    },
+    "Process Image Data": {
+      "main": [[{"node": "Generate AI Content", "type": "main", "index": 0}]]
+    },
+    "Generate AI Content": {
+      "main": [[{"node": "Validate Content", "type": "main", "index": 0}]]
+    },
+    "Validate Content": {
+      "main": [[{"node": "Copy Design Template", "type": "main", "index": 0}]]
+    },
+    "Copy Design Template": {
+      "main": [[{"node": "Build Design Updates", "type": "main", "index": 0}]]
+    },
+    "Build Design Updates": {
+      "main": [[{"node": "Apply Design Updates", "type": "main", "index": 0}]]
+    },
+    "Apply Design Updates": {
+      "main": [[{"node": "Get Slide Info", "type": "main", "index": 0}]]
+    },
+    "Get Slide Info": {
+      "main": [[{"node": "Generate Thumbnail", "type": "main", "index": 0}]]
+    },
+    "Generate Thumbnail": {
+      "main": [[{"node": "Download Final Image", "type": "main", "index": 0}]]
+    },
+    "Download Final Image": {
+      "main": [[{"node": "Save Final Post", "type": "main", "index": 0}]]
+    },
+    "Save Final Post": {
+      "main": [[{"node": "Format Output", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateId": "jabocafe-business-automation-v1",
+    "templateVersion": "1.0.0",
+    "description": "Complete business content automation system"
+  }
+}

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeadMagnet - Automated Business Outreach System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3/dist/cdn.min.js" defer></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div x-data="leadMagnet()" class="min-h-screen">
+        <!-- Header -->
+        <header class="gradient-bg text-white">
+            <div class="max-w-7xl mx-auto px-4 py-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold">🧲 LeadMagnet</h1>
+                        <p class="text-purple-100">Find and contact 1000+ leads automatically</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-purple-100">Active Campaigns</p>
+                        <p class="text-2xl font-bold">3 Running</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <main class="max-w-7xl mx-auto px-4 py-8">
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="text-sm text-gray-600">Leads Found</div>
+                    <div class="text-2xl font-bold text-gray-900">2,847</div>
+                    <div class="text-xs text-green-600">+127 today</div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="text-sm text-gray-600">Emails Sent</div>
+                    <div class="text-2xl font-bold text-gray-900">1,423</div>
+                    <div class="text-xs text-green-600">+89 today</div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="text-sm text-gray-600">Response Rate</div>
+                    <div class="text-2xl font-bold text-gray-900">14.3%</div>
+                    <div class="text-xs text-green-600">↑ 2.1%</div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="text-sm text-gray-600">Meetings Booked</div>
+                    <div class="text-2xl font-bold text-purple-600">23</div>
+                    <div class="text-xs text-green-600">+3 this week</div>
+                </div>
+            </div>
+
+            <!-- Campaign Builder -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left: Campaign Setup -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Step 1: Target Selection -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center">
+                            <span class="bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">1</span>
+                            Find Your Targets
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Business Type</label>
+                                <select x-model="campaign.businessType" class="w-full px-3 py-2 border rounded-lg">
+                                    <option value="cafe">Coffee Shops & Cafes</option>
+                                    <option value="restaurant">Restaurants</option>
+                                    <option value="fitness">Fitness Centers</option>
+                                    <option value="salon">Beauty Salons</option>
+                                    <option value="retail">Retail Stores</option>
+                                    <option value="professional">Professional Services</option>
+                                    <option value="medical">Medical Practices</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                                <input 
+                                    x-model="campaign.location"
+                                    type="text" 
+                                    placeholder="City, State or ZIP"
+                                    class="w-full px-3 py-2 border rounded-lg"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="mt-4 grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Lead Sources</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" x-model="campaign.sources.googleMaps" class="mr-2">
+                                        <span>Google Maps</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" x-model="campaign.sources.linkedin" class="mr-2">
+                                        <span>LinkedIn</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" x-model="campaign.sources.instagram" class="mr-2">
+                                        <span>Instagram</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" x-model="campaign.sources.facebook" class="mr-2">
+                                        <span>Facebook</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Filters</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" x-model="campaign.filters.hasWebsite" class="mr-2">
+                                        <span>Has Website</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" x-model="campaign.filters.activeOnSocial" class="mr-2">
+                                        <span>Active on Social</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" x-model="campaign.filters.rating4Plus" class="mr-2">
+                                        <span>4+ Star Rating</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button 
+                            @click="searchLeads()"
+                            class="mt-4 bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition"
+                        >
+                            Search for Leads
+                        </button>
+                    </div>
+
+                    <!-- Step 2: Message Templates -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center">
+                            <span class="bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">2</span>
+                            Craft Your Message
+                        </h2>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Subject</label>
+                            <input 
+                                x-model="campaign.emailSubject"
+                                type="text"
+                                placeholder="Quick question about {business_name}'s social media"
+                                class="w-full px-3 py-2 border rounded-lg"
+                            />
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Template</label>
+                            <textarea 
+                                x-model="campaign.emailTemplate"
+                                rows="8"
+                                placeholder="Hi {first_name},
+
+I noticed {business_name} has amazing content on Instagram...
+
+Would love to show you how we helped {similar_business} save 10 hours/week..."
+                                class="w-full px-3 py-2 border rounded-lg"
+                            ></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">LinkedIn Message</label>
+                            <textarea 
+                                x-model="campaign.linkedinMessage"
+                                rows="4"
+                                placeholder="Hi {first_name}, I help {business_type} owners automate their social media..."
+                                class="w-full px-3 py-2 border rounded-lg"
+                            ></textarea>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <button class="text-purple-600 text-sm hover:text-purple-700">
+                                Load Template
+                            </button>
+                            <button class="text-purple-600 text-sm hover:text-purple-700">
+                                Test Variables
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Launch Settings -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center">
+                            <span class="bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">3</span>
+                            Launch Campaign
+                        </h2>
+
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Send Rate</label>
+                                <select x-model="campaign.sendRate" class="w-full px-3 py-2 border rounded-lg">
+                                    <option value="10">10 per day</option>
+                                    <option value="25">25 per day</option>
+                                    <option value="50">50 per day</option>
+                                    <option value="100">100 per day</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Follow-up After</label>
+                                <select x-model="campaign.followUpDays" class="w-full px-3 py-2 border rounded-lg">
+                                    <option value="2">2 days</option>
+                                    <option value="3">3 days</option>
+                                    <option value="5">5 days</option>
+                                    <option value="7">7 days</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" x-model="campaign.autoFollowUp" class="mr-2">
+                                <span class="text-sm">Enable automatic follow-ups (max 3)</span>
+                            </label>
+                        </div>
+
+                        <button 
+                            @click="launchCampaign()"
+                            class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition"
+                        >
+                            🚀 Launch Campaign
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Lead Preview -->
+                <div class="space-y-6">
+                    <!-- Found Leads -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold mb-4">Found Leads (Preview)</h3>
+                        
+                        <div x-show="!leads.length" class="text-center py-8 text-gray-400">
+                            <svg class="mx-auto h-12 w-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            <p>Search for leads to see them here</p>
+                        </div>
+
+                        <div x-show="leads.length" class="space-y-3 max-h-96 overflow-y-auto">
+                            <template x-for="lead in leads" :key="lead.id">
+                                <div class="border rounded-lg p-3 hover:shadow-md transition">
+                                    <div class="flex items-start justify-between">
+                                        <div>
+                                            <h4 class="font-semibold text-sm" x-text="lead.businessName"></h4>
+                                            <p class="text-xs text-gray-600" x-text="lead.location"></p>
+                                            <div class="flex items-center mt-1">
+                                                <span class="text-xs text-yellow-500">★</span>
+                                                <span class="text-xs text-gray-600 ml-1" x-text="lead.rating"></span>
+                                            </div>
+                                        </div>
+                                        <input type="checkbox" x-model="lead.selected" class="mt-1">
+                                    </div>
+                                    <div class="mt-2 flex flex-wrap gap-1">
+                                        <span x-show="lead.hasEmail" class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Email</span>
+                                        <span x-show="lead.hasLinkedIn" class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">LinkedIn</span>
+                                        <span x-show="lead.hasInstagram" class="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">Instagram</span>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+
+                        <div x-show="leads.length" class="mt-4 text-sm text-gray-600">
+                            <span x-text="leads.filter(l => l.selected).length"></span> of <span x-text="leads.length"></span> selected
+                        </div>
+                    </div>
+
+                    <!-- Active Campaigns -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold mb-4">Active Campaigns</h3>
+                        
+                        <div class="space-y-3">
+                            <div class="border rounded-lg p-3">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-semibold text-sm">Coffee Shops - Indianapolis</span>
+                                    <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Active</span>
+                                </div>
+                                <div class="text-xs text-gray-600">
+                                    <div>Sent: 142/500</div>
+                                    <div>Responses: 19 (13.4%)</div>
+                                    <div>Meetings: 3</div>
+                                </div>
+                                <div class="mt-2 bg-gray-200 rounded-full h-2">
+                                    <div class="bg-purple-600 h-2 rounded-full" style="width: 28.4%"></div>
+                                </div>
+                            </div>
+
+                            <div class="border rounded-lg p-3">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-semibold text-sm">Restaurants - Carmel</span>
+                                    <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">Paused</span>
+                                </div>
+                                <div class="text-xs text-gray-600">
+                                    <div>Sent: 89/300</div>
+                                    <div>Responses: 8 (9.0%)</div>
+                                    <div>Meetings: 1</div>
+                                </div>
+                                <div class="mt-2 bg-gray-200 rounded-full h-2">
+                                    <div class="bg-purple-600 h-2 rounded-full" style="width: 29.7%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function leadMagnet() {
+            return {
+                campaign: {
+                    businessType: 'cafe',
+                    location: '',
+                    sources: {
+                        googleMaps: true,
+                        linkedin: true,
+                        instagram: true,
+                        facebook: false
+                    },
+                    filters: {
+                        hasWebsite: true,
+                        activeOnSocial: true,
+                        rating4Plus: true
+                    },
+                    emailSubject: "Quick question about {business_name}'s social media",
+                    emailTemplate: `Hi {first_name},
+
+I noticed {business_name} has amazing content on Instagram but I couldn't find you on other platforms.
+
+We helped The Daily Grind (a coffee shop in Broad Ripple) save 10 hours/week by automating their social media posting across Instagram, Facebook, LinkedIn, and Twitter from one place.
+
+Would you be interested in a quick 5-minute demo of how this could work for {business_name}?
+
+Best,
+Renato`,
+                    linkedinMessage: "Hi {first_name}, I help coffee shop owners automate their social media presence. Noticed {business_name} has great content - would love to show you how to amplify it across all platforms automatically. Interested?",
+                    sendRate: '25',
+                    followUpDays: '3',
+                    autoFollowUp: true
+                },
+                
+                leads: [],
+                
+                searchLeads() {
+                    // Simulate finding leads
+                    this.leads = [
+                        {
+                            id: 1,
+                            businessName: 'The Daily Grind',
+                            location: 'Indianapolis, IN',
+                            rating: '4.7',
+                            hasEmail: true,
+                            hasLinkedIn: true,
+                            hasInstagram: true,
+                            selected: true
+                        },
+                        {
+                            id: 2,
+                            businessName: 'Java Junction',
+                            location: 'Carmel, IN',
+                            rating: '4.5',
+                            hasEmail: true,
+                            hasLinkedIn: false,
+                            hasInstagram: true,
+                            selected: true
+                        },
+                        {
+                            id: 3,
+                            businessName: 'Perk Up Cafe',
+                            location: 'Fishers, IN',
+                            rating: '4.8',
+                            hasEmail: false,
+                            hasLinkedIn: true,
+                            hasInstagram: true,
+                            selected: false
+                        },
+                        {
+                            id: 4,
+                            businessName: 'Urban Coffee House',
+                            location: 'Zionsville, IN',
+                            rating: '4.6',
+                            hasEmail: true,
+                            hasLinkedIn: true,
+                            hasInstagram: false,
+                            selected: true
+                        }
+                    ];
+                },
+                
+                launchCampaign() {
+                    alert('Campaign launched! Outreach will begin automatically.');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

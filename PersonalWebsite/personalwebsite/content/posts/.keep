@@ -1,0 +1,9 @@
+# Content Posts Directory
+
+MDX posts are organized by date: `/yyyy/mm/slug.mdx`
+
+This directory structure ensures:
+- Chronological organization
+- Clean URLs
+- Easy archival
+- Clear content history

@@ -1,0 +1,5 @@
+{
+  "buildCommand": "pnpm turbo run build",
+  "installCommand": "pnpm install",
+  "ignoreCommand": "npx turbo-ignore"
+}

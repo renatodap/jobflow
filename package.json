@@ -1,0 +1,28 @@
+{
+  "name": "sharpened-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo for all Sharpened products",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean",
+    "deploy:feelsharper": "turbo run build --filter=feelsharper",
+    "deploy:studysharper": "turbo run build --filter=studysharper",
+    "deploy:all": "turbo run build"
+  },
+  "devDependencies": {
+    "turbo": "latest",
+    "prettier": "latest",
+    "eslint": "latest",
+    "typescript": "latest"
+  },
+  "packageManager": "pnpm@8.0.0",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

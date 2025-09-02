@@ -1,0 +1,136 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ===== FEEL SHARPER DARK-FIRST FITNESS DESIGN SYSTEM ===== */
+:root {
+  /* Dark-First Color Palette */
+  --navy: #0B2A4A;              /* Primary brand navy */
+  --navy-600: #123B69;          /* Darker navy */
+  --navy-400: #1F5798;          /* Lighter navy */
+  --navy-50: #EBF2F9;           /* Very light navy (for light mode) */
+  
+  --bg: #0A0A0A;                /* Pure black background */
+  --surface: #111418;           /* Near-black surface */
+  --surface-2: #161A1F;         /* Elevated surface */
+  --surface-3: #1D2127;         /* Higher elevation */
+  
+  --text-primary: #FFFFFF;      /* Primary text (white) */
+  --text-secondary: #C7CBD1;    /* Secondary text (light gray) */
+  --text-muted: #8B9096;        /* Muted text (mid gray) */
+  --text-disabled: #6B6F76;     /* Disabled text */
+  
+  --success: #10B981;           /* Success green */
+  --warning: #F59E0B;           /* Warning amber */
+  --error: #EF4444;             /* Error red */
+  --info: #3B82F6;              /* Info blue */
+  
+  --border: #23272E;            /* Border color */
+  --focus: #E5E7EB;             /* Focus rings */
+  
+  /* Gradients */
+  --gradient-navy: linear-gradient(135deg, #1F5798 0%, #0B2A4A 100%);
+  --gradient-dark: linear-gradient(135deg, #161A1F 0%, #0A0A0A 100%);
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.2);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4);
+  
+  /* Animations */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== BASE STYLES ===== */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Dark-first design - body always dark */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Subtle dark background pattern */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(31, 87, 152, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(11, 42, 74, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+/* ===== FOCUS STATES ===== */
+*:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--navy);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--navy-600);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+}

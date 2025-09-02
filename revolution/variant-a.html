@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse Daily - Get Ahead of Trends</title>
+    <meta name="description" content="Join elite content creators who know what's trending 6-12 hours before everyone else. Premium intelligence for viral content.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Analytics with UTM tracking -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+        
+        // Track variant and UTM parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const utm_source = urlParams.get('utm_source') || 'direct';
+        const utm_campaign = urlParams.get('utm_campaign') || 'unknown';
+        
+        gtag('event', 'variant_view', {
+            'variant': 'A',
+            'price': 49,
+            'urgency': 'scarcity',
+            'messaging': 'intelligence',
+            'utm_source': utm_source,
+            'utm_campaign': utm_campaign
+        });
+    </script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Header -->
+    <header class="container mx-auto px-4 py-6">
+        <nav class="flex justify-center">
+            <div class="text-2xl font-bold text-indigo-600">Pulse Daily</div>
+        </nav>
+    </header>
+
+    <!-- Hero Section - VARIANT A: INTELLIGENCE FOCUS -->
+    <section class="container mx-auto px-4 py-16 text-center">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-lg inline-block mb-6">
+            🔥 Only 23 spots left out of 100 founders
+        </div>
+        
+        <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            Get <span class="text-indigo-600">Premium Intelligence</span><br>
+            Before Your Competitors
+        </h1>
+        
+        <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            Join 500+ elite creators who receive trending topics and viral content strategies 
+            6-12 hours before they hit mainstream. Stop being late to trends.
+        </p>
+        
+        <!-- Fake Door CTA - VARIANT A: $49 -->
+        <div class="max-w-md mx-auto mb-8">
+            <button 
+                onclick="openPreOrderA()"
+                class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 px-12 rounded-lg transition-all text-xl shadow-lg transform hover:scale-105"
+            >
+                🎯 Get Founder Access - $49/month
+            </button>
+            <p class="text-sm text-gray-500 mt-2">Usually $129/month • Save 62% • Limited time</p>
+        </div>
+        
+        <!-- Social Proof -->
+        <div class="flex flex-wrap justify-center items-center gap-8 opacity-60 mb-12">
+            <div class="text-sm text-gray-500">Trusted by creators from:</div>
+            <div class="text-sm font-medium text-gray-600">TikTok</div>
+            <div class="text-sm font-medium text-gray-600">YouTube</div>
+            <div class="text-sm font-medium text-gray-600">Twitter</div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="bg-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12">What You Get</h2>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center p-6">
+                        <div class="text-4xl mb-4">📊</div>
+                        <h3 class="font-semibold mb-2">Early Trend Detection</h3>
+                        <p class="text-gray-600">Get alerts 6-12 hours before trends hit mainstream</p>
+                    </div>
+                    
+                    <div class="text-center p-6">
+                        <div class="text-4xl mb-4">✍️</div>
+                        <h3 class="font-semibold mb-2">Content Templates</h3>
+                        <p class="text-gray-600">Proven hooks and formats that go viral</p>
+                    </div>
+                    
+                    <div class="text-center p-6">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h3 class="font-semibold mb-2">Performance Data</h3>
+                        <p class="text-gray-600">Which platforms and formats work best</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pre-order Modal -->
+    <div id="preOrderModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <div class="text-center">
+                <h2 class="text-2xl font-bold mb-4">🎯 Founder Access</h2>
+                <p class="text-gray-600 mb-6">Join the elite creators who stay ahead of trends</p>
+                
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg mb-6">
+                    <div class="text-3xl font-bold text-green-600">$49<span class="text-lg">/month</span></div>
+                    <div class="text-sm text-gray-500 line-through">Usually $129/month</div>
+                    <div class="text-sm text-green-700 font-semibold">Save 62% as founder</div>
+                </div>
+                
+                <div class="text-left mb-6 space-y-2">
+                    <div class="flex items-center text-sm">
+                        <span class="text-green-500 mr-2">✓</span>
+                        Daily intelligence briefings
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-green-500 mr-2">✓</span>
+                        Viral content templates
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-green-500 mr-2">✓</span>
+                        6-12 hour head start on trends
+                    </div>
+                </div>
+                
+                <button 
+                    onclick="processPreOrderA()"
+                    class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold py-3 px-6 rounded-lg mb-4"
+                >
+                    Secure My Founder Access
+                </button>
+                
+                <button onclick="closePreOrder()" class="text-gray-500 text-sm hover:text-gray-700">
+                    Maybe later
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openPreOrderA() {
+            document.getElementById('preOrderModal').classList.remove('hidden');
+            
+            gtag('event', 'fake_door_click', {
+                'variant': 'A',
+                'price': 49,
+                'button_location': 'hero'
+            });
+            
+            const clickData = {
+                timestamp: new Date().toISOString(),
+                event: 'fake_door_click',
+                variant: 'A',
+                price: 49,
+                source: new URLSearchParams(window.location.search).get('utm_source') || 'direct'
+            };
+            
+            const clicks = JSON.parse(localStorage.getItem('variant_a_clicks') || '[]');
+            clicks.push(clickData);
+            localStorage.setItem('variant_a_clicks', JSON.stringify(clicks));
+        }
+        
+        function closePreOrder() {
+            document.getElementById('preOrderModal').classList.add('hidden');
+            gtag('event', 'modal_close', {'variant': 'A'});
+        }
+        
+        function processPreOrderA() {
+            gtag('event', 'purchase_intent', {
+                'variant': 'A',
+                'value': 49,
+                'currency': 'USD'
+            });
+            
+            alert('🎉 Welcome to Pulse Daily founders! We launch in 2 weeks. Check your email for early access.');
+            
+            const preOrderData = {
+                timestamp: new Date().toISOString(),
+                event: 'pre_order_intent',
+                variant: 'A',
+                amount: 49
+            };
+            
+            const preOrders = JSON.parse(localStorage.getItem('variant_a_preorders') || '[]');
+            preOrders.push(preOrderData);
+            localStorage.setItem('variant_a_preorders', JSON.stringify(preOrders));
+            
+            closePreOrder();
+        }
+    </script>
+</body>
+</html>

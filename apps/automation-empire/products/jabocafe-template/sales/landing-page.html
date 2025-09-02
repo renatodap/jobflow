@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stop Struggling With Social Media - Automated Content That Works</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            font-size: 1.5em;
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 20px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 10px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .problem-section {
+            background: #f8f9fa;
+            padding: 60px 0;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .problem-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .problem-card h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .solution-section {
+            padding: 60px 0;
+            background: white;
+        }
+        
+        .benefits-list {
+            list-style: none;
+            margin: 40px 0;
+        }
+        
+        .benefits-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 1.2em;
+        }
+        
+        .benefits-list li:before {
+            content: "✅ ";
+            color: #4caf50;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .stat-card {
+            padding: 30px;
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .pricing-section {
+            padding: 60px 0;
+            background: #f8f9fa;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .pricing-card {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+        }
+        
+        .pricing-card.featured {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .pricing-card.featured:before {
+            content: "MOST POPULAR";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        
+        .price {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        .price-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .features-list {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .features-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .faq-section {
+            padding: 60px 0;
+            background: white;
+        }
+        
+        .faq-item {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .faq-question {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .testimonial-section {
+            padding: 60px 0;
+            background: #f8f9fa;
+        }
+        
+        .testimonial-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        .testimonial-text {
+            font-size: 1.2em;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-author {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        footer {
+            background: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .guarantee-badge {
+            background: #4caf50;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        h2 {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .demo-video {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .video-placeholder {
+            background: #333;
+            color: white;
+            padding: 100px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            width: 100%;
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Stop Struggling With Social Media</h1>
+            <p class="subtitle">Let AI Create & Post Perfect Content Daily - While You Sleep</p>
+            <a href="#pricing" class="cta-button">Start Automating Today →</a>
+            <a href="#demo" class="cta-button" style="background: transparent; border: 2px solid white;">Watch It Work</a>
+        </div>
+    </header>
+
+    <section class="problem-section">
+        <div class="container">
+            <h2>The Social Media Struggle Is Real</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <h3>❌ Forgetting to Post</h3>
+                    <p>You know you should post daily, but life gets in the way. Your last post was... 2 weeks ago?</p>
+                </div>
+                <div class="problem-card">
+                    <h3>❌ Running Out of Ideas</h3>
+                    <p>Staring at a blank screen, wondering what to post. The creative well has run dry.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>❌ Time Black Hole</h3>
+                    <p>Hours spent creating content, editing images, writing captions. Time you don't have.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution-section">
+        <div class="container">
+            <h2>Your Personal Content Team (That Never Sleeps)</h2>
+            <p style="text-align: center; font-size: 1.2em; margin-bottom: 40px;">
+                Our AI automation creates, designs, and posts professional content daily - completely hands-free.
+            </p>
+            <ul class="benefits-list">
+                <li>Professional content posted every single day</li>
+                <li>AI writes captions that match your brand voice</li>
+                <li>Beautiful designs created automatically</li>
+                <li>Perfect hashtags for maximum reach</li>
+                <li>Works 24/7 - weekends, holidays, while you're on vacation</li>
+                <li>Costs 95% less than hiring a social media manager</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container">
+            <h2 style="color: white;">The Numbers Don't Lie</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">30</div>
+                    <div class="stat-label">Days of Continuous Posting</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">45s</div>
+                    <div class="stat-label">Per Post Generation</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$1,903</div>
+                    <div class="stat-label">Saved Monthly</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">99.9%</div>
+                    <div class="stat-label">Uptime Reliability</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo-video" id="demo">
+        <div class="container">
+            <h2>See It In Action</h2>
+            <p style="text-align: center; font-size: 1.2em; margin-bottom: 40px;">
+                Watch how we generated 30 days of content for a coffee shop in under 2 minutes
+            </p>
+            <div class="video-placeholder">
+                <p style="font-size: 1.5em;">📹 Demo Video</p>
+                <p>3-minute walkthrough showing the entire system</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <h2>Choose Your Automation Package</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">$497</div>
+                    <div class="price-subtitle">Setup + $97/month</div>
+                    <ul class="features-list">
+                        <li>✓ 1 social platform</li>
+                        <li>✓ 30 posts per month</li>
+                        <li>✓ AI content generation</li>
+                        <li>✓ Basic analytics</li>
+                        <li>✓ Email support</li>
+                    </ul>
+                    <a href="https://buy.stripe.com/starter" class="cta-button">Get Started</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <h3>Professional</h3>
+                    <div class="price">$997</div>
+                    <div class="price-subtitle">Setup + $197/month</div>
+                    <ul class="features-list">
+                        <li>✓ 3 social platforms</li>
+                        <li>✓ 90 posts per month</li>
+                        <li>✓ Advanced AI optimization</li>
+                        <li>✓ Detailed analytics</li>
+                        <li>✓ Priority support</li>
+                        <li>✓ A/B testing</li>
+                    </ul>
+                    <a href="https://buy.stripe.com/professional" class="cta-button">Most Popular</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">$2,497</div>
+                    <div class="price-subtitle">Setup + $497/month</div>
+                    <ul class="features-list">
+                        <li>✓ Unlimited platforms</li>
+                        <li>✓ 300+ posts per month</li>
+                        <li>✓ Custom AI training</li>
+                        <li>✓ White-label option</li>
+                        <li>✓ Dedicated manager</li>
+                        <li>✓ Custom integrations</li>
+                    </ul>
+                    <a href="https://calendly.com/demo" class="cta-button">Book Demo</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial-section">
+        <div class="container">
+            <h2>Real Results From Real Businesses</h2>
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    "This automation saved me 20+ hours per month. My engagement is up 47% and I haven't touched social media in weeks."
+                </p>
+                <p class="testimonial-author">- Maria, Jabô Café Owner</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    "I was skeptical, but the content quality is incredible. My clients think I hired a full marketing team!"
+                </p>
+                <p class="testimonial-author">- David, Real Estate Agent</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    "ROI was immediate. The setup cost paid for itself in the first month just from time saved."
+                </p>
+                <p class="testimonial-author">- Sarah, Fitness Studio Owner</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="guarantee-badge">
+        <div class="container">
+            <h3 style="font-size: 2em; margin-bottom: 15px;">30-Day Money-Back Guarantee</h3>
+            <p style="font-size: 1.2em;">If you're not completely satisfied with your automation, we'll refund every penny. No questions asked.</p>
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">Will it sound robotic or generic?</div>
+                <div class="faq-answer">No! Our AI is trained on millions of successful posts and adapts to your brand voice. Most people can't tell it's automated.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">What if something breaks?</div>
+                <div class="faq-answer">Our system has 99.9% uptime and includes monitoring. If anything goes wrong, we fix it within 24 hours at no extra cost.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How long does setup take?</div>
+                <div class="faq-answer">We handle everything in 2-3 hours. You just provide your brand assets and guidelines, we do the rest.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I still post manually if I want?</div>
+                <div class="faq-answer">Absolutely! The automation handles your baseline content, but you can always add timely posts manually.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Is this really worth the investment?</div>
+                <div class="faq-answer">A social media manager costs $2,000+/month. Our automation costs $97/month after setup. You save $1,900+ monthly.</div>
+            </div>
+        </div>
+    </section>
+
+    <header style="background: #333; padding: 40px 0;">
+        <div class="container">
+            <h2 style="color: white;">Ready to Automate Your Social Media?</h2>
+            <p style="color: white; font-size: 1.2em; margin-bottom: 30px;">
+                Join 30+ businesses already saving 20+ hours per month
+            </p>
+            <a href="#pricing" class="cta-button">Start Today - Setup in 24 Hours</a>
+        </div>
+    </header>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Social Media Automation by Renato da Prado</p>
+            <p style="margin-top: 10px;">Questions? Email: automation@renatodaprado.com</p>
+        </div>
+    </footer>
+</body>
+</html>

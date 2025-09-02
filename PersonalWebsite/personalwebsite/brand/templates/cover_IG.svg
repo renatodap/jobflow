@@ -1,0 +1,57 @@
+<svg width="1080" height="1350" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%" gradientTransform="rotate(18)">
+      <stop offset="0%" style="stop-color:#14B8A6"/>
+      <stop offset="100%" style="stop-color:#4338CA"/>
+    </linearGradient>
+    <filter id="subtle-shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1080" height="1350" fill="#F8FAFC"/>
+  
+  <!-- Top Gradient Block (40%) -->
+  <rect width="1080" height="540" fill="url(#g1)"/>
+  
+  <!-- Icon Placeholder Circle -->
+  <circle cx="540" cy="675" r="80" fill="white" fill-opacity="0.1" stroke="white" stroke-width="2"/>
+  
+  <!-- Icon Placeholder (replace with actual Iconoir icon) -->
+  <text x="540" y="685" font-family="Inter, sans-serif" font-size="24" font-weight="400" fill="white" text-anchor="middle">
+    [ICON]
+  </text>
+  
+  <!-- Title Text -->
+  <text x="540" y="850" font-family="Inter, sans-serif" font-size="48" font-weight="600" fill="#0F172A" text-anchor="middle" filter="url(#subtle-shadow)">
+    [POST TITLE]
+  </text>
+  
+  <!-- Subtitle/Date -->
+  <text x="540" y="900" font-family="Inter, sans-serif" font-size="24" font-weight="400" fill="#64748B" text-anchor="middle">
+    [DATE or SUBTITLE]
+  </text>
+  
+  <!-- Optional: Do This Today Stamp -->
+  <g transform="translate(840, 1200)">
+    <rect width="180" height="60" rx="8" fill="#A3E635"/>
+    <text x="90" y="38" font-family="Inter, sans-serif" font-size="18" font-weight="600" fill="#0F172A" text-anchor="middle">
+      DO THIS TODAY
+    </text>
+  </g>
+  
+  <!-- Bottom Brand Mark -->
+  <text x="540" y="1300" font-family="Inter, sans-serif" font-size="16" font-weight="400" fill="#64748B" text-anchor="middle">
+    renatodap.me/blog
+  </text>
+</svg>

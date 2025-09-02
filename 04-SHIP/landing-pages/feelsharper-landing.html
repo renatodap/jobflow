@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FeelSharper - AI Fitness Tracking That Actually Works</title>
+    <meta name="description" content="Track workouts and meals like texting a friend. AI-powered fitness that saves you 10 hours per week.">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --success: #10b981;
+            --text: #334155;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: var(--primary);
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        /* Social Proof */
+        .social-proof {
+            background: var(--light);
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 50px auto 0;
+        }
+
+        .testimonial {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .author-name {
+            font-weight: 600;
+        }
+
+        .author-result {
+            color: var(--success);
+            font-size: 0.9rem;
+        }
+
+        /* Features */
+        .features {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature {
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        /* Demo Section */
+        .demo {
+            background: var(--light);
+            padding: 80px 20px;
+        }
+
+        .demo-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .demo-text h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .demo-example {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            font-family: 'SF Mono', monospace;
+        }
+
+        .user-message {
+            background: var(--primary);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            max-width: 80%;
+            margin-left: auto;
+        }
+
+        .ai-response {
+            background: #e5e7eb;
+            padding: 12px 16px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            max-width: 80%;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 800px;
+            margin: 50px auto 0;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .pricing-card.popular {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 20px 0;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: var(--text);
+            font-weight: 400;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pricing-features li:before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* FAQ */
+        .faq {
+            background: var(--light);
+            padding: 80px 20px;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .faq-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            margin-top: 15px;
+            color: var(--text);
+            display: none;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        /* CTA Section */
+        .final-cta {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .final-cta h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .guarantee {
+            background: rgba(255,255,255,0.1);
+            display: inline-block;
+            padding: 20px 40px;
+            border-radius: 15px;
+            margin-top: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-stats {
+                gap: 30px;
+            }
+            
+            .pricing-card.popular {
+                transform: none;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="animate">Track Fitness Like Texting a Friend</h1>
+        <p class="animate" style="animation-delay: 0.1s">
+            Just type "ran 5 miles" or "ate chicken salad" and our AI handles everything else. 
+            Save 10+ hours per week on fitness tracking.
+        </p>
+        <a href="#pricing" class="cta-button animate" style="animation-delay: 0.2s">
+            Start Free Trial - No Credit Card
+        </a>
+        
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-number">10hrs</div>
+                <div class="stat-label">Saved Per Week</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">2min</div>
+                <div class="stat-label">Daily Tracking Time</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">97%</div>
+                <div class="stat-label">Stick With It</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <h2 class="section-title">Real People, Real Results</h2>
+        <p class="section-subtitle">Join thousands who finally enjoy tracking their fitness</p>
+        
+        <div class="testimonials">
+            <div class="testimonial">
+                <p class="testimonial-text">
+                    "I actually stick with it! Never lasted more than a week with MyFitnessPal. 
+                    3 months strong with FeelSharper."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar"></div>
+                    <div>
+                        <div class="author-name">Sarah Martinez</div>
+                        <div class="author-result">Lost 22 lbs in 3 months</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial">
+                <p class="testimonial-text">
+                    "Game changer. I just text what I did and it figures out sets, reps, calories, everything."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar"></div>
+                    <div>
+                        <div class="author-name">Mike Chen</div>
+                        <div class="author-result">Added 15 lbs muscle</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial">
+                <p class="testimonial-text">
+                    "Finally, fitness tracking that doesn't feel like homework. It's actually fun!"
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar"></div>
+                    <div>
+                        <div class="author-name">Jessica Williams</div>
+                        <div class="author-result">5K PR: 24:32 → 21:15</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <h2 class="section-title">Everything You Need, Nothing You Don't</h2>
+        <p class="section-subtitle">Powerful features that actually help you get fit</p>
+        
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon">💬</div>
+                <h3>Natural Language</h3>
+                <p>Just type like you're texting. "Bench pressed 185 for 3 sets of 8" - Done!</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🤖</div>
+                <h3>AI That Understands</h3>
+                <p>Knows "chicken caesar" is ~600 calories. Recognizes "leg day" means squats coming.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>Smart Analytics</h3>
+                <p>See trends, get insights, know exactly what's working and what's not.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>Adaptive Goals</h3>
+                <p>AI adjusts your targets based on progress. Always challenging, never overwhelming.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Instant Logging</h3>
+                <p>Voice, text, or photo. Log a workout in 10 seconds, meal in 5 seconds.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🏆</div>
+                <h3>Achievement System</h3>
+                <p>Gamified progress that actually motivates. Streaks, badges, and real rewards.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo">
+        <div class="demo-container">
+            <div class="demo-text">
+                <h2>See How Simple It Is</h2>
+                <p>This is exactly how our users track their fitness every day:</p>
+                
+                <div class="demo-example">
+                    <div class="user-message">Just crushed legs. Squats 225x5x3, leg press, lunges</div>
+                    <div class="ai-response">
+                        ✅ Logged leg workout!<br>
+                        • Squats: 225 lbs × 5 reps × 3 sets<br>
+                        • Leg press: Logged<br>
+                        • Lunges: Logged<br>
+                        Total: 45 mins, ~350 calories burned
+                    </div>
+                    <div class="user-message">Had grilled chicken with rice and veggies for lunch</div>
+                    <div class="ai-response">
+                        ✅ Meal tracked!<br>
+                        • Calories: 520<br>
+                        • Protein: 45g<br>
+                        • Carbs: 48g<br>
+                        • Fat: 12g<br>
+                        Daily total: 1,240 cal (760 remaining)
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">No More:</h3>
+                <ul style="list-style: none; font-size: 1.1rem; line-height: 2;">
+                    <li>❌ Searching food databases for 10 minutes</li>
+                    <li>❌ Manually entering sets and reps</li>
+                    <li>❌ Forgetting what you ate yesterday</li>
+                    <li>❌ Complex apps with 50 features you don't use</li>
+                    <li>❌ Losing motivation after day 3</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <h2 class="section-title">Simple Pricing, Incredible Value</h2>
+        <p class="section-subtitle">Choose the plan that fits your goals</p>
+        
+        <div class="pricing-cards">
+            <div class="pricing-card">
+                <h3>Basic</h3>
+                <div class="price">$29<span>/month</span></div>
+                <ul class="pricing-features">
+                    <li>Natural language tracking</li>
+                    <li>Basic analytics</li>
+                    <li>Meal & workout logging</li>
+                    <li>Progress tracking</li>
+                    <li>Mobile app</li>
+                </ul>
+                <a href="/signup?plan=basic" class="cta-button" style="width: 100%;">Start Free Trial</a>
+            </div>
+            
+            <div class="pricing-card popular">
+                <span class="popular-badge">MOST POPULAR</span>
+                <h3>Pro</h3>
+                <div class="price">$49<span>/month</span></div>
+                <ul class="pricing-features">
+                    <li>Everything in Basic</li>
+                    <li>AI meal recommendations</li>
+                    <li>Custom workout plans</li>
+                    <li>Advanced analytics</li>
+                    <li>Priority support</li>
+                    <li>Export your data</li>
+                </ul>
+                <a href="/signup?plan=pro" class="cta-button" style="width: 100%; background: var(--primary); color: white;">Start Free Trial</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+        <div class="faq-container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <div class="faq-question">
+                    How accurate is the AI tracking?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Our AI is 95%+ accurate for common foods and exercises. For anything unusual, 
+                    you can easily adjust. Most users find it more accurate than manual entry because 
+                    there's less room for forgetting or estimation errors.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <div class="faq-question">
+                    Can I import data from other apps?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes! We support imports from MyFitnessPal, Fitbit, Apple Health, and 15+ other 
+                    platforms. Takes about 2 minutes and all your history comes with you.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <div class="faq-question">
+                    What if I want to cancel?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Cancel anytime with one click. No questions, no hassle. We'll even send you 
+                    all your data in a format you can use elsewhere. We're confident you'll stay 
+                    because you love it, not because you're locked in.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <div class="faq-question">
+                    Is there a free trial?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes! 14 days completely free, no credit card required. If you don't save at 
+                    least 5 hours in your first week, we'll personally help you set it up better.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>Ready to Actually Enjoy Fitness Tracking?</h2>
+        <p style="font-size: 1.3rem; margin-bottom: 30px;">
+            Join thousands who save 10+ hours per week and finally stick with their fitness goals
+        </p>
+        <a href="#pricing" class="cta-button">Start Your Free Trial Now</a>
+        
+        <div class="guarantee">
+            <strong>30-Day Money Back Guarantee</strong><br>
+            If you don't save at least 5 hours per week, get a full refund. No questions asked.
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        });
+
+        document.querySelectorAll('.feature, .testimonial, .pricing-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Track page views
+        console.log('Page viewed at:', new Date().toISOString());
+        
+        // Track CTA clicks
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function() {
+                console.log('CTA clicked:', this.textContent);
+                // Add your analytics tracking here
+            });
+        });
+    </script>
+</body>
+</html>

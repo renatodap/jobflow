@@ -1,0 +1,35 @@
+RENATO DAP
+Software Engineer - New Graduate 2026
+Email: renatodap@example.com | Phone: 555-0100 | LinkedIn: linkedin.com/in/renatodap
+
+SUMMARY
+Recent Computer Science graduate with strong foundation in software engineering.
+Internship experience at leading tech companies. Eager to contribute to innovative projects.
+
+TECHNICAL SKILLS
+Languages: Python, Java, JavaScript, C++, SQL
+Web: React, Node.js, HTML/CSS, REST APIs
+Tools: Git, Docker, Linux, Agile/Scrum
+Databases: PostgreSQL, MongoDB, MySQL
+
+EDUCATION
+Bachelor of Science in Computer Science | University Name | Expected: May 2026
+- GPA: 3.8/4.0
+- Relevant Courses: Data Structures, Algorithms, Software Engineering, Databases
+
+EXPERIENCE
+Software Engineering Intern | Major Tech Company | Summer 2025
+- Developed features for product used by millions
+- Collaborated with cross-functional teams
+- Participated in code reviews and design discussions
+
+Software Development Intern | Startup | Summer 2024
+- Built full-stack web applications
+- Worked in fast-paced agile environment
+
+PROJECTS
+Multiple significant projects demonstrating various skills
+- Web applications, mobile apps, and system tools
+- Open source contributions on GitHub
+
+KEYWORDS: ai

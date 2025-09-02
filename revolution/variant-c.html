@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse Daily - Creator Community</title>
+    <meta name="description" content="Join the exclusive community of creators who share trending insights and collaborate on viral content. Network + intelligence = success.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Analytics with UTM tracking -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+        
+        // Track variant and UTM parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const utm_source = urlParams.get('utm_source') || 'direct';
+        const utm_campaign = urlParams.get('utm_campaign') || 'unknown';
+        
+        gtag('event', 'variant_view', {
+            'variant': 'C',
+            'price': 99,
+            'urgency': 'exclusive',
+            'messaging': 'community',
+            'utm_source': utm_source,
+            'utm_campaign': utm_campaign
+        });
+    </script>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 to-teal-100 min-h-screen">
+    <!-- Header -->
+    <header class="container mx-auto px-4 py-6">
+        <nav class="flex justify-center">
+            <div class="text-2xl font-bold text-emerald-600">Pulse Daily</div>
+        </nav>
+    </header>
+
+    <!-- Hero Section - VARIANT C: COMMUNITY FOCUS -->
+    <section class="container mx-auto px-4 py-16 text-center">
+        <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-2 rounded-lg inline-block mb-6">
+            👑 Exclusive: Invitation-only creator circle
+        </div>
+        
+        <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            Join the <span class="text-emerald-600">Elite Creator</span><br>
+            Intelligence Network
+        </h1>
+        
+        <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            Connect with 100+ successful creators who share trending insights, collaborate on viral content, 
+            and build million-dollar personal brands together.
+        </p>
+        
+        <!-- Fake Door CTA - VARIANT C: $99 -->
+        <div class="max-w-md mx-auto mb-8">
+            <button 
+                onclick="openPreOrderC()"
+                class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-4 px-12 rounded-lg transition-all text-xl shadow-lg transform hover:scale-105"
+            >
+                👑 Join Elite Network - $99/month
+            </button>
+            <p class="text-sm text-gray-500 mt-2">Invitation-only • Premium members only</p>
+        </div>
+        
+        <!-- Social Proof -->
+        <div class="flex flex-wrap justify-center items-center gap-8 opacity-60 mb-12">
+            <div class="text-sm text-gray-500">Network includes:</div>
+            <div class="text-sm font-medium text-gray-600">Top 1% creators</div>
+            <div class="text-sm font-medium text-gray-600">Million+ followers</div>
+            <div class="text-sm font-medium text-gray-600">Industry leaders</div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="bg-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12">Exclusive Network Benefits</h2>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center p-6">
+                        <div class="text-4xl mb-4">🤝</div>
+                        <h3 class="font-semibold mb-2">Elite Creator Network</h3>
+                        <p class="text-gray-600">Connect with successful creators and industry leaders</p>
+                    </div>
+                    
+                    <div class="text-center p-6">
+                        <div class="text-4xl mb-4">💡</div>
+                        <h3 class="font-semibold mb-2">Shared Intelligence</h3>
+                        <p class="text-gray-600">Real-time trend sharing and collaborative insights</p>
+                    </div>
+                    
+                    <div class="text-center p-6">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h3 class="font-semibold mb-2">Premium Resources</h3>
+                        <p class="text-gray-600">Exclusive content, templates, and growth strategies</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pre-order Modal -->
+    <div id="preOrderModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <div class="text-center">
+                <h2 class="text-2xl font-bold mb-4">👑 Elite Network Access</h2>
+                <p class="text-gray-600 mb-6">Join the exclusive creator intelligence network</p>
+                
+                <div class="bg-gradient-to-r from-emerald-50 to-teal-50 p-4 rounded-lg mb-6">
+                    <div class="text-3xl font-bold text-emerald-600">$99<span class="text-lg">/month</span></div>
+                    <div class="text-sm text-gray-500">Invitation-only membership</div>
+                    <div class="text-sm text-emerald-700 font-semibold">Premium tier access</div>
+                </div>
+                
+                <div class="text-left mb-6 space-y-2">
+                    <div class="flex items-center text-sm">
+                        <span class="text-emerald-500 mr-2">✓</span>
+                        Elite creator network access
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-emerald-500 mr-2">✓</span>
+                        Shared intelligence & insights
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-emerald-500 mr-2">✓</span>
+                        Premium resources & templates
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-emerald-500 mr-2">✓</span>
+                        Direct collaboration opportunities
+                    </div>
+                </div>
+                
+                <button 
+                    onclick="processPreOrderC()"
+                    class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold py-3 px-6 rounded-lg mb-4"
+                >
+                    Request Elite Access
+                </button>
+                
+                <button onclick="closePreOrder()" class="text-gray-500 text-sm hover:text-gray-700">
+                    Not ready yet
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openPreOrderC() {
+            document.getElementById('preOrderModal').classList.remove('hidden');
+            
+            gtag('event', 'fake_door_click', {
+                'variant': 'C',
+                'price': 99,
+                'button_location': 'hero'
+            });
+            
+            const clickData = {
+                timestamp: new Date().toISOString(),
+                event: 'fake_door_click',
+                variant: 'C',
+                price: 99,
+                source: new URLSearchParams(window.location.search).get('utm_source') || 'direct'
+            };
+            
+            const clicks = JSON.parse(localStorage.getItem('variant_c_clicks') || '[]');
+            clicks.push(clickData);
+            localStorage.setItem('variant_c_clicks', JSON.stringify(clicks));
+        }
+        
+        function closePreOrder() {
+            document.getElementById('preOrderModal').classList.add('hidden');
+            gtag('event', 'modal_close', {'variant': 'C'});
+        }
+        
+        function processPreOrderC() {
+            gtag('event', 'purchase_intent', {
+                'variant': 'C',
+                'value': 99,
+                'currency': 'USD'
+            });
+            
+            alert('🎉 Elite access request received! We\'ll review and send your invitation within 24 hours.');
+            
+            const preOrderData = {
+                timestamp: new Date().toISOString(),
+                event: 'pre_order_intent',
+                variant: 'C',
+                amount: 99
+            };
+            
+            const preOrders = JSON.parse(localStorage.getItem('variant_c_preorders') || '[]');
+            preOrders.push(preOrderData);
+            localStorage.setItem('variant_c_preorders', JSON.stringify(preOrders));
+            
+            closePreOrder();
+        }
+    </script>
+</body>
+</html>

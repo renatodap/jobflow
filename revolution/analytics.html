@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse Daily - Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8">📊 Pulse Daily - Reinforcement Learning Analytics</h1>
+        
+        <!-- Key Metrics -->
+        <div class="grid md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h3 class="text-lg font-semibold text-gray-700 mb-2">Page Views</h3>
+                <div class="text-3xl font-bold text-blue-600" id="pageViews">0</div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h3 class="text-lg font-semibold text-gray-700 mb-2">Fake Door Clicks</h3>
+                <div class="text-3xl font-bold text-green-600" id="fakeDoorClicks">0</div>
+                <div class="text-sm text-gray-500 mt-1" id="clickRate">0% CTR</div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h3 class="text-lg font-semibold text-gray-700 mb-2">Pre-order Intent</h3>
+                <div class="text-3xl font-bold text-purple-600" id="preOrderCount">0</div>
+                <div class="text-sm text-gray-500 mt-1" id="conversionRate">0% conversion</div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h3 class="text-lg font-semibold text-gray-700 mb-2">Potential Revenue</h3>
+                <div class="text-3xl font-bold text-emerald-600" id="revenue">$0</div>
+            </div>
+        </div>
+        
+        <!-- Reinforcement Learning Insights -->
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h3 class="text-xl font-semibold mb-4">🎯 A/B Test Performance</h3>
+                <div id="channelData">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-2 bg-green-50 rounded">
+                            <span class="font-medium">Variant A (Intelligence - $49)</span>
+                            <div class="text-right">
+                                <div class="font-bold text-green-600" id="variantA">0 clicks</div>
+                                <div class="text-xs text-gray-500" id="variantARevenue">$0 potential</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-purple-50 rounded">
+                            <span class="font-medium">Variant B (Tools - $79)</span>
+                            <div class="text-right">
+                                <div class="font-bold text-purple-600" id="variantB">0 clicks</div>
+                                <div class="text-xs text-gray-500" id="variantBRevenue">$0 potential</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-emerald-50 rounded">
+                            <span class="font-medium">Variant C (Community - $99)</span>
+                            <div class="text-right">
+                                <div class="font-bold text-emerald-600" id="variantC">0 clicks</div>
+                                <div class="text-xs text-gray-500" id="variantCRevenue">$0 potential</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h3 class="text-xl font-semibold mb-4">💡 Optimization Insights</h3>
+                <div id="insights">
+                    <div class="text-gray-500">Insights will appear after 10+ interactions</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Raw Event Log -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h3 class="text-xl font-semibold mb-4">📋 Event Log (Last 50)</h3>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="p-2 text-left">Timestamp</th>
+                            <th class="p-2 text-left">Event</th>
+                            <th class="p-2 text-left">Source</th>
+                            <th class="p-2 text-left">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventLog">
+                        <tr>
+                            <td class="p-2 text-gray-500" colspan="4">No events yet</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="mt-8 flex gap-4">
+            <button onclick="refreshData()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                🔄 Refresh Data
+            </button>
+            <button onclick="clearData()" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700">
+                🗑️ Clear Data
+            </button>
+            <button onclick="exportData()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                📊 Export CSV
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function refreshData() {
+            // Get all stored data from all variants
+            const clicksA = JSON.parse(localStorage.getItem('variant_a_clicks') || '[]');
+            const clicksB = JSON.parse(localStorage.getItem('variant_b_clicks') || '[]');
+            const clicksC = JSON.parse(localStorage.getItem('variant_c_clicks') || '[]');
+            const clicks = [...clicksA, ...clicksB, ...clicksC];
+            
+            const preOrdersA = JSON.parse(localStorage.getItem('variant_a_preorders') || '[]');
+            const preOrdersB = JSON.parse(localStorage.getItem('variant_b_preorders') || '[]');
+            const preOrdersC = JSON.parse(localStorage.getItem('variant_c_preorders') || '[]');
+            const preOrders = [...preOrdersA, ...preOrdersB, ...preOrdersC];
+            
+            const emails = JSON.parse(localStorage.getItem('waitlist_emails') || '[]');
+            
+            // Update metrics
+            document.getElementById('pageViews').textContent = '1'; // Placeholder
+            document.getElementById('fakeDoorClicks').textContent = clicks.length;
+            document.getElementById('preOrderCount').textContent = preOrders.length;
+            document.getElementById('revenue').textContent = `$${preOrders.length * 49}`;
+            
+            // Calculate rates
+            const clickRate = clicks.length > 0 ? ((clicks.length / 1) * 100).toFixed(1) : '0';
+            const conversionRate = clicks.length > 0 ? ((preOrders.length / clicks.length) * 100).toFixed(1) : '0';
+            
+            document.getElementById('clickRate').textContent = `${clickRate}% CTR`;
+            document.getElementById('conversionRate').textContent = `${conversionRate}% conversion`;
+            
+            // Update variant performance
+            document.getElementById('variantA').textContent = `${clicksA.length} clicks`;
+            document.getElementById('variantARevenue').textContent = `$${preOrdersA.length * 49} potential`;
+            
+            document.getElementById('variantB').textContent = `${clicksB.length} clicks`;
+            document.getElementById('variantBRevenue').textContent = `$${preOrdersB.length * 79} potential`;
+            
+            document.getElementById('variantC').textContent = `${clicksC.length} clicks`;
+            document.getElementById('variantCRevenue').textContent = `$${preOrdersC.length * 99} potential`;
+            
+            // Update event log
+            const allEvents = [...clicks, ...preOrders].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            const eventLog = document.getElementById('eventLog');
+            
+            if (allEvents.length === 0) {
+                eventLog.innerHTML = '<tr><td class="p-2 text-gray-500" colspan="4">No events yet</td></tr>';
+            } else {
+                eventLog.innerHTML = allEvents.slice(0, 50).map(event => `
+                    <tr>
+                        <td class="p-2">${new Date(event.timestamp).toLocaleString()}</td>
+                        <td class="p-2">${event.event}</td>
+                        <td class="p-2">${event.source || 'N/A'}</td>
+                        <td class="p-2">$${event.amount || event.price || 0}</td>
+                    </tr>
+                `).join('');
+            }
+            
+            // Generate insights
+            generateInsights(clicks, preOrders);
+        }
+        
+        function generateInsights(clicks, preOrders) {
+            const insights = document.getElementById('insights');
+            const insightsList = [];
+            
+            // Get variant-specific data
+            const clicksA = JSON.parse(localStorage.getItem('variant_a_clicks') || '[]');
+            const clicksB = JSON.parse(localStorage.getItem('variant_b_clicks') || '[]');
+            const clicksC = JSON.parse(localStorage.getItem('variant_c_clicks') || '[]');
+            const preOrdersA = JSON.parse(localStorage.getItem('variant_a_preorders') || '[]');
+            const preOrdersB = JSON.parse(localStorage.getItem('variant_b_preorders') || '[]');
+            const preOrdersC = JSON.parse(localStorage.getItem('variant_c_preorders') || '[]');
+            
+            // Basic insights
+            if (clicks.length > 0) {
+                insightsList.push(`✅ Total ${clicks.length} fake door clicks across all variants`);
+            }
+            
+            if (preOrders.length > 0) {
+                insightsList.push(`💎 ${preOrders.length} people showed purchase intent`);
+                insightsList.push(`💰 ${((preOrders.length / clicks.length) * 100).toFixed(1)}% conversion rate`);
+            }
+            
+            // Variant performance insights
+            const variants = [
+                {name: 'A (Intelligence $49)', clicks: clicksA.length, preOrders: preOrdersA.length},
+                {name: 'B (Tools $79)', clicks: clicksB.length, preOrders: preOrdersB.length},
+                {name: 'C (Community $99)', clicks: clicksC.length, preOrders: preOrdersC.length}
+            ];
+            
+            // Find winning variant
+            const winner = variants.reduce((prev, current) => 
+                current.clicks > prev.clicks ? current : prev
+            );
+            
+            if (winner.clicks > 0) {
+                insightsList.push(`🏆 Variant ${winner.name} is leading with ${winner.clicks} clicks`);
+            }
+            
+            // Price sensitivity insights
+            if (clicksA.length + clicksB.length + clicksC.length >= 5) {
+                const avgRevenue = (preOrdersA.length * 49 + preOrdersB.length * 79 + preOrdersC.length * 99) / preOrders.length;
+                if (avgRevenue > 0) {
+                    insightsList.push(`💵 Average pre-order value: $${avgRevenue.toFixed(0)}`);
+                }
+            }
+            
+            // Actionable insights
+            if (clicks.length >= 10) {
+                insightsList.push(`📈 Ready to scale - good conversion signals`);
+            }
+            
+            if (preOrders.length >= 1) {
+                insightsList.push(`🎯 Channel validated - at least 1 purchase intent achieved`);
+            }
+            
+            if (insightsList.length === 0) {
+                insights.innerHTML = '<div class="text-gray-500">Run ad campaigns to generate insights</div>';
+            } else {
+                insights.innerHTML = insightsList.map(insight => 
+                    `<div class="mb-2 p-2 bg-blue-50 rounded text-sm">${insight}</div>`
+                ).join('');
+            }
+        }
+        
+        function clearData() {
+            if (confirm('Clear all tracking data? This cannot be undone.')) {
+                localStorage.removeItem('fake_door_clicks');
+                localStorage.removeItem('pre_orders');
+                localStorage.removeItem('waitlist_emails');
+                refreshData();
+            }
+        }
+        
+        function exportData() {
+            const clicks = JSON.parse(localStorage.getItem('fake_door_clicks') || '[]');
+            const preOrders = JSON.parse(localStorage.getItem('pre_orders') || '[]');
+            
+            const csvData = [...clicks, ...preOrders].map(event => 
+                `${event.timestamp},${event.event},${event.source || ''},${event.amount || event.price || 0}`
+            ).join('\n');
+            
+            const csv = 'Timestamp,Event,Source,Value\n' + csvData;
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'pulse-daily-analytics.csv';
+            a.click();
+        }
+        
+        // Auto-refresh every 30 seconds
+        setInterval(refreshData, 30000);
+        
+        // Initial load
+        refreshData();
+    </script>
+</body>
+</html>

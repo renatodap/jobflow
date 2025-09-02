@@ -1,0 +1,84 @@
+{
+  "trendsSeeds": {
+    "coreTerms": [
+      "ai agents",
+      "llm",
+      "machine learning",
+      "python libraries",
+      "automation",
+      "image recognition",
+      "ai math",
+      "new models",
+      "chatgpt",
+      "claude ai",
+      "gemini ai",
+      "stable diffusion"
+    ],
+    "howToQueries": [
+      "how to use ai for writing",
+      "how to use ai for coding",
+      "how to use ai for research",
+      "how to use ai for business",
+      "how to use ai for automation",
+      "how to use ai for data analysis",
+      "how to use ai for marketing",
+      "how to use ai for learning"
+    ],
+    "comparisonQueries": [
+      "chatgpt vs claude",
+      "free vs paid ai tools",
+      "best ai for coding",
+      "best ai for writing",
+      "ai tools comparison",
+      "openai vs anthropic",
+      "midjourney alternatives",
+      "github copilot alternatives"
+    ],
+    "problemQueries": [
+      "ai hallucination fix",
+      "reduce ai costs",
+      "ai prompt engineering",
+      "ai accuracy problems",
+      "ai rate limits",
+      "ai API errors",
+      "ai content detection",
+      "ai workflow automation"
+    ],
+    "emergingTopics": [
+      "rag pipeline",
+      "vector database",
+      "ai agents framework",
+      "llm fine tuning",
+      "prompt chaining",
+      "ai code review",
+      "multimodal ai",
+      "local llm",
+      "ai safety",
+      "constitutional ai"
+    ]
+  },
+  "queryParameters": {
+    "timeRange": "now 7-d",
+    "geo": "US",
+    "category": "0",
+    "property": ""
+  },
+  "scoringWeights": {
+    "trendingUp": 0.4,
+    "searchVolume": 0.3,
+    "competitionGap": 0.2,
+    "freshness": 0.1
+  },
+  "refreshSchedule": {
+    "coreTerms": "weekly",
+    "howToQueries": "daily",
+    "comparisonQueries": "twice_weekly",
+    "problemQueries": "daily",
+    "emergingTopics": "weekly"
+  },
+  "alertThresholds": {
+    "breakoutTrend": 500,
+    "risingTrend": 200,
+    "decliningTrend": -50
+  }
+}

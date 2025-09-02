@@ -1,0 +1,135 @@
+{
+  "version": "1.0.0",
+  "project_name": "Automation Empire",
+  "optimization_level": "maximum",
+  
+  "pre_execution_checks": [
+    "verify_no_fake_data",
+    "check_documentation_age",
+    "scan_for_duplicates",
+    "validate_revenue_alignment",
+    "ensure_real_content_only"
+  ],
+  
+  "auto_behaviors": {
+    "archive_old_files": true,
+    "archive_threshold_days": 7,
+    "remove_temp_files": true,
+    "update_documentation": true,
+    "track_revenue_impact": true,
+    "optimize_prompts": true,
+    "validate_real_data": true,
+    "cleanup_on_start": true,
+    "cleanup_on_end": true
+  },
+  
+  "required_files_check": [
+    "MASTER_PLAN.md",
+    "TODO.md",
+    "REVENUE.md",
+    "PROMPT_OPTIMIZER.md",
+    "ARCHIVE_POLICY.md"
+  ],
+  
+  "prompt_optimization": {
+    "enabled": true,
+    "min_score": 12,
+    "auto_enhance": true,
+    "require_paths": true,
+    "require_success_criteria": true,
+    "require_revenue_impact": true
+  },
+  
+  "fake_data_patterns": [
+    "lorem ipsum",
+    "john doe",
+    "jane doe",
+    "test@example.com",
+    "example.com",
+    "test@test",
+    "foo bar",
+    "your-.*-here",
+    "placeholder",
+    "coming soon",
+    "tbd",
+    "todo without date",
+    "sample data",
+    "dummy",
+    "fake"
+  ],
+  
+  "archive_patterns": [
+    "*.tmp",
+    "*.swp",
+    "*.bak",
+    "*.old",
+    "*.backup",
+    "*_copy.*",
+    "*_old.*",
+    ".DS_Store",
+    "Thumbs.db",
+    "~*"
+  ],
+  
+  "priority_directories": [
+    "/automation-empire/products/",
+    "/feelsharper/",
+    "/studysharper/",
+    "/automation-empire/monitoring/",
+    "/automation-empire/revenue-tracking/"
+  ],
+  
+  "revenue_focus": {
+    "minimum_roi": 10,
+    "require_monetization_strategy": true,
+    "track_conversion_metrics": true,
+    "prioritize_paying_features": true
+  },
+  
+  "code_quality": {
+    "no_console_logs": true,
+    "no_commented_code": true,
+    "require_error_handling": true,
+    "require_type_safety": true,
+    "max_file_size_kb": 100,
+    "max_function_lines": 50
+  },
+  
+  "documentation_rules": {
+    "require_readme": true,
+    "max_age_days": 7,
+    "require_examples": true,
+    "require_success_metrics": true,
+    "auto_generate_changelog": true
+  },
+  
+  "performance_targets": {
+    "max_response_time_ms": 3000,
+    "min_automation_success_rate": 0.99,
+    "max_error_rate": 0.01,
+    "min_test_coverage": 0.8
+  },
+  
+  "smart_behaviors": {
+    "parallel_execution": true,
+    "batch_similar_operations": true,
+    "cache_expensive_operations": true,
+    "preemptive_validation": true,
+    "auto_rollback_on_error": true
+  },
+  
+  "monitoring": {
+    "track_all_changes": true,
+    "log_revenue_impact": true,
+    "alert_on_fake_data": true,
+    "dashboard_update_frequency": "realtime"
+  },
+  
+  "enforcement": {
+    "strict_mode": true,
+    "block_fake_data": true,
+    "require_real_examples": true,
+    "auto_fix_issues": true,
+    "reject_unclear_prompts": true
+  }
+}

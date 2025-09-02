@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 9% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom styles for StudySharper */
+.study-focus-mode {
+  @apply relative;
+}
+
+.study-focus-mode::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg pointer-events-none;
+}
+
+.progress-ring {
+  transition: stroke-dasharray 0.3s ease;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1px;
+}
+
+.study-block {
+  @apply rounded-md p-2 text-xs font-medium;
+  min-height: 2rem;
+}
+
+.study-block.reading {
+  @apply bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200;
+}
+
+.study-block.flashcards {
+  @apply bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200;
+}
+
+.study-block.practice-problems {
+  @apply bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200;
+}
+
+.study-block.writing {
+  @apply bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-200;
+}
+
+.study-block.discussion {
+  @apply bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-200;
+}
+
+.study-block.video {
+  @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200;
+}
+
+.cognitive-load-1 {
+  @apply opacity-50;
+}
+
+.cognitive-load-2 {
+  @apply opacity-65;
+}
+
+.cognitive-load-3 {
+  @apply opacity-80;
+}
+
+.cognitive-load-4 {
+  @apply opacity-90;
+}
+
+.cognitive-load-5 {
+  @apply opacity-100 font-bold;
+}
+
+/* Keyboard navigation styles */
+.keyboard-focus {
+  @apply focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none;
+}
+
+/* Loading skeletons */
+.skeleton {
+  @apply animate-pulse bg-muted rounded;
+}
+
+/* Math rendering support */
+.math-inline {
+  @apply inline-block;
+}
+
+.math-display {
+  @apply block text-center my-4;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .study-block {
+    @apply text-xs p-1;
+    min-height: 1.5rem;
+  }
+  
+  .calendar-grid {
+    gap: 0.5px;
+  }
+}

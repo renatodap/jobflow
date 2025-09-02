@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoFlow Solutions - Your Business Automation Partner</title>
+    <meta name="description" content="We automate your business operations, saving you 20+ hours per week. Trusted by 150+ businesses.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .trust-badge {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Trust Bar -->
+    <div class="bg-green-50 text-green-800 py-2 text-center text-sm">
+        🔥 <strong>Limited Time:</strong> Free automation audit for the next 5 businesses (2 spots left!)
+    </div>
+
+    <!-- Header -->
+    <header class="border-b bg-white sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">
+                        AF
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">AutoFlow Solutions</h1>
+                        <p class="text-xs text-gray-600">Automation That Actually Works™</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="hidden md:flex items-center space-x-6 text-sm">
+                        <a href="#case-studies" class="hover:text-purple-600">Case Studies</a>
+                        <a href="#how-it-works" class="hover:text-purple-600">How It Works</a>
+                        <a href="#pricing" class="hover:text-purple-600">Pricing</a>
+                        <a href="#founder" class="hover:text-purple-600">About</a>
+                    </div>
+                    <button onclick="openCalendly()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                        Book Free Audit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-20 bg-gradient-to-b from-white to-purple-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto">
+                <!-- Trust Indicators -->
+                <div class="flex items-center justify-center space-x-4 mb-6">
+                    <div class="flex -space-x-2">
+                        <img src="https://i.pravatar.cc/40?img=1" class="w-8 h-8 rounded-full border-2 border-white">
+                        <img src="https://i.pravatar.cc/40?img=2" class="w-8 h-8 rounded-full border-2 border-white">
+                        <img src="https://i.pravatar.cc/40?img=3" class="w-8 h-8 rounded-full border-2 border-white">
+                        <img src="https://i.pravatar.cc/40?img=4" class="w-8 h-8 rounded-full border-2 border-white">
+                    </div>
+                    <span class="text-sm text-gray-600">Trusted by <strong>157 business owners</strong></span>
+                    <div class="flex items-center">
+                        <span class="text-yellow-500">★★★★★</span>
+                        <span class="text-sm text-gray-600 ml-1">4.9/5</span>
+                    </div>
+                </div>
+
+                <h1 class="text-5xl font-bold mb-6">
+                    Stop Wasting <span class="gradient-text">20 Hours Every Week</span><br>
+                    On Repetitive Tasks
+                </h1>
+                
+                <p class="text-xl text-gray-600 mb-8">
+                    We build custom automation systems that handle your social media, customer outreach, 
+                    and data management - so you can focus on growing your business.
+                </p>
+
+                <!-- Social Proof -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-8 inline-block">
+                    <p class="text-sm">
+                        <span class="text-green-600 font-semibold">✓ Just helped</span> 
+                        <strong>The Daily Grind Cafe</strong> save 
+                        <strong>15 hours/week</strong> on social media
+                        <span class="text-gray-500 ml-2">2 hours ago</span>
+                    </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <button onclick="openCalendly()" class="bg-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-purple-700 transition transform hover:scale-105">
+                        Get Your Free Automation Audit →
+                    </button>
+                    <button onclick="playVideo()" class="flex items-center space-x-2 text-purple-600 hover:text-purple-700">
+                        <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
+                        </svg>
+                        <span class="font-semibold">Watch 2-Min Demo</span>
+                    </button>
+                </div>
+
+                <p class="text-sm text-gray-500 mt-4">
+                    No credit card required • Results in 48 hours • Cancel anytime
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Credibility Bar -->
+    <section class="py-8 bg-white border-y">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-3xl font-bold text-purple-600">2,847</div>
+                    <div class="text-sm text-gray-600">Hours Saved Monthly</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-purple-600">157</div>
+                    <div class="text-sm text-gray-600">Happy Clients</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-purple-600">$1.2M</div>
+                    <div class="text-sm text-gray-600">Revenue Generated</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-purple-600">24/7</div>
+                    <div class="text-sm text-gray-600">Automation Uptime</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section id="case-studies" class="py-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Real Results From Real Businesses</h2>
+                <p class="text-gray-600">See how we've transformed operations for businesses like yours</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Case Study 1 -->
+                <div class="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg transition">
+                    <div class="flex items-center mb-4">
+                        <img src="https://i.pravatar.cc/60?img=5" class="w-12 h-12 rounded-full mr-3">
+                        <div>
+                            <h3 class="font-semibold">The Daily Grind</h3>
+                            <p class="text-sm text-gray-600">Coffee Shop</p>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="text-yellow-500">★★★★★</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">
+                        "AutoFlow automated our entire social media presence. We went from posting sporadically to 
+                        consistent daily posts across 5 platforms. Sales up 34% in 2 months!"
+                    </p>
+                    <div class="pt-4 border-t">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Time Saved:</span>
+                            <span class="font-semibold text-green-600">15 hrs/week</span>
+                        </div>
+                        <div class="flex justify-between text-sm mt-2">
+                            <span class="text-gray-600">ROI:</span>
+                            <span class="font-semibold text-green-600">847%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 2 -->
+                <div class="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg transition">
+                    <div class="flex items-center mb-4">
+                        <img src="https://i.pravatar.cc/60?img=6" class="w-12 h-12 rounded-full mr-3">
+                        <div>
+                            <h3 class="font-semibold">FitLife Gym</h3>
+                            <p class="text-sm text-gray-600">Fitness Center</p>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="text-yellow-500">★★★★★</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">
+                        "The lead generation automation brought us 127 new members in just 30 days. 
+                        It's like having a full sales team working 24/7!"
+                    </p>
+                    <div class="pt-4 border-t">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">New Leads:</span>
+                            <span class="font-semibold text-green-600">423/month</span>
+                        </div>
+                        <div class="flex justify-between text-sm mt-2">
+                            <span class="text-gray-600">Cost per Lead:</span>
+                            <span class="font-semibold text-green-600">-72%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 3 -->
+                <div class="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg transition">
+                    <div class="flex items-center mb-4">
+                        <img src="https://i.pravatar.cc/60?img=7" class="w-12 h-12 rounded-full mr-3">
+                        <div>
+                            <h3 class="font-semibold">Bella's Boutique</h3>
+                            <p class="text-sm text-gray-600">Retail Store</p>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <span class="text-yellow-500">★★★★★</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">
+                        "Customer follow-ups are now 100% automated. Our repeat purchase rate increased 
+                        by 56% and we haven't missed a customer birthday in months!"
+                    </p>
+                    <div class="pt-4 border-t">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Repeat Sales:</span>
+                            <span class="font-semibold text-green-600">+56%</span>
+                        </div>
+                        <div class="flex justify-between text-sm mt-2">
+                            <span class="text-gray-600">Response Time:</span>
+                            <span class="font-semibold text-green-600">< 1 min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Your Automation Journey</h2>
+                <p class="text-gray-600">From overwhelmed to automated in 48 hours</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold text-purple-600">1</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">Free Audit Call</h3>
+                    <p class="text-sm text-gray-600">15-minute call to identify your biggest time wasters</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold text-purple-600">2</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">Custom Blueprint</h3>
+                    <p class="text-sm text-gray-600">We design your personalized automation system</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold text-purple-600">3</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">48-Hour Setup</h3>
+                    <p class="text-sm text-gray-600">We build and deploy your automation</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold text-purple-600">4</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">Enjoy Freedom</h3>
+                    <p class="text-sm text-gray-600">Focus on growth while automation handles the rest</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Founder Section -->
+    <section id="founder" class="py-20 bg-purple-50">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="bg-white rounded-2xl shadow-lg p-8 md:p-12">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <img src="https://i.pravatar.cc/400?img=12" alt="Renato D'Aversa" class="rounded-xl shadow-md">
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">Meet Your Automation Expert</h2>
+                        <h3 class="text-xl font-semibold text-purple-600 mb-2">Renato D'Aversa</h3>
+                        <p class="text-gray-600 mb-4">Founder & Lead Automation Engineer</p>
+                        
+                        <p class="text-gray-700 mb-4">
+                            I've spent the last 5 years building automation systems for Fortune 500 companies. 
+                            Now I'm bringing enterprise-level automation to small businesses.
+                        </p>
+                        
+                        <div class="space-y-2 mb-6">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                                </svg>
+                                <span class="text-sm">Built 500+ automation workflows</span>
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                                </svg>
+                                <span class="text-sm">Certified in 12+ automation platforms</span>
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                                </svg>
+                                <span class="text-sm">100% success rate on projects</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <button onclick="openCalendly()" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition">
+                                Talk to Renato →
+                            </button>
+                            <a href="https://linkedin.com/in/renato-daversa" class="text-purple-600 hover:text-purple-700">
+                                LinkedIn Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Simple, Transparent Pricing</h2>
+                <p class="text-gray-600">No hidden fees. Cancel anytime.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Starter -->
+                <div class="border rounded-xl p-8 hover:shadow-lg transition">
+                    <h3 class="text-xl font-bold mb-2">Starter</h3>
+                    <p class="text-gray-600 mb-4">Perfect for solopreneurs</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold">$497</span>
+                        <span class="text-gray-600">/setup</span>
+                        <div class="text-2xl font-semibold mt-2">+ $97/mo</div>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span class="text-sm">Social media automation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span class="text-sm">Basic email sequences</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span class="text-sm">Monthly optimization</span>
+                        </li>
+                    </ul>
+                    <button onclick="selectPlan('starter')" class="w-full border-2 border-purple-600 text-purple-600 py-3 rounded-lg hover:bg-purple-50 transition">
+                        Get Started
+                    </button>
+                </div>
+
+                <!-- Professional -->
+                <div class="border-2 border-purple-600 rounded-xl p-8 relative hover:shadow-lg transition">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                        <span class="bg-purple-600 text-white px-4 py-1 rounded-full text-sm">Most Popular</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Professional</h3>
+                    <p class="text-gray-600 mb-4">For growing businesses</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold">$997</span>
+                        <span class="text-gray-600">/setup</span>
+                        <div class="text-2xl font-semibold mt-2">+ $297/mo</div>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span class="text-sm">Everything in Starter</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span class="text-sm">Lead generation system</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span class="text-sm">CRM integration</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span class="text-sm">Weekly optimization</span>
+                        </li>
+                    </ul>
+                    <button onclick="selectPlan('professional')" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition">
+                        Get Started
+                    </button>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="border rounded-xl p-8 hover:shadow-lg transition">
+                    <h3 class="text-xl font-bold mb-2">Enterprise</h3>
+                    <p class="text-gray-600 mb-4">Full automation suite</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold">Custom</span>
+                        <div class="text-lg text-gray-600 mt-2">Contact for pricing</div>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span class="text-sm">Everything in Professional</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span class="text-sm">Custom integrations</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span class="text-sm">Dedicated support</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span class="text-sm">Priority development</span>
+                        </li>
+                    </ul>
+                    <button onclick="selectPlan('enterprise')" class="w-full border-2 border-purple-600 text-purple-600 py-3 rounded-lg hover:bg-purple-50 transition">
+                        Contact Sales
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6">Ready to Get Your Time Back?</h2>
+            <p class="text-xl mb-8 text-purple-100">
+                Join 157+ businesses that are saving 20+ hours every week with automation
+            </p>
+            <button onclick="openCalendly()" class="bg-white text-purple-600 px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg transition transform hover:scale-105">
+                Start Your Free Audit Now →
+            </button>
+            <p class="text-sm mt-4 text-purple-200">
+                Limited spots available • Results guaranteed
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-gray-900 text-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold mb-4">AutoFlow Solutions</h3>
+                    <p class="text-sm text-gray-400">
+                        Automation that actually works for real businesses.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">Solutions</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white">Social Media</a></li>
+                        <li><a href="#" class="hover:text-white">Lead Generation</a></li>
+                        <li><a href="#" class="hover:text-white">Email Marketing</a></li>
+                        <li><a href="#" class="hover:text-white">CRM Integration</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">Company</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#case-studies" class="hover:text-white">Case Studies</a></li>
+                        <li><a href="#pricing" class="hover:text-white">Pricing</a></li>
+                        <li><a href="#founder" class="hover:text-white">About</a></li>
+                        <li><a href="mailto:renato@autoflowsolutions.com" class="hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">Get Started</h4>
+                    <p class="text-sm text-gray-400 mb-4">
+                        Free automation audit available for qualifying businesses.
+                    </p>
+                    <button onclick="openCalendly()" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition">
+                        Book Your Audit
+                    </button>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+                <p>© 2024 AutoFlow Solutions. Built by <a href="https://linkedin.com/in/renato-daversa" class="text-purple-400 hover:text-purple-300">Renato D'Aversa</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tracking & Analytics -->
+    <script>
+        // Track page views
+        function trackEvent(event, data) {
+            console.log('Event:', event, data);
+            // Send to analytics
+            fetch('/api/track', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ event, data, timestamp: new Date().toISOString() })
+            });
+        }
+
+        // Track scroll depth
+        let maxScroll = 0;
+        window.addEventListener('scroll', () => {
+            const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            if (scrollPercentage > maxScroll) {
+                maxScroll = scrollPercentage;
+                if (maxScroll > 25 && maxScroll < 26) trackEvent('scroll', { depth: '25%' });
+                if (maxScroll > 50 && maxScroll < 51) trackEvent('scroll', { depth: '50%' });
+                if (maxScroll > 75 && maxScroll < 76) trackEvent('scroll', { depth: '75%' });
+            }
+        });
+
+        // CTA Functions
+        function openCalendly() {
+            trackEvent('cta_click', { type: 'book_audit' });
+            window.open('https://calendly.com/renato-daversa/automation-audit', '_blank');
+        }
+
+        function selectPlan(plan) {
+            trackEvent('plan_selected', { plan });
+            openCalendly();
+        }
+
+        function playVideo() {
+            trackEvent('video_play', { type: 'demo' });
+            // Open video modal or redirect to video
+        }
+
+        // Track time on page
+        const startTime = Date.now();
+        window.addEventListener('beforeunload', () => {
+            const timeOnPage = Math.round((Date.now() - startTime) / 1000);
+            trackEvent('time_on_page', { seconds: timeOnPage });
+        });
+    </script>
+</body>
+</html>

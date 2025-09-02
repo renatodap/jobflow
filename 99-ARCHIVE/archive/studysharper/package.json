@@ -1,0 +1,39 @@
+{
+  "name": "studysharper",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"pnpm dev:web\" \"supabase start\"",
+    "dev:web": "pnpm --filter web dev",
+    "build": "pnpm build:packages && pnpm --filter web build",
+    "build:packages": "pnpm --filter \"@studysharper/*\" build",
+    "start": "pnpm --filter web start",
+    "lint": "pnpm --filter web lint",
+    "typecheck": "pnpm --filter web typecheck",
+    "test": "pnpm --filter web test",
+    "test:e2e": "pnpm --filter web test:e2e",
+    "db:push": "supabase db push",
+    "db:reset": "supabase db reset",
+    "db:seed": "supabase seed --seed-path supabase/seeds",
+    "db:types": "supabase gen types typescript --local > packages/core/src/types/database.ts",
+    "ai:swap": "node tools/scripts/swap-ai-provider.js",
+    "docs:toc": "node tools/scripts/generate-docs-toc.js",
+    "verify": "pnpm typecheck && pnpm lint && pnpm test && pnpm test:e2e && pnpm build",
+    "docs:expand": "echo 'TODO: Implement docs:expand command'",
+    "db:migrate": "supabase db push",
+    "db:gen": "pnpm db:types",
+    "db:bootstrap": "supabase db reset && pnpm db:seed",
+    "ingest": "echo 'TODO: Implement ingest command'",
+    "reindex": "echo 'TODO: Implement reindex command'"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "supabase": "^1.200.3"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

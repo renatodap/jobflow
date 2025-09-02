@@ -1,0 +1,331 @@
+/**
+ * AI-Daily Typography System
+ * Consistent type scales and rhythm
+ */
+
+:root {
+  /* Font Families */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 
+                   'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+  --font-mono: 'Space Mono', 'SF Mono', 'Monaco', 'Inconsolata', 
+                'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+  --font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', 
+                 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+  
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Font Sizes - Mobile First */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+  --font-size-5xl: 3rem;      /* 48px */
+  
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-snug: 1.4;
+  --line-height-normal: 1.6;
+  --line-height-relaxed: 1.8;
+  --line-height-loose: 2;
+  
+  /* Letter Spacing */
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.02em;
+  --letter-spacing-wider: 0.04em;
+  
+  /* Paragraph Spacing */
+  --paragraph-spacing: 1.5rem;
+  
+  /* Max Width for Readability */
+  --max-width-prose: 65ch;
+  --max-width-narrow: 45ch;
+  --max-width-wide: 80ch;
+}
+
+/* Base Typography */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+  color: var(--color-charcoal);
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+h1, .h1 {
+  font-size: var(--font-size-4xl);
+  line-height: 1.1;
+}
+
+h2, .h2 {
+  font-size: var(--font-size-3xl);
+  line-height: 1.2;
+}
+
+h3, .h3 {
+  font-size: var(--font-size-2xl);
+  line-height: 1.3;
+}
+
+h4, .h4 {
+  font-size: var(--font-size-xl);
+  line-height: 1.4;
+}
+
+h5, .h5 {
+  font-size: var(--font-size-lg);
+  line-height: 1.5;
+}
+
+h6, .h6 {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Desktop Sizes */
+@media (min-width: 768px) {
+  h1, .h1 {
+    font-size: var(--font-size-5xl);
+  }
+  
+  h2, .h2 {
+    font-size: var(--font-size-4xl);
+  }
+  
+  h3, .h3 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  h4, .h4 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  h5, .h5 {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* Body Text */
+p {
+  margin-top: 0;
+  margin-bottom: var(--paragraph-spacing);
+  max-width: var(--max-width-prose);
+}
+
+.lead {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  font-weight: var(--font-weight-regular);
+}
+
+.small {
+  font-size: var(--font-size-sm);
+}
+
+.xs {
+  font-size: var(--font-size-xs);
+}
+
+/* Links */
+a {
+  color: var(--color-indigo-700);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-indigo-500);
+}
+
+a:focus {
+  outline: 2px solid var(--color-teal-500);
+  outline-offset: 2px;
+}
+
+/* Lists */
+ul, ol {
+  margin-top: 0;
+  margin-bottom: var(--paragraph-spacing);
+  padding-left: 1.5rem;
+  max-width: var(--max-width-prose);
+}
+
+li {
+  margin-bottom: 0.5rem;
+  line-height: var(--line-height-normal);
+}
+
+li:last-child {
+  margin-bottom: 0;
+}
+
+/* Inline Code */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  padding: 0.125rem 0.25rem;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+/* Code Blocks */
+pre {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  padding: 1rem;
+  background-color: var(--color-charcoal);
+  color: var(--color-off-white);
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-bottom: var(--paragraph-spacing);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* Blockquotes (though we avoid quotes) */
+blockquote {
+  margin: 0 0 var(--paragraph-spacing) 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--color-teal-500);
+  font-style: italic;
+  max-width: var(--max-width-prose);
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--paragraph-spacing);
+}
+
+th, td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+th {
+  font-weight: var(--font-weight-semibold);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Utility Classes */
+.font-regular { font-weight: var(--font-weight-regular); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+.uppercase { text-transform: uppercase; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+.normal-case { text-transform: none; }
+
+.tracking-tight { letter-spacing: var(--letter-spacing-tight); }
+.tracking-normal { letter-spacing: var(--letter-spacing-normal); }
+.tracking-wide { letter-spacing: var(--letter-spacing-wide); }
+.tracking-wider { letter-spacing: var(--letter-spacing-wider); }
+
+.line-tight { line-height: var(--line-height-tight); }
+.line-snug { line-height: var(--line-height-snug); }
+.line-normal { line-height: var(--line-height-normal); }
+.line-relaxed { line-height: var(--line-height-relaxed); }
+.line-loose { line-height: var(--line-height-loose); }
+
+/* Monospace/Metrics */
+.font-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Truncation */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--color-teal-300);
+  color: var(--color-charcoal);
+}
+
+/* Focus Styles */
+:focus-visible {
+  outline: 2px solid var(--color-teal-500);
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+  
+  h1 { font-size: 24pt; }
+  h2 { font-size: 18pt; }
+  h3 { font-size: 14pt; }
+  
+  a {
+    color: inherit;
+    text-decoration: underline;
+  }
+}

@@ -1,0 +1,260 @@
+{
+  "name": "AI-Daily Draft Kit Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-kit",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Kit Generation Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "draft-kit-generator"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "gpt-4",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "={{$node['prompts'].json.carouselPrompt}}"
+            },
+            {
+              "role": "user", 
+              "content": "Generate Instagram carousel for: {{$json.brief}}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 2000
+        }
+      },
+      "id": "generate-carousel",
+      "name": "Generate IG Carousel",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [450, 200]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "claude-3-opus",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "={{$node['prompts'].json.blogPrompt}}"
+            },
+            {
+              "role": "user",
+              "content": "Expand to full blog post: {{$json.brief}}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 3000
+        }
+      },
+      "id": "generate-blog",
+      "name": "Generate Blog Post",
+      "type": "n8n-nodes-community.anthropic",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "gpt-3.5-turbo",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "={{$node['prompts'].json.xHooksPrompt}}"
+            },
+            {
+              "role": "user",
+              "content": "Create A/B hooks for: {{$json.title}}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.8,
+          "maxTokens": 200
+        }
+      },
+      "id": "generate-x-hooks",
+      "name": "Generate X Hooks",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [450, 400]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Combine all generated content\nconst carousel = $node['generate-carousel'].json;\nconst blog = $node['generate-blog'].json;\nconst hooks = $node['generate-x-hooks'].json;\nconst brief = $input.first().json;\n\n// Structure the complete kit\nconst kit = {\n  briefId: brief.briefId,\n  title: brief.title,\n  postType: brief.postType,\n  generatedAt: new Date().toISOString(),\n  \n  instagram: {\n    slides: carousel.slides,\n    hashtags: carousel.hashtags,\n    firstComment: carousel.firstComment\n  },\n  \n  blog: {\n    frontmatter: blog.frontmatter,\n    content: blog.content,\n    wordCount: blog.content.split(' ').length,\n    readingTime: Math.ceil(blog.content.split(' ').length / 200)\n  },\n  \n  twitter: {\n    hookA: hooks.hookA,\n    hookB: hooks.hookB,\n    thread: hooks.thread\n  },\n  \n  linkedin: brief.postType === 'T3' ? {\n    post: generateLinkedInPost(blog.content),\n    bullets: extractBullets(blog.content)\n  } : null,\n  \n  metadata: {\n    similarityScore: 0, // Will be checked next\n    qualityScore: brief.scores?.total || 0,\n    approved: false\n  }\n};\n\nreturn [{ json: kit }];\n\nfunction generateLinkedInPost(content) {\n  // Extract key insights for LinkedIn\n  const lines = content.split('\\n').filter(l => l.length > 0);\n  return lines.slice(0, 3).join(' ').substring(0, 180);\n}\n\nfunction extractBullets(content) {\n  // Find bullet points or create from headers\n  const bullets = [];\n  const lines = content.split('\\n');\n  \n  for (const line of lines) {\n    if (line.startsWith('•') || line.startsWith('-')) {\n      bullets.push(line.replace(/^[•\\-]\\s*/, ''));\n      if (bullets.length >= 3) break;\n    }\n  }\n  \n  return bullets;\n}"
+      },
+      "id": "combine-kit",
+      "name": "Combine Content Kit",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetId": "={{$credentials.googleSheets.spreadsheetId}}",
+        "range": "Drafts!A:Z",
+        "options": {
+          "valueInputMode": "USER_ENTERED"
+        }
+      },
+      "id": "save-kit",
+      "name": "Save Kit to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "bucketName": "ai-daily-assets",
+        "fileName": "=/kits/{{$json.briefId}}/kit.json",
+        "binaryPropertyName": "data",
+        "options": {
+          "acl": "private"
+        }
+      },
+      "id": "save-s3",
+      "name": "Backup to S3",
+      "type": "n8n-nodes-base.s3",
+      "typeVersion": 1,
+      "position": [850, 400]
+    },
+    {
+      "parameters": {
+        "chatId": "={{$credentials.telegram.chatId}}",
+        "text": "=✨ Content Kit Ready\\n\\n**{{$json.title}}**\\nType: {{$json.postType}}\\n\\n📱 IG: {{$json.instagram.slides.length}} slides\\n📝 Blog: {{$json.blog.wordCount}} words\\n🐦 X: 2 hooks ready\\n{{$json.linkedin ? '💼 LinkedIn: Ready' : ''}}\\n\\nQuality Score: {{$json.metadata.qualityScore}}/100",
+        "additionalFields": {
+          "parse_mode": "Markdown",
+          "reply_markup": {
+            "inline_keyboard": [
+              [
+                {
+                  "text": "👀 Preview",
+                  "callback_data": "preview_{{$json.briefId}}"
+                },
+                {
+                  "text": "✅ Approve",
+                  "callback_data": "approve_{{$json.briefId}}"
+                }
+              ]
+            ]
+          }
+        }
+      },
+      "id": "notify-complete",
+      "name": "Notify Complete",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [1050, 300]
+    }
+  ],
+  "connections": {
+    "Kit Generation Request": {
+      "main": [
+        [
+          {
+            "node": "Generate IG Carousel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate Blog Post",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate X Hooks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate IG Carousel": {
+      "main": [
+        [
+          {
+            "node": "Combine Content Kit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Blog Post": {
+      "main": [
+        [
+          {
+            "node": "Combine Content Kit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate X Hooks": {
+      "main": [
+        [
+          {
+            "node": "Combine Content Kit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine Content Kit": {
+      "main": [
+        [
+          {
+            "node": "Save Kit to Sheets",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Backup to S3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Kit to Sheets": {
+      "main": [
+        [
+          {
+            "node": "Notify Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Indiana/Indianapolis",
+    "errorWorkflow": "error-handler",
+    "saveExecutionProgress": true
+  },
+  "staticData": null,
+  "tags": ["content-pipeline", "generation", "ai"],
+  "updatedAt": "2025-01-27T10:00:00.000Z"
+}

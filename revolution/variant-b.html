@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse Daily - AI Content Tools</title>
+    <meta name="description" content="Stop wasting hours creating content. Get AI-powered tools that turn trending topics into viral posts in seconds.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Analytics with UTM tracking -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+        
+        // Track variant and UTM parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const utm_source = urlParams.get('utm_source') || 'direct';
+        const utm_campaign = urlParams.get('utm_campaign') || 'unknown';
+        
+        gtag('event', 'variant_view', {
+            'variant': 'B',
+            'price': 79,
+            'urgency': 'limited_time',
+            'messaging': 'tools',
+            'utm_source': utm_source,
+            'utm_campaign': utm_campaign
+        });
+    </script>
+</head>
+<body class="bg-gradient-to-br from-purple-50 to-pink-100 min-h-screen">
+    <!-- Header -->
+    <header class="container mx-auto px-4 py-6">
+        <nav class="flex justify-center">
+            <div class="text-2xl font-bold text-purple-600">Pulse Daily</div>
+        </nav>
+    </header>
+
+    <!-- Hero Section - VARIANT B: TOOLS FOCUS -->
+    <section class="container mx-auto px-4 py-16 text-center">
+        <div class="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-2 rounded-lg inline-block mb-6">
+            ⏰ Limited Time: 48 hours left at this price
+        </div>
+        
+        <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <span class="text-purple-600">AI Tools</span> That Create<br>
+            Viral Content Instantly
+        </h1>
+        
+        <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            Stop wasting 3+ hours creating content. Our AI turns trending topics into 
+            viral posts, threads, and videos in under 30 seconds. 10x your output.
+        </p>
+        
+        <!-- Fake Door CTA - VARIANT B: $79 -->
+        <div class="max-w-md mx-auto mb-8">
+            <button 
+                onclick="openPreOrderB()"
+                class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-12 rounded-lg transition-all text-xl shadow-lg transform hover:scale-105"
+            >
+                🚀 Get AI Tools Access - $79/month
+            </button>
+            <p class="text-sm text-gray-500 mt-2">Regular price $159/month • Save 50%</p>
+        </div>
+        
+        <!-- Social Proof -->
+        <div class="flex flex-wrap justify-center items-center gap-8 opacity-60 mb-12">
+            <div class="text-sm text-gray-500">Used by creators with:</div>
+            <div class="text-sm font-medium text-gray-600">10M+ followers</div>
+            <div class="text-sm font-medium text-gray-600">Viral content daily</div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="bg-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12">Your AI Content Arsenal</h2>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center p-6">
+                        <div class="text-4xl mb-4">🤖</div>
+                        <h3 class="font-semibold mb-2">AI Content Generator</h3>
+                        <p class="text-gray-600">Turn any trend into posts, threads, and scripts</p>
+                    </div>
+                    
+                    <div class="text-center p-6">
+                        <div class="text-4xl mb-4">📱</div>
+                        <h3 class="font-semibold mb-2">Multi-Platform Export</h3>
+                        <p class="text-gray-600">Instagram, TikTok, Twitter, LinkedIn ready</p>
+                    </div>
+                    
+                    <div class="text-center p-6">
+                        <div class="text-4xl mb-4">⚡</div>
+                        <h3 class="font-semibold mb-2">30-Second Creation</h3>
+                        <p class="text-gray-600">From trending topic to viral post in seconds</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pre-order Modal -->
+    <div id="preOrderModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <div class="text-center">
+                <h2 class="text-2xl font-bold mb-4">🚀 AI Tools Access</h2>
+                <p class="text-gray-600 mb-6">Get the AI content creation tools that go viral</p>
+                
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg mb-6">
+                    <div class="text-3xl font-bold text-purple-600">$79<span class="text-lg">/month</span></div>
+                    <div class="text-sm text-gray-500 line-through">Regular $159/month</div>
+                    <div class="text-sm text-purple-700 font-semibold">50% OFF - Limited time</div>
+                </div>
+                
+                <div class="text-left mb-6 space-y-2">
+                    <div class="flex items-center text-sm">
+                        <span class="text-purple-500 mr-2">✓</span>
+                        AI content generator
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-purple-500 mr-2">✓</span>
+                        Multi-platform export
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-purple-500 mr-2">✓</span>
+                        Trending topics feed
+                    </div>
+                </div>
+                
+                <button 
+                    onclick="processPreOrderB()"
+                    class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 px-6 rounded-lg mb-4"
+                >
+                    Get AI Tools Access
+                </button>
+                
+                <button onclick="closePreOrder()" class="text-gray-500 text-sm hover:text-gray-700">
+                    Not now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openPreOrderB() {
+            document.getElementById('preOrderModal').classList.remove('hidden');
+            
+            gtag('event', 'fake_door_click', {
+                'variant': 'B',
+                'price': 79,
+                'button_location': 'hero'
+            });
+            
+            const clickData = {
+                timestamp: new Date().toISOString(),
+                event: 'fake_door_click',
+                variant: 'B',
+                price: 79,
+                source: new URLSearchParams(window.location.search).get('utm_source') || 'direct'
+            };
+            
+            const clicks = JSON.parse(localStorage.getItem('variant_b_clicks') || '[]');
+            clicks.push(clickData);
+            localStorage.setItem('variant_b_clicks', JSON.stringify(clicks));
+        }
+        
+        function closePreOrder() {
+            document.getElementById('preOrderModal').classList.add('hidden');
+            gtag('event', 'modal_close', {'variant': 'B'});
+        }
+        
+        function processPreOrderB() {
+            gtag('event', 'purchase_intent', {
+                'variant': 'B',
+                'value': 79,
+                'currency': 'USD'
+            });
+            
+            alert('🎉 Welcome to Pulse Daily! Launch in 2 weeks. Your AI tools are coming!');
+            
+            const preOrderData = {
+                timestamp: new Date().toISOString(),
+                event: 'pre_order_intent',
+                variant: 'B',
+                amount: 79
+            };
+            
+            const preOrders = JSON.parse(localStorage.getItem('variant_b_preorders') || '[]');
+            preOrders.push(preOrderData);
+            localStorage.setItem('variant_b_preorders', JSON.stringify(preOrders));
+            
+            closePreOrder();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "name": "pagecraft-ai",
+  "version": "0.1.0",
+  "description": "AI-powered landing page generator that transforms product ideas into high-converting pages in seconds",
+  "private": true,
+  "scripts": {
+    "test": "node tests/landing-page.test.js",
+    "serve": "npx serve .",
+    "dev": "npx serve . --listen 3000",
+    "validate": "npm run test",
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "echo 'Ready for deployment'"
+  },
+  "keywords": [
+    "ai",
+    "landing-pages",
+    "saas",
+    "conversion-optimization",
+    "indie-makers"
+  ],
+  "author": "PageCraft AI Team",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pagecraft-ai/landing-page.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pagecraft-ai/landing-page/issues"
+  },
+  "homepage": "https://pagecraft.ai"
+}

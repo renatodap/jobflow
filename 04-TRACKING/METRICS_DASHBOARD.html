@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metrics Command Center - Real-Time Business Intelligence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, 'SF Pro Display', sans-serif;
+            background: #000;
+            color: #fff;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .dashboard {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #222;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #34c759;
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background: #34c759;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* KPI Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card.success {
+            border-color: #34c759;
+        }
+
+        .kpi-card.warning {
+            border-color: #ffcc00;
+        }
+
+        .kpi-card.danger {
+            border-color: #ff3b30;
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .kpi-value {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .kpi-change {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .kpi-change.positive {
+            color: #34c759;
+        }
+
+        .kpi-change.negative {
+            color: #ff3b30;
+        }
+
+        /* Charts Container */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* Revenue Chart */
+        .revenue-chart {
+            height: 300px;
+            position: relative;
+        }
+
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 30px;
+            background: linear-gradient(to top, #667eea, #764ba2);
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+        }
+
+        /* Funnel */
+        .funnel-stage {
+            background: #1a1a1a;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .funnel-bar {
+            height: 8px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            margin-top: 5px;
+            transition: width 0.5s;
+        }
+
+        /* Activity Feed */
+        .activity-feed {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            padding: 12px;
+            border-left: 3px solid #1a1a1a;
+            margin-bottom: 15px;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .activity-item.sale {
+            border-color: #34c759;
+        }
+
+        .activity-item.signup {
+            border-color: #007aff;
+        }
+
+        .activity-item.churn {
+            border-color: #ff3b30;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Customer Table */
+        .customer-table {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #666;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #0a0a0a;
+        }
+
+        tr:hover {
+            background: #1a1a1a;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.active {
+            background: #34c759;
+            color: #000;
+        }
+
+        .status-badge.trial {
+            background: #007aff;
+            color: #fff;
+        }
+
+        .status-badge.churned {
+            background: #ff3b30;
+            color: #fff;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">METRICS COMMAND CENTER</div>
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span>LIVE DATA</span>
+                <span id="current-time">3:45 AM</span>
+            </div>
+        </div>
+
+        <!-- KPI Grid -->
+        <div class="kpi-grid">
+            <div class="kpi-card danger">
+                <div class="kpi-label">MRR</div>
+                <div class="kpi-value" id="mrr">$0</div>
+                <div class="kpi-change negative">
+                    <span>↓</span> Need $3,000
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-label">Total Customers</div>
+                <div class="kpi-value" id="customers">0</div>
+                <div class="kpi-change">
+                    Target: 100
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-label">Trial → Paid</div>
+                <div class="kpi-value" id="conversion">0%</div>
+                <div class="kpi-change">
+                    Industry avg: 15%
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-label">CAC</div>
+                <div class="kpi-value" id="cac">$0</div>
+                <div class="kpi-change">
+                    Target: <$50
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-label">LTV</div>
+                <div class="kpi-value" id="ltv">$0</div>
+                <div class="kpi-change">
+                    Target: >$500
+                </div>
+            </div>
+            
+            <div class="kpi-card warning">
+                <div class="kpi-label">Churn Rate</div>
+                <div class="kpi-value" id="churn">0%</div>
+                <div class="kpi-change">
+                    Target: <5%
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-label">NPS Score</div>
+                <div class="kpi-value" id="nps">0</div>
+                <div class="kpi-change">
+                    Target: >50
+                </div>
+            </div>
+            
+            <div class="kpi-card success">
+                <div class="kpi-label">Uptime</div>
+                <div class="kpi-value" id="uptime">100%</div>
+                <div class="kpi-change positive">
+                    <span>↑</span> All systems go
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <!-- Revenue Chart -->
+            <div class="chart-card">
+                <h3 class="chart-title">Revenue Trend (Last 30 Days)</h3>
+                <div class="revenue-chart" id="revenueChart">
+                    <!-- Chart bars will be generated here -->
+                </div>
+            </div>
+            
+            <!-- Conversion Funnel -->
+            <div class="chart-card">
+                <h3 class="chart-title">Conversion Funnel</h3>
+                <div class="funnel">
+                    <div class="funnel-stage">
+                        <div>
+                            <div>Visitors</div>
+                            <div style="font-size: 24px; font-weight: 600;">1,234</div>
+                        </div>
+                        <span>100%</span>
+                    </div>
+                    <div class="funnel-bar" style="width: 100%"></div>
+                    
+                    <div class="funnel-stage">
+                        <div>
+                            <div>Signups</div>
+                            <div style="font-size: 24px; font-weight: 600;">89</div>
+                        </div>
+                        <span>7.2%</span>
+                    </div>
+                    <div class="funnel-bar" style="width: 72%"></div>
+                    
+                    <div class="funnel-stage">
+                        <div>
+                            <div>Trials</div>
+                            <div style="font-size: 24px; font-weight: 600;">34</div>
+                        </div>
+                        <span>2.8%</span>
+                    </div>
+                    <div class="funnel-bar" style="width: 38%"></div>
+                    
+                    <div class="funnel-stage">
+                        <div>
+                            <div>Paid</div>
+                            <div style="font-size: 24px; font-weight: 600;">0</div>
+                        </div>
+                        <span>0%</span>
+                    </div>
+                    <div class="funnel-bar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Feed & Customer Table -->
+        <div class="charts-grid">
+            <!-- Activity Feed -->
+            <div class="activity-feed">
+                <h3 class="chart-title">Live Activity</h3>
+                <div id="activityFeed">
+                    <div class="activity-item signup">
+                        <div>New trial: john@example.com</div>
+                        <div class="activity-time">2 minutes ago</div>
+                    </div>
+                    <div class="activity-item">
+                        <div>Page view: /pricing</div>
+                        <div class="activity-time">5 minutes ago</div>
+                    </div>
+                    <div class="activity-item">
+                        <div>Blog post read: "How to Save 10 Hours"</div>
+                        <div class="activity-time">12 minutes ago</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Top Customers -->
+            <div class="customer-table">
+                <h3 class="chart-title">Recent Customers</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Plan</th>
+                            <th>MRR</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customerTable">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: #666;">
+                                No customers yet. Let's change that!
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="action-btn" onclick="refreshData()">↻ Refresh</button>
+            <button class="action-btn" onclick="exportData()">📊 Export</button>
+            <button class="action-btn" onclick="addCustomer()">+ Add Customer</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize data
+        let metricsData = {
+            mrr: 0,
+            customers: 0,
+            trials: 34,
+            conversion: 0,
+            cac: 0,
+            ltv: 0,
+            churn: 0,
+            nps: 0,
+            uptime: 100,
+            revenue: []
+        };
+
+        // Load saved data
+        function loadData() {
+            const saved = localStorage.getItem('metricsData');
+            if (saved) {
+                metricsData = JSON.parse(saved);
+                updateDisplay();
+            }
+        }
+
+        // Save data
+        function saveData() {
+            localStorage.setItem('metricsData', JSON.stringify(metricsData));
+        }
+
+        // Update display
+        function updateDisplay() {
+            document.getElementById('mrr').textContent = `$${metricsData.mrr}`;
+            document.getElementById('customers').textContent = metricsData.customers;
+            document.getElementById('conversion').textContent = `${metricsData.conversion}%`;
+            document.getElementById('cac').textContent = `$${metricsData.cac}`;
+            document.getElementById('ltv').textContent = `$${metricsData.ltv}`;
+            document.getElementById('churn').textContent = `${metricsData.churn}%`;
+            document.getElementById('nps').textContent = metricsData.nps;
+            document.getElementById('uptime').textContent = `${metricsData.uptime}%`;
+            
+            // Update card colors based on values
+            updateCardColors();
+        }
+
+        // Update card colors
+        function updateCardColors() {
+            const mrrCard = document.querySelector('.kpi-card');
+            if (metricsData.mrr === 0) {
+                mrrCard.classList.add('danger');
+            } else if (metricsData.mrr < 3000) {
+                mrrCard.classList.add('warning');
+            } else {
+                mrrCard.classList.add('success');
+            }
+        }
+
+        // Generate revenue chart
+        function generateRevenueChart() {
+            const chart = document.getElementById('revenueChart');
+            const days = 30;
+            const barWidth = 100 / days;
+            
+            chart.innerHTML = '';
+            
+            for (let i = 0; i < days; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.left = `${i * barWidth}%`;
+                bar.style.width = `${barWidth - 0.5}%`;
+                bar.style.height = '0%';
+                
+                // Simulate some data
+                if (i > 25) {
+                    const height = Math.random() * 50 + 10;
+                    setTimeout(() => {
+                        bar.style.height = `${height}%`;
+                    }, i * 50);
+                }
+                
+                chart.appendChild(bar);
+            }
+        }
+
+        // Add activity
+        function addActivity(type, message) {
+            const feed = document.getElementById('activityFeed');
+            const item = document.createElement('div');
+            item.className = `activity-item ${type}`;
+            item.innerHTML = `
+                <div>${message}</div>
+                <div class="activity-time">Just now</div>
+            `;
+            feed.insertBefore(item, feed.firstChild);
+            
+            // Keep only last 10 items
+            while (feed.children.length > 10) {
+                feed.removeChild(feed.lastChild);
+            }
+        }
+
+        // Add customer
+        function addCustomer() {
+            const name = prompt('Customer name:');
+            const plan = prompt('Plan (Basic/Pro):');
+            const mrr = parseInt(prompt('MRR amount:'));
+            
+            if (name && plan && mrr) {
+                metricsData.customers++;
+                metricsData.mrr += mrr;
+                metricsData.conversion = Math.round((metricsData.customers / metricsData.trials) * 100);
+                
+                // Update table
+                const table = document.getElementById('customerTable');
+                if (metricsData.customers === 1) {
+                    table.innerHTML = '';
+                }
+                
+                const row = table.insertRow(0);
+                row.innerHTML = `
+                    <td>${name}</td>
+                    <td>${plan}</td>
+                    <td>$${mrr}</td>
+                    <td><span class="status-badge active">Active</span></td>
+                `;
+                
+                // Add activity
+                addActivity('sale', `New customer: ${name} (${plan} - $${mrr}/mo)`);
+                
+                updateDisplay();
+                saveData();
+                
+                // Celebrate!
+                if (metricsData.customers === 1) {
+                    alert('🎉 FIRST CUSTOMER! This is huge! Take a screenshot!');
+                } else if (metricsData.customers % 10 === 0) {
+                    alert(`🎊 ${metricsData.customers} CUSTOMERS! You're crushing it!`);
+                }
+            }
+        }
+
+        // Refresh data
+        function refreshData() {
+            // Simulate live data updates
+            addActivity('', 'Data refreshed');
+            generateRevenueChart();
+        }
+
+        // Export data
+        function exportData() {
+            const dataStr = JSON.stringify(metricsData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `metrics-${new Date().toISOString()}.json`;
+            a.click();
+        }
+
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: true 
+            });
+            document.getElementById('current-time').textContent = timeStr;
+        }
+
+        // Simulate real-time updates
+        function simulateActivity() {
+            const activities = [
+                { type: '', message: 'Page view: /features' },
+                { type: '', message: 'Blog read: "Getting Started Guide"' },
+                { type: 'signup', message: 'New trial: sarah@example.com' },
+                { type: '', message: 'Demo watched: 3:45 duration' },
+                { type: '', message: 'Pricing page viewed' }
+            ];
+            
+            const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+            
+            // Only add activity occasionally
+            if (Math.random() > 0.7) {
+                addActivity(randomActivity.type, randomActivity.message);
+            }
+        }
+
+        // Initialize
+        loadData();
+        updateTime();
+        generateRevenueChart();
+        
+        // Set up intervals
+        setInterval(updateTime, 60000);
+        setInterval(simulateActivity, 10000);
+        setInterval(saveData, 30000);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'r') refreshData();
+            if (e.key === 'a') addCustomer();
+            if (e.key === 'e') exportData();
+        });
+    </script>
+</body>
+</html>

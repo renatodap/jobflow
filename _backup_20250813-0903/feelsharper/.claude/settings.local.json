@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(npm run dev:*)",
+      "Bash(del appfavicon.ico)",
+      "Bash(rm:*)",
+      "Bash(npx tsc:*)",
+      "Bash(mv:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(npm install:*)",
+      "Bash(npm test)",
+      "Bash(npx next:*)",
+      "Bash(git commit:*)",
+      "Bash(git fetch:*)",
+      "Bash(grep:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(chmod:*)",
+      "Bash(npm run docs:expand:*)",
+      "Bash(npx supabase:*)",
+      "Bash(ls:*)",
+      "Bash(npm test:*)",
+      "Bash(node:*)",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Bash(npm run lint)",
+      "Bash(git rm:*)",
+      "Bash(taskkill:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

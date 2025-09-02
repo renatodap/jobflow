@@ -1,0 +1,54 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Recipe Post Type (T2) Cover Variant -->
+  <defs>
+    <linearGradient id="recipe-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2DD4BF"/>
+      <stop offset="100%" style="stop-color:#6366F1"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#recipe-gradient)"/>
+  
+  <!-- Recipe Icon (numbered list) -->
+  <g transform="translate(150, 240)">
+    <circle cx="20" cy="20" r="18" fill="none" stroke="white" stroke-width="2"/>
+    <text x="20" y="27" font-family="Inter, sans-serif" font-size="18" font-weight="600" fill="white" text-anchor="middle">1</text>
+    
+    <circle cx="20" cy="65" r="18" fill="none" stroke="white" stroke-width="2"/>
+    <text x="20" y="72" font-family="Inter, sans-serif" font-size="18" font-weight="600" fill="white" text-anchor="middle">2</text>
+    
+    <circle cx="20" cy="110" r="18" fill="none" stroke="white" stroke-width="2"/>
+    <text x="20" y="117" font-family="Inter, sans-serif" font-size="18" font-weight="600" fill="white" text-anchor="middle">3</text>
+    
+    <line x1="50" y1="20" x2="120" y2="20" stroke="white" stroke-width="2" opacity="0.5"/>
+    <line x1="50" y1="65" x2="120" y2="65" stroke="white" stroke-width="2" opacity="0.5"/>
+    <line x1="50" y1="110" x2="120" y2="110" stroke="white" stroke-width="2" opacity="0.5"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="350" y="280" font-family="Inter, sans-serif" font-size="48" font-weight="600" fill="white">
+    5 Steps to Perfect
+  </text>
+  <text x="350" y="340" font-family="Inter, sans-serif" font-size="48" font-weight="600" fill="white">
+    AI Automation
+  </text>
+  
+  <!-- Do This Today Badge -->
+  <g transform="translate(350, 380)">
+    <rect width="180" height="40" rx="8" fill="#A3E635"/>
+    <text x="90" y="26" font-family="Inter, sans-serif" font-size="16" font-weight="600" fill="#0F172A" text-anchor="middle">
+      DO THIS TODAY
+    </text>
+  </g>
+  
+  <!-- Post Type -->
+  <text x="550" y="406" font-family="Inter, sans-serif" font-size="14" font-weight="400" fill="white" opacity="0.8">
+    Recipe • 5 min read
+  </text>
+  
+  <!-- Bottom -->
+  <text x="1050" y="580" font-family="Inter, sans-serif" font-size="14" font-weight="400" fill="white" opacity="0.6" text-anchor="end">
+    AI-Daily | renatodap.me
+  </text>
+</svg>

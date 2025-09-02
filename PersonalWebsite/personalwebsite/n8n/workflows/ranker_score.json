@@ -1,0 +1,191 @@
+{
+  "name": "AI-Daily Ranker Score",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "read",
+        "sheetId": "={{$credentials.googleSheets.spreadsheetId}}",
+        "range": "Briefs!A:Z",
+        "options": {
+          "returnAllMatches": true
+        }
+      },
+      "id": "read-briefs",
+      "name": "Read Unscored Briefs",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.scored}}",
+              "value2": "={{false}}"
+            }
+          ]
+        }
+      },
+      "id": "filter-unscored",
+      "name": "Filter Unscored",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Scoring algorithm based on 4 dimensions\nconst items = $input.all();\nconst scoredItems = [];\n\nfor (const item of items) {\n  const brief = item.json;\n  \n  // Calculate individual scores (0-25 each)\n  const scores = {\n    freshness: calculateFreshness(brief.discovered_date),\n    replicability: analyzeReplicability(brief.content),\n    impact: estimateImpact(brief.benefits),\n    contentGap: assessContentGap(brief.title, brief.competitors)\n  };\n  \n  // Calculate total score\n  scores.total = scores.freshness + scores.replicability + scores.impact + scores.contentGap;\n  \n  // Determine recommendation\n  let recommendation = 'decline';\n  if (scores.total >= 85) {\n    recommendation = 'auto-approve';\n  } else if (scores.total >= 70) {\n    recommendation = 'review';\n  }\n  \n  scoredItems.push({\n    json: {\n      ...brief,\n      scores,\n      recommendation,\n      scored: true,\n      scored_at: new Date().toISOString()\n    }\n  });\n}\n\nreturn scoredItems;\n\n// Scoring functions\nfunction calculateFreshness(discoveredDate) {\n  if (!discoveredDate) return 10;\n  \n  const hoursSince = (Date.now() - new Date(discoveredDate)) / (1000 * 60 * 60);\n  \n  if (hoursSince <= 24) return 25;\n  if (hoursSince <= 48) return 20;\n  if (hoursSince <= 72) return 15;\n  if (hoursSince <= 168) return 10; // 1 week\n  return 5;\n}\n\nfunction analyzeReplicability(content) {\n  if (!content) return 10;\n  \n  const indicators = [\n    /step.by.step/i,\n    /\\d+\\s*minutes?/i,\n    /tutorial/i,\n    /how.to/i,\n    /guide/i,\n    /instructions/i\n  ];\n  \n  let score = 10;\n  for (const indicator of indicators) {\n    if (indicator.test(content)) {\n      score += 3;\n    }\n  }\n  \n  return Math.min(score, 25);\n}\n\nfunction estimateImpact(benefits) {\n  if (!benefits) return 10;\n  \n  let score = 10;\n  \n  // Check for time savings\n  if (/save.{0,20}hours?/i.test(benefits)) score += 8;\n  else if (/save.{0,20}minutes?/i.test(benefits)) score += 5;\n  \n  // Check for cost savings\n  if (/\\$\\d+/i.test(benefits)) score += 7;\n  if (/free/i.test(benefits)) score += 5;\n  \n  return Math.min(score, 25);\n}\n\nfunction assessContentGap(title, competitors) {\n  // Simplified - would check against database of existing content\n  const commonTopics = [\n    'chatgpt tips',\n    'ai tools list',\n    'prompt engineering basics',\n    'midjourney tutorial'\n  ];\n  \n  const titleLower = title.toLowerCase();\n  \n  for (const topic of commonTopics) {\n    if (titleLower.includes(topic)) {\n      return 5; // Oversaturated topic\n    }\n  }\n  \n  return 20; // Assume good content gap\n}"
+      },
+      "id": "score-algorithm",
+      "name": "Apply Scoring Algorithm",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "sheetId": "={{$credentials.googleSheets.spreadsheetId}}",
+        "range": "Briefs!A:Z",
+        "key": "briefId",
+        "options": {
+          "valueInputMode": "USER_ENTERED"
+        }
+      },
+      "id": "update-scores",
+      "name": "Update Scores in Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.scores.total}}",
+              "operation": "largerEqual",
+              "value2": 85
+            }
+          ]
+        }
+      },
+      "id": "check-auto-approve",
+      "name": "Check Auto-Approve",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1050, 250]
+    },
+    {
+      "parameters": {
+        "queue": "content-generation",
+        "options": {
+          "priority": 1,
+          "delay": 0
+        }
+      },
+      "id": "queue-generation",
+      "name": "Queue for Generation",
+      "type": "n8n-nodes-base.queue",
+      "typeVersion": 1,
+      "position": [1250, 200]
+    },
+    {
+      "parameters": {
+        "chatId": "={{$credentials.telegram.chatId}}",
+        "text": "=📊 Scoring Complete\\n\\nProcessed: {{$node['filter-unscored'].outputDataLength}} briefs\\n\\nResults:\\n✅ Auto-approved: {{$node['check-auto-approve'].outputDataLength}}\\n👀 Needs review: {{$items.filter(i => i.json.scores.total >= 70 && i.json.scores.total < 85).length}}\\n❌ Declined: {{$items.filter(i => i.json.scores.total < 70).length}}\\n\\nTop score: {{$items.reduce((max, i) => Math.max(max, i.json.scores.total), 0)}}/100",
+        "additionalFields": {
+          "parse_mode": "Markdown",
+          "reply_markup": {
+            "inline_keyboard": [
+              [
+                {
+                  "text": "📝 View Briefs",
+                  "url": "https://docs.google.com/spreadsheets/d/{{$credentials.googleSheets.spreadsheetId}}"
+                }
+              ]
+            ]
+          }
+        }
+      },
+      "id": "telegram-summary",
+      "name": "Send Summary",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [1250, 400]
+    }
+  ],
+  "connections": {
+    "Read Unscored Briefs": {
+      "main": [
+        [
+          {
+            "node": "Filter Unscored",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Unscored": {
+      "main": [
+        [
+          {
+            "node": "Apply Scoring Algorithm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apply Scoring Algorithm": {
+      "main": [
+        [
+          {
+            "node": "Update Scores in Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Scores in Sheet": {
+      "main": [
+        [
+          {
+            "node": "Check Auto-Approve",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Auto-Approve": {
+      "main": [
+        [
+          {
+            "node": "Queue for Generation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Indiana/Indianapolis",
+    "errorWorkflow": "error-handler"
+  },
+  "staticData": null,
+  "tags": ["content-pipeline", "scoring"],
+  "updatedAt": "2025-01-27T10:00:00.000Z"
+}

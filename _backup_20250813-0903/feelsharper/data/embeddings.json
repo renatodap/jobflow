@@ -1,0 +1,144 @@
+[
+  {
+    "id": "fix-your-sleep-in-3-days",
+    "title": "How to Fix Your Sleep in 3 Days",
+    "slug": "fix-your-sleep-in-3-days",
+    "summary": "",
+    "category": "Sleep",
+    "tags": [
+      "sleep optimization",
+      "circadian rhythm",
+      "recovery",
+      "performance"
+    ],
+    "content": "\nMost men accept poor sleep as inevitable. You wake up groggy, drag through the day, and repeat the cycle. But sleep isn't a luxury—it's the foundation of everything else you want to optimize.\n\nThis isn't another \"sleep hygiene\" checklist. This is a systematic approach to fixing your sleep in 72 hours using evidence-based strategies that work with your biology.\n\n<Callout type=\"tip\" title=\"Why 3 Days?\">\nYour circadian rhythm can begin adjusting within 24-48 hours of consistent signals. While full optimization takes weeks, you'll notice significant improvements in sleep quality and morning energy within 3 days of implementing this system.\n</Callout>\n\n## The Feel Sharper Sleep Protocol\n\n### Day 1: Reset Your Light Exposure\n\nYour circadian rhythm is controlled by light. Most men get this backwards—too little light during the day, too much at night.\n\n**Morning (Within 30 minutes of waking):**\n- Get 10-15 minutes of direct sunlight exposure\n- No sunglasses during this window\n- If cloudy, use a 10,000 lux light therapy lamp for 20 minutes\n\n**Evening (2 hours before bed):**\n- Dim all lights to 50% or less\n- Use blue light blocking glasses if using screens\n- Install f.lux or similar software on devices\n\n**Why this works:** Light is the primary zeitgeber (time cue) for your circadian clock. Morning light advances your circadian phase, while evening light delays it.\n\n### Day 2: Optimize Your Sleep Environment\n\nYour bedroom should be a cave: cool, dark, and quiet.\n\n**Temperature:** 65-68°F (18-20°C)\n- Your core body temperature naturally drops 1-2°F before sleep\n- A cool environment facilitates this process\n\n**Darkness:** Blackout everything\n- Blackout curtains or eye mask\n- Cover or remove all LED lights\n- Use red light bulbs for any necessary lighting\n\n**Sound:** Consistent background noise\n- Earplugs or white noise machine\n- Aim for 40-50 decibels maximum\n\n<AffiliateBox\n  title=\"Oura Ring Gen 3\"\n  description=\"Track your sleep stages, heart rate variability, and recovery metrics. The data will help you optimize your sleep protocol and measure improvements.\"\n  price=\"$299\"\n  rating={4}\n  link=\"https://example.com/oura-ring\"\n  pros={[\n    \"Accurate sleep stage tracking\",\n    \"HRV and recovery insights\",\n    \"Long battery life (7 days)\",\n    \"Comfortable for sleep\"\n  ]}\n/>\n\n### Day 3: Master Your Pre-Sleep Routine\n\nThe 90 minutes before bed are critical. This is when you signal to your body that it's time to wind down.\n\n**90 minutes before bed:**\n- Stop all work and stimulating activities\n- Begin dimming lights throughout your home\n- No more food or alcohol\n\n**60 minutes before bed:**\n- Take a hot shower or bath (raises then drops core temperature)\n- Practice 4-7-8 breathing: Inhale 4, hold 7, exhale 8\n- Read fiction or listen to calm music\n\n**30 minutes before bed:**\n- All screens off (or with blue light blockers)\n- Keep bedroom temperature at 65-68°F\n- Use magnesium glycinate (200-400mg) if needed\n\n## The Science Behind Sleep Optimization\n\n### Sleep Architecture Matters\n\nQuality sleep isn't just about duration—it's about cycling properly through sleep stages:\n\n- **Stage 1-2 (Light Sleep):** 45-55% of total sleep\n- **Stage 3 (Deep Sleep):** 15-20% of total sleep  \n- **REM Sleep:** 20-25% of total sleep\n\nDeep sleep is when your body repairs tissue and consolidates memories. REM sleep is crucial for cognitive function and emotional regulation.\n\n### Circadian Rhythm Optimization\n\nYour circadian rhythm is a 24-hour biological clock that regulates:\n- Core body temperature\n- Hormone production (cortisol, melatonin, growth hormone)\n- Alertness and cognitive performance\n\n<Callout type=\"warning\" title=\"Common Mistakes\">\n- Taking melatonin at the wrong time or dose\n- Exercising too close to bedtime (within 3 hours)\n- Inconsistent sleep/wake times on weekends\n- Using alcohol as a sleep aid (it fragments sleep)\n</Callout>\n\n## Supplements That Actually Work\n\nMost sleep supplements are marketing hype. These three have solid research:\n\n<ComparisonTable\n  title=\"Evidence-Based Sleep Supplements\"\n  features={[\"Dosage\", \"Timing\", \"Research Quality\", \"Side Effects\"]}\n  items={[\n    {\n      name: \"Magnesium Glycinate\",\n      price: \"$15-25\",\n      rating: 5,\n      features: {\n        \"Dosage\": \"200-400mg\",\n        \"Timing\": \"1 hour before bed\",\n        \"Research Quality\": true,\n        \"Side Effects\": false\n      },\n      pros: [\"Calms nervous system\", \"Improves deep sleep\", \"Minimal side effects\"],\n      cons: [\"May cause loose stools in high doses\"],\n      recommended: true,\n      link: \"https://example.com/magnesium\"\n    },\n    {\n      name: \"Melatonin\",\n      price: \"$8-15\",\n      rating: 4,\n      features: {\n        \"Dosage\": \"0.5-3mg\",\n        \"Timing\": \"30-60 min before bed\",\n        \"Research Quality\": true,\n        \"Side Effects\": false\n      },\n      pros: [\"Regulates circadian rhythm\", \"Helps with jet lag\", \"Well-researched\"],\n      cons: [\"Can cause grogginess if timed wrong\", \"May affect natural production\"],\n      link: \"https://example.com/melatonin\"\n    },\n    {\n      name: \"L-Theanine\",\n      price: \"$12-20\",\n      rating: 4,\n      features: {\n        \"Dosage\": \"100-200mg\",\n        \"Timing\": \"1-2 hours before bed\",\n        \"Research Quality\": true,\n        \"Side Effects\": false\n      },\n      pros: [\"Promotes relaxation\", \"Doesn't cause drowsiness\", \"Stacks well with others\"],\n      cons: [\"Effects are subtle\", \"May not work for severe insomnia\"],\n      link: \"https://example.com/theanine\"\n    }\n  ]}\n/>\n\n## Measuring Your Progress\n\nTrack these metrics to optimize your protocol:\n\n**Subjective measures:**\n- Morning energy level (1-10 scale)\n- Time to fall asleep\n- Number of wake-ups\n- Morning mood\n\n**Objective measures (if using a tracker):**\n- Sleep efficiency (time asleep / time in bed)\n- Deep sleep percentage\n- REM sleep percentage\n- Heart rate variability (HRV)\n\n## Advanced Optimization Strategies\n\nOnce you've mastered the basics, consider these advanced techniques:\n\n### Temperature Manipulation\n- Cooling mattress pad or chiliPAD\n- Hot bath 90 minutes before bed\n- Cool bedroom, warm extremities (socks)\n\n### Breathing Techniques\n- 4-7-8 breathing for sleep onset\n- Box breathing for anxiety\n- Wim Hof method for overall resilience\n\n### Chronotype Optimization\n- Determine if you're naturally a morning lark or night owl\n- Adjust your schedule within constraints\n- Use light therapy to shift your chronotype if needed\n\n<Callout type=\"success\" title=\"Expected Results\">\nAfter 3 days of consistent implementation, you should notice:\n- Falling asleep within 10-15 minutes\n- Fewer middle-of-night wake-ups\n- More consistent morning energy\n- Improved mood and cognitive function\n</Callout>\n\n## The Bottom Line\n\nSleep optimization isn't about perfection—it's about consistency. The strategies in this guide work because they align with your biology, not against it.\n\nStart with Day 1's light exposure protocol. It's the highest-leverage change you can make. Add the environment and routine optimizations over the following days.\n\nMost importantly, stick with it. Your circadian rhythm needs consistent signals to entrain properly. Give it 3 days of disciplined implementation, and you'll understand why sleep is the foundation of everything else you want to optimize.\n\n**Next steps:**\n- Implement the 3-day protocol starting tonight\n- Track your subjective energy and sleep quality\n- Consider objective tracking with an Oura ring or similar device\n- Once sleep is dialed in, focus on optimizing your energy and focus\n\nRemember: Most men drift through life accepting mediocrity. You won't.\n",
+    "chunks": [
+      {
+        "id": "chunk_0",
+        "content": "Most men accept poor sleep as inevitable. You wake up groggy, drag through the day, and repeat the cycle. But sleep isn't a luxury—it's the foundation of everything else you want to optimize.\n\nThis isn't another \"sleep hygiene\" checklist. This is a systematic approach to fixing your sleep in 72 hours using evidence-based strategies that work with your biology.\n\n<Callout type=\"tip\" title=\"Why 3 Days?\">\nYour circadian rhythm can begin adjusting within 24-48 hours of consistent signals. While full optimization takes weeks, you'll notice significant improvements in sleep quality and morning energy within 3 days of implementing this system.\n</Callout>",
+        "startIndex": 0,
+        "endIndex": 657,
+        "type": "paragraph"
+      },
+      {
+        "id": "chunk_1",
+        "content": "## The Feel Sharper Sleep Protocol",
+        "startIndex": 657,
+        "endIndex": 693,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_2",
+        "content": "### Day 1: Reset Your Light Exposure\n\nYour circadian rhythm is controlled by light. Most men get this backwards—too little light during the day, too much at night.\n\n**Morning (Within 30 minutes of waking):**\n- Get 10-15 minutes of direct sunlight exposure\n- No sunglasses during this window\n- If cloudy, use a 10,000 lux light therapy lamp for 20 minutes\n\n**Evening (2 hours before bed):**\n- Dim all lights to 50% or less\n- Use blue light blocking glasses if using screens\n- Install f.lux or similar software on devices\n\n**Why this works:** Light is the primary zeitgeber (time cue) for your circadian clock. Morning light advances your circadian phase, while evening light delays it.",
+        "startIndex": 693,
+        "endIndex": 1379,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_3",
+        "content": "### Day 2: Optimize Your Sleep Environment\n\nYour bedroom should be a cave: cool, dark, and quiet.\n\n**Temperature:** 65-68°F (18-20°C)\n- Your core body temperature naturally drops 1-2°F before sleep\n- A cool environment facilitates this process\n\n**Darkness:** Blackout everything\n- Blackout curtains or eye mask\n- Cover or remove all LED lights\n- Use red light bulbs for any necessary lighting\n\n**Sound:** Consistent background noise\n- Earplugs or white noise machine\n- Aim for 40-50 decibels maximum\n\n<AffiliateBox\ntitle=\"Oura Ring Gen 3\"\ndescription=\"Track your sleep stages, heart rate variability, and recovery metrics. The data will help you optimize your sleep protocol and measure improvements.\"\nprice=\"$299\"\nrating={4}\nlink=\"https://example.com/oura-ring\"\npros={[\n\"Accurate sleep stage tracking\",",
+        "startIndex": 1379,
+        "endIndex": 803,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_4",
+        "content": "\"HRV and recovery insights\",\n\"Long battery life (7 days)\",\n\"Comfortable for sleep\"\n]}\n/>",
+        "startIndex": 2199,
+        "endIndex": 89,
+        "type": "paragraph"
+      },
+      {
+        "id": "chunk_5",
+        "content": "### Day 3: Master Your Pre-Sleep Routine\n\nThe 90 minutes before bed are critical. This is when you signal to your body that it's time to wind down.\n\n**90 minutes before bed:**\n- Stop all work and stimulating activities\n- Begin dimming lights throughout your home\n- No more food or alcohol\n\n**60 minutes before bed:**\n- Take a hot shower or bath (raises then drops core temperature)\n- Practice 4-7-8 breathing: Inhale 4, hold 7, exhale 8\n- Read fiction or listen to calm music\n\n**30 minutes before bed:**\n- All screens off (or with blue light blockers)\n- Keep bedroom temperature at 65-68°F\n- Use magnesium glycinate (200-400mg) if needed",
+        "startIndex": 2303,
+        "endIndex": 2942,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_6",
+        "content": "## The Science Behind Sleep Optimization",
+        "startIndex": 2942,
+        "endIndex": 2984,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_7",
+        "content": "### Sleep Architecture Matters\n\nQuality sleep isn't just about duration—it's about cycling properly through sleep stages:\n\n- **Stage 1-2 (Light Sleep):** 45-55% of total sleep\n- **Stage 3 (Deep Sleep):** 15-20% of total sleep\n- **REM Sleep:** 20-25% of total sleep\n\nDeep sleep is when your body repairs tissue and consolidates memories. REM sleep is crucial for cognitive function and emotional regulation.",
+        "startIndex": 2984,
+        "endIndex": 407,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_8",
+        "content": "### Circadian Rhythm Optimization\n\nYour circadian rhythm is a 24-hour biological clock that regulates:\n- Core body temperature\n- Hormone production (cortisol, melatonin, growth hormone)\n- Alertness and cognitive performance\n\n<Callout type=\"warning\" title=\"Common Mistakes\">\n- Taking melatonin at the wrong time or dose\n- Exercising too close to bedtime (within 3 hours)\n- Inconsistent sleep/wake times on weekends\n- Using alcohol as a sleep aid (it fragments sleep)\n</Callout>",
+        "startIndex": 3394,
+        "endIndex": 3872,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_9",
+        "content": "## Supplements That Actually Work\n\nMost sleep supplements are marketing hype. These three have solid research:\n\n<ComparisonTable\ntitle=\"Evidence-Based Sleep Supplements\"\nfeatures={[\"Dosage\", \"Timing\", \"Research Quality\", \"Side Effects\"]}\nitems={[\n{\nname: \"Magnesium Glycinate\",\nprice: \"$15-25\",\nrating: 5,\nfeatures: {\n\"Dosage\": \"200-400mg\",\n\"Timing\": \"1 hour before bed\",\n\"Research Quality\": true,\n\"Side Effects\": false\n},\npros: [\"Calms nervous system\", \"Improves deep sleep\", \"Minimal side effects\"],\ncons: [\"May cause loose stools in high doses\"],\nrecommended: true,\nlink: \"https://example.com/magnesium\"\n},\n{\nname: \"Melatonin\",\nprice: \"$8-15\",\nrating: 4,\nfeatures: {\n\"Dosage\": \"0.5-3mg\",\n\"Timing\": \"30-60 min before bed\",\n\"Research Quality\": true,\n\"Side Effects\": false\n},\npros: [\"Regulates circadian rhythm\", \"Helps with jet lag\", \"Well-researched\"],",
+        "startIndex": 3872,
+        "endIndex": 854,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_10",
+        "content": "cons: [\"Can cause grogginess if timed wrong\", \"May affect natural production\"],\nlink: \"https://example.com/melatonin\"\n},\n{\nname: \"L-Theanine\",\nprice: \"$12-20\",\nrating: 4,\nfeatures: {\n\"Dosage\": \"100-200mg\",\n\"Timing\": \"1-2 hours before bed\",\n\"Research Quality\": true,\n\"Side Effects\": false\n},\npros: [\"Promotes relaxation\", \"Doesn't cause drowsiness\", \"Stacks well with others\"],\ncons: [\"Effects are subtle\", \"May not work for severe insomnia\"],\nlink: \"https://example.com/theanine\"\n}\n]}\n/>",
+        "startIndex": 4899,
+        "endIndex": 488,
+        "type": "paragraph"
+      },
+      {
+        "id": "chunk_11",
+        "content": "## Measuring Your Progress\n\nTrack these metrics to optimize your protocol:\n\n**Subjective measures:**\n- Morning energy level (1-10 scale)\n- Time to fall asleep\n- Number of wake-ups\n- Morning mood\n\n**Objective measures (if using a tracker):**\n- Sleep efficiency (time asleep / time in bed)\n- Deep sleep percentage\n- REM sleep percentage\n- Heart rate variability (HRV)",
+        "startIndex": 5494,
+        "endIndex": 5861,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_12",
+        "content": "## Advanced Optimization Strategies\n\nOnce you've mastered the basics, consider these advanced techniques:",
+        "startIndex": 5861,
+        "endIndex": 5968,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_13",
+        "content": "### Temperature Manipulation\n- Cooling mattress pad or chiliPAD\n- Hot bath 90 minutes before bed\n- Cool bedroom, warm extremities (socks)",
+        "startIndex": 5968,
+        "endIndex": 6107,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_14",
+        "content": "### Breathing Techniques\n- 4-7-8 breathing for sleep onset\n- Box breathing for anxiety\n- Wim Hof method for overall resilience",
+        "startIndex": 6107,
+        "endIndex": 6235,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_15",
+        "content": "### Chronotype Optimization\n- Determine if you're naturally a morning lark or night owl\n- Adjust your schedule within constraints\n- Use light therapy to shift your chronotype if needed\n\n<Callout type=\"success\" title=\"Expected Results\">\nAfter 3 days of consistent implementation, you should notice:\n- Falling asleep within 10-15 minutes\n- Fewer middle-of-night wake-ups\n- More consistent morning energy\n- Improved mood and cognitive function\n</Callout>",
+        "startIndex": 6235,
+        "endIndex": 6688,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_16",
+        "content": "## The Bottom Line\n\nSleep optimization isn't about perfection—it's about consistency. The strategies in this guide work because they align with your biology, not against it.\n\nStart with Day 1's light exposure protocol. It's the highest-leverage change you can make. Add the environment and routine optimizations over the following days.\n\nMost importantly, stick with it. Your circadian rhythm needs consistent signals to entrain properly. Give it 3 days of disciplined implementation, and you'll understand why sleep is the foundation of everything else you want to optimize.\n\n**Next steps:**\n- Implement the 3-day protocol starting tonight\n- Track your subjective energy and sleep quality\n- Consider objective tracking with an Oura ring or similar device\n- Once sleep is dialed in, focus on optimizing your energy and focus",
+        "startIndex": 6688,
+        "endIndex": 7513,
+        "type": "heading"
+      },
+      {
+        "id": "chunk_17",
+        "content": "Remember: Most men drift through life accepting mediocrity. You won't.",
+        "startIndex": 0,
+        "endIndex": 7585,
+        "type": "paragraph"
+      }
+    ]
+  }
+]

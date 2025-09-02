@@ -1,0 +1,315 @@
+{
+  "name": "ContentMachine - Multi-Platform Publisher",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "content-publish",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook_trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Parse incoming content and prepare for platform adaptation\nconst content = items[0].json;\n\n// Base content structure\nconst baseContent = {\n  message: content.mainContent || '',\n  hashtags: content.hashtags || '',\n  keyPoints: content.keyPoints ? content.keyPoints.split(',').map(p => p.trim()) : [],\n  contentType: content.contentType || 'announcement',\n  mediaUrl: content.mediaUrl || null\n};\n\n// Platform-specific adaptations\nconst platforms = {\n  twitter: {\n    enabled: content.platforms?.twitter !== false,\n    charLimit: 280,\n    content: ''\n  },\n  linkedin: {\n    enabled: content.platforms?.linkedin !== false,\n    charLimit: 3000,\n    content: ''\n  },\n  facebook: {\n    enabled: content.platforms?.facebook !== false,\n    charLimit: 63206,\n    content: ''\n  },\n  instagram: {\n    enabled: content.platforms?.instagram !== false,\n    charLimit: 2200,\n    content: ''\n  },\n  tiktok: {\n    enabled: content.platforms?.tiktok !== false,\n    charLimit: 150,\n    content: ''\n  }\n};\n\n// Content type emojis and titles\nconst contentTitles = {\n  'announcement': '🚀 Exciting News!',\n  'tip': '💡 Pro Tip',\n  'story': '📖 Success Story',\n  'promotion': '🎁 Special Offer',\n  'engagement': '🤔 Question for You'\n};\n\nconst title = contentTitles[baseContent.contentType] || '📢 Update';\nconst keyPointsList = baseContent.keyPoints.map(p => `✅ ${p}`).join('\\n');\n\n// Adapt content for each platform\nif (platforms.twitter.enabled) {\n  platforms.twitter.content = `${baseContent.message}\\n\\n${baseContent.hashtags}`.slice(0, 280);\n}\n\nif (platforms.linkedin.enabled) {\n  platforms.linkedin.content = `${title}\\n\\n${baseContent.message}\\n\\n${keyPointsList}\\n\\n${baseContent.hashtags}\\n\\n💬 What are your thoughts?`;\n}\n\nif (platforms.facebook.enabled) {\n  platforms.facebook.content = `${title}\\n\\n${baseContent.message}\\n\\n${keyPointsList}\\n\\n${baseContent.hashtags}`;\n}\n\nif (platforms.instagram.enabled) {\n  platforms.instagram.content = `${baseContent.message}\\n.\\n.\\n.\\n${baseContent.hashtags}\\n\\n📲 Link in bio for more details!`;\n}\n\nif (platforms.tiktok.enabled) {\n  platforms.tiktok.content = `${baseContent.message.slice(0, 100)}... ${baseContent.hashtags}`;\n}\n\nreturn [\n  {\n    json: {\n      baseContent,\n      platforms,\n      timestamp: new Date().toISOString()\n    }\n  }\n];"
+      },
+      "id": "content_adapter",
+      "name": "Content Adapter",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.platforms.twitter.enabled}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "twitter_check",
+      "name": "Twitter Enabled?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 100]
+    },
+    {
+      "parameters": {
+        "resource": "tweet",
+        "text": "={{$json.platforms.twitter.content}}",
+        "additionalFields": {}
+      },
+      "id": "twitter_post",
+      "name": "Post to Twitter",
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [850, 50],
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "1",
+          "name": "Twitter OAuth2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.platforms.linkedin.enabled}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "linkedin_check",
+      "name": "LinkedIn Enabled?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 250]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "text": "={{$json.platforms.linkedin.content}}",
+        "shareMediaCategory": "NONE",
+        "additionalFields": {}
+      },
+      "id": "linkedin_post",
+      "name": "Post to LinkedIn",
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [850, 200],
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "2",
+          "name": "LinkedIn OAuth2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.platforms.facebook.enabled}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "facebook_check",
+      "name": "Facebook Enabled?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 400]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "message": "={{$json.platforms.facebook.content}}",
+        "additionalFields": {}
+      },
+      "id": "facebook_post",
+      "name": "Post to Facebook",
+      "type": "n8n-nodes-base.facebook",
+      "typeVersion": 1,
+      "position": [850, 350],
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "3",
+          "name": "Facebook Graph API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "status",
+              "value": "success"
+            },
+            {
+              "name": "message",
+              "value": "Content published successfully to all enabled platforms"
+            }
+          ],
+          "number": [
+            {
+              "name": "platformsPublished",
+              "value": "={{$items.length}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "merge_results",
+      "name": "Merge Results",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{JSON.stringify($json)}}",
+        "options": {}
+      },
+      "id": "webhook_response",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Store content in database for analytics\nconst supabaseUrl = $env.SUPABASE_URL;\nconst supabaseKey = $env.SUPABASE_ANON_KEY;\n\nconst publishData = {\n  content: items[0].json.baseContent,\n  platforms_published: items[0].json.platforms,\n  created_at: new Date().toISOString(),\n  status: 'published'\n};\n\n// Log to database (implement Supabase integration)\nconsole.log('Content published:', publishData);\n\nreturn items;"
+      },
+      "id": "log_to_database",
+      "name": "Log to Database",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1050, 450]
+    }
+  ],
+  "connections": {
+    "webhook_trigger": {
+      "main": [
+        [
+          {
+            "node": "content_adapter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "content_adapter": {
+      "main": [
+        [
+          {
+            "node": "twitter_check",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "linkedin_check",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "facebook_check",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "log_to_database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "twitter_check": {
+      "main": [
+        [
+          {
+            "node": "twitter_post",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "linkedin_check": {
+      "main": [
+        [
+          {
+            "node": "linkedin_post",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "facebook_check": {
+      "main": [
+        [
+          {
+            "node": "facebook_post",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "twitter_post": {
+      "main": [
+        [
+          {
+            "node": "merge_results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "linkedin_post": {
+      "main": [
+        [
+          {
+            "node": "merge_results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "facebook_post": {
+      "main": [
+        [
+          {
+            "node": "merge_results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "merge_results": {
+      "main": [
+        [
+          {
+            "node": "webhook_response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "instanceId": "contentmachine-v1"
+  },
+  "tags": [
+    {
+      "name": "ContentMachine",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ]
+}

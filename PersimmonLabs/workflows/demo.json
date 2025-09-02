@@ -1,0 +1,623 @@
+{
+    "name": "Persimmon Labs Self-Serve Demo Pipeline",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "api/demo",
+                "responseMode": "lastNode",
+                "options": {
+                    "binaryData": true,
+                    "cors": {
+                        "enabled": true,
+                        "allowedOrigins": "*"
+                    }
+                }
+            },
+            "id": "1",
+            "name": "Webhook Trigger",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [-1200, 0]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Validate & Rate Limit\nconst allowedPlatforms = ['instagram', 'linkedin', 'x', 'facebook'];\nconst allowedTones = ['professional', 'friendly', 'playful', 'bold'];\nconst now = Date.now();\nconst HOUR = 3600000;\nconst DAY = 86400000;\n\nconst g = getWorkflowStaticData('global');\nif (!g.rate) g.rate = { email: {}, ip: {} };\n\nreturn items.map(item => {\n  const body = item.json.body ?? item.json;\n  const headers = item.json.headers ?? {};\n  const ip = (headers['x-forwarded-for'] || headers['cf-connecting-ip'] || 'unknown').split(',')[0].trim();\n\n  // Validation\n  const errors = [];\n  if (!body.email || !/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(body.email)) {\n    errors.push('Valid email required');\n  }\n  if (!body.brand_name || body.brand_name.length < 2) {\n    errors.push('Brand name required (min 2 chars)');\n  }\n  if (!body.industry || body.industry.length < 2) {\n    errors.push('Industry required');\n  }\n  if (!body.tone || !allowedTones.includes(body.tone.toLowerCase())) {\n    errors.push('Tone must be: professional, friendly, playful, or bold');\n  }\n  if (!Array.isArray(body.platforms) || body.platforms.length === 0) {\n    errors.push('Select at least one platform');\n  } else {\n    const invalid = body.platforms.filter(p => !allowedPlatforms.includes(p.toLowerCase()));\n    if (invalid.length) errors.push(`Invalid platforms: ${invalid.join(', ')}`);\n  }\n  \n  // File size check (10MB limit)\n  if (body.asset_urls?.some(url => url.size > 10485760)) {\n    errors.push('Images must be under 10MB');\n  }\n\n  // Rate limiting\n  for (const k of Object.keys(g.rate.email)) {\n    g.rate.email[k] = (g.rate.email[k] || []).filter(t => (now - t) < HOUR);\n  }\n  for (const k of Object.keys(g.rate.ip)) {\n    g.rate.ip[k] = (g.rate.ip[k] || []).filter(t => (now - t) < DAY);\n  }\n\n  const emailKey = body.email?.toLowerCase();\n  const emailHits = (g.rate.email[emailKey] || []).length;\n  const ipHits = (g.rate.ip[ip] || []).length;\n\n  if (emailHits >= 1) errors.push('Please wait 1 hour between demos');\n  if (ip !== 'unknown' && ipHits >= 3) errors.push('Daily demo limit reached (3 per day)');\n\n  if (errors.length) {\n    item.json.validation = { ok: false, errors };\n  } else {\n    // Track rate limit\n    g.rate.email[emailKey] = [...(g.rate.email[emailKey] || []), now];\n    g.rate.ip[ip] = [...(g.rate.ip[ip] || []), now];\n    \n    // Normalize inputs\n    item.json.input = {\n      brand_name: body.brand_name.trim(),\n      industry: body.industry.trim(),\n      tone: body.tone.toLowerCase(),\n      platforms: body.platforms.map(p => p.toLowerCase()),\n      email: emailKey,\n      asset_urls: body.asset_urls?.filter(Boolean).slice(0, 2) || [],\n      consent: !!body.consent\n    };\n    item.json.validation = { ok: true };\n    item.json.client_ip = ip;\n    item.json.request_id = `demo_${now}_${Math.random().toString(36).slice(2, 10)}`;\n    item.json.started_at = new Date().toISOString();\n    \n    // Initialize timeout tracking\n    if (!g.persimmon) g.persimmon = {};\n    g.persimmon[item.json.request_id] = {\n      startedAt: now,\n      responded: false,\n      done: false\n    };\n  }\n  return item;\n});"
+            },
+            "id": "2",
+            "name": "Validate & Rate Limit",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 2,
+            "position": [-1000, 0]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "boolean": [
+                        {
+                            "value1": "={{$json.validation.ok}}",
+                            "operation": "isTrue"
+                        }
+                    ]
+                }
+            },
+            "id": "3",
+            "name": "Valid Input?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2,
+            "position": [-820, 0]
+        },
+        {
+            "parameters": {
+                "responseBody": "={{ { success: false, errors: $json.validation.errors } }}",
+                "responseCode": 400,
+                "responseHeaders": {
+                    "values": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                }
+            },
+            "id": "4",
+            "name": "Return Validation Error",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [-620, -120]
+        },
+        {
+            "parameters": {
+                "seconds": 20
+            },
+            "id": "5",
+            "name": "20s Timeout Branch",
+            "type": "n8n-nodes-base.wait",
+            "typeVersion": 1,
+            "position": [-620, 260]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "number": [
+                        {
+                            "value1": "={{$json.input.asset_urls.length}}",
+                            "operation": "larger",
+                            "value2": 0
+                        }
+                    ]
+                }
+            },
+            "id": "6",
+            "name": "Has Assets?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2,
+            "position": [-420, 120]
+        },
+        {
+            "parameters": {
+                "url": "={{$json.input.asset_urls[0]}}",
+                "responseFormat": "file",
+                "options": {
+                    "timeout": 10000,
+                    "maxRedirects": 3
+                }
+            },
+            "id": "7",
+            "name": "Download Asset 1",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [-220, 60],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "url": "={{$env.VISION_API_URL || 'https://api.openai.com/v1/chat/completions'}}",
+                "options": {
+                    "timeout": 8000
+                },
+                "jsonParameters": true,
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "headerParametersJson": "{\"Authorization\":\"Bearer {{$env.OPENAI_API_KEY}}\",\"Content-Type\":\"application/json\"}",
+                "bodyParametersJson": "={{ {\n  model: 'gpt-4-vision-preview',\n  messages: [{\n    role: 'system',\n    content: 'Analyze this image for social media content. Extract: main subjects, brand elements, dominant colors, mood, suggested crops for IG square/LinkedIn header.'\n  }, {\n    role: 'user',\n    content: [{\n      type: 'image_url',\n      image_url: { url: $json.input.asset_urls[0] }\n    }]\n  }],\n  max_tokens: 300\n} }}"
+            },
+            "id": "8",
+            "name": "Vision Analysis",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [-20, 60],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "functionCode": "// Pass through without assets\nreturn items.map(item => {\n  item.json.vision_analysis = {\n    has_assets: false,\n    tags: [],\n    colors: [],\n    mood: 'neutral'\n  };\n  return item;\n});"
+            },
+            "id": "9",
+            "name": "No Assets Path",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 2,
+            "position": [-220, 180]
+        },
+        {
+            "parameters": {
+                "mode": "passThrough"
+            },
+            "id": "10",
+            "name": "Merge Asset Paths",
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 2,
+            "position": [180, 120]
+        },
+        {
+            "parameters": {
+                "url": "={{$env.LLM_API_URL || 'https://api.openai.com/v1/chat/completions'}}",
+                "options": {
+                    "timeout": 10000
+                },
+                "jsonParameters": true,
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "headerParametersJson": "{\"Authorization\":\"Bearer {{$env.OPENAI_API_KEY}}\",\"Content-Type\":\"application/json\"}",
+                "bodyParametersJson": "={{ {\n  model: $env.OPENAI_MODEL || 'gpt-4-turbo-preview',\n  messages: [{\n    role: 'system',\n    content: 'You are Persimmon\\'s Brand Voice Agent. Create a concise brand brief based on inputs.'\n  }, {\n    role: 'user',\n    content: `Create brand brief for:\\nBrand: ${$json.input.brand_name}\\nIndustry: ${$json.input.industry}\\nTone: ${$json.input.tone}\\n${$json.vision_analysis ? 'Visual elements: ' + JSON.stringify($json.vision_analysis) : ''}\\n\\nReturn JSON: {voice_traits:[], do_list:[], dont_list:[], brand_words:[], target_audience:[], cta_styles:[]}`\n  }],\n  temperature: 0.6,\n  response_format: { type: 'json_object' }\n} }}"
+            },
+            "id": "11",
+            "name": "Generate Brand Brief",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [380, 120]
+        },
+        {
+            "parameters": {
+                "url": "={{$env.LLM_API_URL || 'https://api.openai.com/v1/chat/completions'}}",
+                "options": {
+                    "timeout": 12000
+                },
+                "jsonParameters": true,
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "headerParametersJson": "{\"Authorization\":\"Bearer {{$env.OPENAI_API_KEY}}\",\"Content-Type\":\"application/json\"}",
+                "bodyParametersJson": "={{ {\n  model: $env.OPENAI_MODEL || 'gpt-4-turbo-preview',\n  messages: [{\n    role: 'system',\n    content: 'You are Instagram content specialist. Create 3 engaging post variants with strong hooks and strategic hashtags.'\n  }, {\n    role: 'user',\n    content: `Brand Brief: ${JSON.stringify($json.brand_brief)}\\n\\nCreate 3 Instagram posts:\\n- Hook (≤80 chars)\\n- Body (≤2000 chars with line breaks)\\n- 8-12 relevant hashtags\\n- Clear CTA\\n\\nReturn JSON array: [{variant:1, hook:\"\", body:\"\", hashtags:[], cta:\"\"}]`\n  }],\n  temperature: 0.7,\n  response_format: { type: 'json_object' }\n} }}"
+            },
+            "id": "12",
+            "name": "Instagram Variants",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [600, -60],
+            "executeOnce": false
+        },
+        {
+            "parameters": {
+                "url": "={{$env.LLM_API_URL || 'https://api.openai.com/v1/chat/completions'}}",
+                "options": {
+                    "timeout": 12000
+                },
+                "jsonParameters": true,
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "headerParametersJson": "{\"Authorization\":\"Bearer {{$env.OPENAI_API_KEY}}\",\"Content-Type\":\"application/json\"}",
+                "bodyParametersJson": "={{ {\n  model: $env.OPENAI_MODEL || 'gpt-4-turbo-preview',\n  messages: [{\n    role: 'system',\n    content: 'You are LinkedIn B2B content expert. Create professional posts that drive engagement and establish thought leadership.'\n  }, {\n    role: 'user',\n    content: `Brand Brief: ${JSON.stringify($json.brand_brief)}\\n\\nCreate 3 LinkedIn posts:\\n- Professional tone\\n- 3-5 short paragraphs\\n- Max 2 emojis\\n- 1-3 strategic hashtags\\n- B2B focused CTA\\n\\nReturn JSON array: [{variant:1, headline:\"\", body:\"\", hashtags:[], cta:\"\"}]`\n  }],\n  temperature: 0.6,\n  response_format: { type: 'json_object' }\n} }}"
+            },
+            "id": "13",
+            "name": "LinkedIn Variants",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [600, 40],
+            "executeOnce": false
+        },
+        {
+            "parameters": {
+                "url": "={{$env.LLM_API_URL || 'https://api.openai.com/v1/chat/completions'}}",
+                "options": {
+                    "timeout": 12000
+                },
+                "jsonParameters": true,
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "headerParametersJson": "{\"Authorization\":\"Bearer {{$env.OPENAI_API_KEY}}\",\"Content-Type\":\"application/json\"}",
+                "bodyParametersJson": "={{ {\n  model: $env.OPENAI_MODEL || 'gpt-4-turbo-preview',\n  messages: [{\n    role: 'system',\n    content: 'You are X/Twitter specialist. Create punchy, engaging tweets and threads.'\n  }, {\n    role: 'user',\n    content: `Brand Brief: ${JSON.stringify($json.brand_brief)}\\n\\nCreate 3 X variants:\\n1. Single punchy tweet (≤260 chars)\\n2. Expanded tweet (≤280 chars, 1 emoji max)\\n3. Mini-thread (2-3 tweets)\\n\\nReturn JSON array: [{variant:1, type:\"single\", tweets:[\"...\"], hashtags:[]}]`\n  }],\n  temperature: 0.7,\n  response_format: { type: 'json_object' }\n} }}"
+            },
+            "id": "14",
+            "name": "X/Twitter Variants",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [600, 140],
+            "executeOnce": false
+        },
+        {
+            "parameters": {
+                "url": "={{$env.LLM_API_URL || 'https://api.openai.com/v1/chat/completions'}}",
+                "options": {
+                    "timeout": 12000
+                },
+                "jsonParameters": true,
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "headerParametersJson": "{\"Authorization\":\"Bearer {{$env.OPENAI_API_KEY}}\",\"Content-Type\":\"application/json\"}",
+                "bodyParametersJson": "={{ {\n  model: $env.OPENAI_MODEL || 'gpt-4-turbo-preview',\n  messages: [{\n    role: 'system',\n    content: 'You are Facebook marketing specialist. Create engaging, shareable posts with community focus.'\n  }, {\n    role: 'user',\n    content: `Brand Brief: ${JSON.stringify($json.brand_brief)}\\n\\nCreate 3 Facebook posts:\\n- Friendly, conversational tone\\n- Story-driven content\\n- 5-10 hashtags\\n- Community-focused CTA\\n\\nReturn JSON array: [{variant:1, headline:\"\", body:\"\", hashtags:[], cta:\"\"}]`\n  }],\n  temperature: 0.65,\n  response_format: { type: 'json_object' }\n} }}"
+            },
+            "id": "15",
+            "name": "Facebook Variants",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [600, 240],
+            "executeOnce": false
+        },
+        {
+            "parameters": {
+                "mode": "multiplex",
+                "combineOperation": "mergeByIndex"
+            },
+            "id": "16",
+            "name": "Merge Platform Variants",
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 2,
+            "position": [820, 90]
+        },
+        {
+            "parameters": {
+                "url": "={{$env.MODERATION_API_URL || 'https://api.openai.com/v1/moderations'}}",
+                "options": {
+                    "timeout": 5000
+                },
+                "jsonParameters": true,
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "headerParametersJson": "{\"Authorization\":\"Bearer {{$env.OPENAI_API_KEY}}\",\"Content-Type\":\"application/json\"}",
+                "bodyParametersJson": "={{ {\n  input: $json.all_variants.map(v => v.body || v.tweets?.join(' ') || '').join('\\n')\n} }}"
+            },
+            "id": "17",
+            "name": "Compliance Check",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [1020, 90],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "functionCode": "// Build preview HTML for each platform\nconst previews = [];\nconst variants = item.json.all_variants || [];\n\nconst platforms = {\n  instagram: {\n    template: (v) => `\n      <div class=\"preview-card instagram\">\n        <div class=\"mock-phone\">\n          <div class=\"header\">@${item.json.input.brand_name}</div>\n          <div class=\"image-placeholder\">📸</div>\n          <div class=\"caption\">\n            <strong>${v.hook}</strong><br>\n            ${v.body.substring(0, 125)}...\n            <span class=\"more\">more</span>\n          </div>\n          <div class=\"hashtags\">${v.hashtags.slice(0, 5).map(h => `#${h}`).join(' ')}</div>\n        </div>\n      </div>`\n  },\n  linkedin: {\n    template: (v) => `\n      <div class=\"preview-card linkedin\">\n        <div class=\"post-container\">\n          <div class=\"author\">${item.json.input.brand_name} • 1st</div>\n          <div class=\"headline\">${v.headline}</div>\n          <div class=\"body\">${v.body.substring(0, 200)}...</div>\n          <div class=\"hashtags\">${v.hashtags.map(h => `#${h}`).join(' ')}</div>\n        </div>\n      </div>`\n  },\n  x: {\n    template: (v) => `\n      <div class=\"preview-card x-twitter\">\n        <div class=\"tweet\">\n          <div class=\"author\">@${item.json.input.brand_name.toLowerCase().replace(/\\s/g, '')}</div>\n          <div class=\"content\">${v.tweets[0]}</div>\n          ${v.type === 'thread' ? '<div class=\"thread-indicator\">1/3</div>' : ''}\n        </div>\n      </div>`\n  },\n  facebook: {\n    template: (v) => `\n      <div class=\"preview-card facebook\">\n        <div class=\"post\">\n          <div class=\"author\">${item.json.input.brand_name}</div>\n          <div class=\"content\">${v.body.substring(0, 250)}...</div>\n          <div class=\"cta-button\">${v.cta}</div>\n        </div>\n      </div>`\n  }\n};\n\n// Generate HTML for requested platforms\nitem.json.input.platforms.forEach(platform => {\n  const platformVariants = variants.filter(v => v.platform === platform);\n  platformVariants.forEach(variant => {\n    if (platforms[platform]) {\n      previews.push({\n        platform,\n        variant: variant.variant,\n        html: platforms[platform].template(variant),\n        data: variant\n      });\n    }\n  });\n});\n\nitem.json.previews = previews;\nreturn items;"
+            },
+            "id": "18",
+            "name": "Build Preview HTML",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 2,
+            "position": [1220, 90]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Generate unique public token\nconst token = `demo_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;\n\n// Prepare database record\nitem.json.db_record = {\n  id: item.json.request_id,\n  created_at: new Date().toISOString(),\n  email: item.json.input.email,\n  brand_name: item.json.input.brand_name,\n  industry: item.json.input.industry,\n  tone: item.json.input.tone,\n  platforms: item.json.input.platforms,\n  asset_urls: item.json.input.asset_urls,\n  status: 'completed',\n  public_token: token,\n  generation_time_ms: Date.now() - item.json.started_at,\n  previews: item.json.previews\n};\n\nitem.json.public_url = `${$env.BASE_URL}/demo/${token}`;\nreturn items;"
+            },
+            "id": "19",
+            "name": "Prepare Database Record",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 2,
+            "position": [1420, 90]
+        },
+        {
+            "parameters": {
+                "url": "={{$env.SUPABASE_URL}}/rest/v1/demo_submissions",
+                "options": {
+                    "timeout": 5000
+                },
+                "jsonParameters": true,
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "headerParametersJson": "{\"apikey\":\"{{$env.SUPABASE_ANON_KEY}}\",\"Authorization\":\"Bearer {{$env.SUPABASE_SERVICE_KEY}}\",\"Content-Type\":\"application/json\",\"Prefer\":\"return=representation\"}",
+                "bodyParametersJson": "={{$json.db_record}}"
+            },
+            "id": "20",
+            "name": "Save to Database",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [1620, 90]
+        },
+        {
+            "parameters": {
+                "url": "https://api.resend.com/emails",
+                "options": {
+                    "timeout": 10000
+                },
+                "jsonParameters": true,
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "headerParametersJson": "{\"Authorization\":\"Bearer {{$env.RESEND_API_KEY}}\",\"Content-Type\":\"application/json\"}",
+                "bodyParametersJson": "={{ {\n  from: 'Persimmon Labs <demo@persimmonlabs.com>',\n  to: [$json.input.email],\n  subject: `Your ${$json.input.brand_name} social posts are ready! 🎯`,\n  html: `\n    <div style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;\">\n      <h1 style=\"color: #F5793B;\">Your Persimmon Demo is Ready!</h1>\n      <p>Hi there,</p>\n      <p>We've created <strong>${$json.previews.length} custom social media posts</strong> for ${$json.input.brand_name}. Each one is tailored to your brand voice and optimized for engagement.</p>\n      \n      <div style=\"background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;\">\n        <h3>What's Included:</h3>\n        <ul>\n          ${$json.input.platforms.map(p => `<li>${p.charAt(0).toUpperCase() + p.slice(1)}: 3 unique variants</li>`).join('')}\n        </ul>\n      </div>\n      \n      <div style=\"text-align: center; margin: 30px 0;\">\n        <a href=\"${$json.public_url}\" style=\"background: #F5793B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 600;\">View Your Posts</a>\n      </div>\n      \n      <p><strong>Ready to automate your social media?</strong></p>\n      <p>Persimmon can create and post content like this every day, without you lifting a finger.</p>\n      \n      <div style=\"display: flex; gap: 10px; margin: 20px 0;\">\n        <a href=\"https://cal.com/persimmon/demo\" style=\"background: #1a1a1a; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;\">Book 15-min Setup Call</a>\n        <a href=\"https://persimmonlabs.com/trial\" style=\"border: 2px solid #F5793B; color: #F5793B; padding: 10px 20px; text-decoration: none; border-radius: 4px;\">Start 7-Day Trial</a>\n      </div>\n      \n      <p style=\"color: #666; font-size: 14px; margin-top: 30px;\">\n        This demo was generated by Persimmon's AI agents in ${Math.round($json.db_record.generation_time_ms / 1000)} seconds.<br>\n        Questions? Reply to this email or visit <a href=\"https://persimmonlabs.com\">persimmonlabs.com</a>\n      </p>\n    </div>\n  `\n} }}"
+            },
+            "id": "21",
+            "name": "Send Email",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [1820, 90]
+        },
+        {
+            "parameters": {
+                "url": "={{$env.SLACK_WEBHOOK_URL}}",
+                "options": {
+                    "timeout": 3000
+                },
+                "jsonParameters": true,
+                "bodyParametersJson": "={{ {\n  text: `🎯 New demo generated!\\n• Brand: ${$json.input.brand_name}\\n• Industry: ${$json.input.industry}\\n• Platforms: ${$json.input.platforms.join(', ')}\\n• Time: ${Math.round($json.db_record.generation_time_ms / 1000)}s\\n• View: ${$json.public_url}`\n} }}"
+            },
+            "id": "22",
+            "name": "Slack Notification",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [1820, -30],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "functionCode": "// Check if already responded via timeout\nconst g = getWorkflowStaticData('global');\nconst rid = item.json.request_id;\nconst state = g.persimmon?.[rid] || {};\n\nif (!state.responded) {\n  // Mark as responded\n  if (g.persimmon?.[rid]) {\n    g.persimmon[rid].responded = true;\n    g.persimmon[rid].done = true;\n  }\n  \n  item.json.should_respond = true;\n} else {\n  item.json.should_respond = false;\n}\n\nreturn items;"
+            },
+            "id": "23",
+            "name": "Check Response State",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 2,
+            "position": [2020, 90]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "boolean": [
+                        {
+                            "value1": "={{$json.should_respond}}",
+                            "operation": "isTrue"
+                        }
+                    ]
+                }
+            },
+            "id": "24",
+            "name": "Should Respond?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2,
+            "position": [2220, 90]
+        },
+        {
+            "parameters": {
+                "responseBody": "={{ {\n  success: true,\n  message: 'Demo generated successfully!',\n  public_url: $json.public_url,\n  email_sent: true,\n  generation_time: Math.round($json.db_record.generation_time_ms / 1000)\n} }}",
+                "responseCode": 200,
+                "responseHeaders": {
+                    "values": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                }
+            },
+            "id": "25",
+            "name": "Return Success",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [2420, 30]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Timeout path - check if main flow completed\nconst g = getWorkflowStaticData('global');\nconst rid = item.json.request_id;\nconst state = g.persimmon?.[rid] || {};\n\nif (!state.responded && !state.done) {\n  // Mark as responded\n  if (g.persimmon?.[rid]) {\n    g.persimmon[rid].responded = true;\n  }\n  \n  item.json.send_timeout_response = true;\n} else {\n  item.json.send_timeout_response = false;\n}\n\nreturn items;"
+            },
+            "id": "26",
+            "name": "Check Timeout State",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 2,
+            "position": [-420, 260]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "boolean": [
+                        {
+                            "value1": "={{$json.send_timeout_response}}",
+                            "operation": "isTrue"
+                        }
+                    ]
+                }
+            },
+            "id": "27",
+            "name": "Send Timeout Response?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2,
+            "position": [-220, 260]
+        },
+        {
+            "parameters": {
+                "responseBody": "={{ {\n  success: true,\n  message: 'Your demo is being generated! We\\'ll email it to you in a moment.',\n  status: 'processing',\n  email: $json.input.email\n} }}",
+                "responseCode": 202,
+                "responseHeaders": {
+                    "values": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                }
+            },
+            "id": "28",
+            "name": "Return Processing",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [-20, 260]
+        },
+        {
+            "parameters": {},
+            "id": "29",
+            "name": "Error Handler",
+            "type": "n8n-nodes-base.errorTrigger",
+            "typeVersion": 1,
+            "position": [-1200, 400]
+        },
+        {
+            "parameters": {
+                "url": "https://api.resend.com/emails",
+                "options": {
+                    "timeout": 10000
+                },
+                "jsonParameters": true,
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "headerParametersJson": "{\"Authorization\":\"Bearer {{$env.RESEND_API_KEY}}\",\"Content-Type\":\"application/json\"}",
+                "bodyParametersJson": "={{ {\n  from: 'Persimmon Labs <demo@persimmonlabs.com>',\n  to: [$json.input?.email || 'team@persimmonlabs.com'],\n  subject: 'Your demo is on the way',\n  html: `\n    <p>We're generating your custom social media posts right now!</p>\n    <p>Due to high demand, this may take a few extra moments. We'll email your demo shortly.</p>\n    <p>In the meantime, <a href=\"https://cal.com/persimmon/demo\">book a quick call</a> to see how Persimmon can automate your entire social media strategy.</p>\n  `\n} }}"
+            },
+            "id": "30",
+            "name": "Error Fallback Email",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [-1000, 400],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "url": "={{$env.SLACK_WEBHOOK_URL}}",
+                "options": {
+                    "timeout": 3000
+                },
+                "jsonParameters": true,
+                "bodyParametersJson": "={{ {\n  text: `⚠️ Demo generation error:\\n• Email: ${$json.input?.email}\\n• Error: ${$json.error?.message || 'Unknown error'}\\n• Request: ${$json.request_id}`\n} }}"
+            },
+            "id": "31",
+            "name": "Error Slack Alert",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [-800, 400],
+            "continueOnFail": true
+        }
+    ],
+    "connections": {
+        "Webhook Trigger": {
+            "main": [[{"node": "Validate & Rate Limit", "type": "main", "index": 0}]]
+        },
+        "Validate & Rate Limit": {
+            "main": [
+                [{"node": "Valid Input?", "type": "main", "index": 0}],
+                [{"node": "20s Timeout Branch", "type": "main", "index": 0}]
+            ]
+        },
+        "Valid Input?": {
+            "main": [
+                [{"node": "Return Validation Error", "type": "main", "index": 0}],
+                [{"node": "Has Assets?", "type": "main", "index": 0}]
+            ]
+        },
+        "Has Assets?": {
+            "main": [
+                [{"node": "No Assets Path", "type": "main", "index": 0}],
+                [{"node": "Download Asset 1", "type": "main", "index": 0}]
+            ]
+        },
+        "Download Asset 1": {
+            "main": [[{"node": "Vision Analysis", "type": "main", "index": 0}]]
+        },
+        "Vision Analysis": {
+            "main": [[{"node": "Merge Asset Paths", "type": "main", "index": 0}]]
+        },
+        "No Assets Path": {
+            "main": [[{"node": "Merge Asset Paths", "type": "main", "index": 1}]]
+        },
+        "Merge Asset Paths": {
+            "main": [[{"node": "Generate Brand Brief", "type": "main", "index": 0}]]
+        },
+        "Generate Brand Brief": {
+            "main": [
+                [{"node": "Instagram Variants", "type": "main", "index": 0}],
+                [{"node": "LinkedIn Variants", "type": "main", "index": 0}],
+                [{"node": "X/Twitter Variants", "type": "main", "index": 0}],
+                [{"node": "Facebook Variants", "type": "main", "index": 0}]
+            ]
+        },
+        "Instagram Variants": {
+            "main": [[{"node": "Merge Platform Variants", "type": "main", "index": 0}]]
+        },
+        "LinkedIn Variants": {
+            "main": [[{"node": "Merge Platform Variants", "type": "main", "index": 1}]]
+        },
+        "X/Twitter Variants": {
+            "main": [[{"node": "Merge Platform Variants", "type": "main", "index": 2}]]
+        },
+        "Facebook Variants": {
+            "main": [[{"node": "Merge Platform Variants", "type": "main", "index": 3}]]
+        },
+        "Merge Platform Variants": {
+            "main": [[{"node": "Compliance Check", "type": "main", "index": 0}]]
+        },
+        "Compliance Check": {
+            "main": [[{"node": "Build Preview HTML", "type": "main", "index": 0}]]
+        },
+        "Build Preview HTML": {
+            "main": [[{"node": "Prepare Database Record", "type": "main", "index": 0}]]
+        },
+        "Prepare Database Record": {
+            "main": [[{"node": "Save to Database", "type": "main", "index": 0}]]
+        },
+        "Save to Database": {
+            "main": [
+                [{"node": "Send Email", "type": "main", "index": 0}],
+                [{"node": "Slack Notification", "type": "main", "index": 0}],
+                [{"node": "Check Response State", "type": "main", "index": 0}]
+            ]
+        },
+        "Send Email": {
+            "main": [[{"node": "Check Response State", "type": "main", "index": 0}]]
+        },
+        "Slack Notification": {
+            "main": [[{"node": "Check Response State", "type": "main", "index": 0}]]
+        },
+        "Check Response State": {
+            "main": [[{"node": "Should Respond?", "type": "main", "index": 0}]]
+        },
+        "Should Respond?": {
+            "main": [
+                [],
+                [{"node": "Return Success", "type": "main", "index": 0}]
+            ]
+        },
+        "20s Timeout Branch": {
+            "main": [[{"node": "Check Timeout State", "type": "main", "index": 0}]]
+        },
+        "Check Timeout State": {
+            "main": [[{"node": "Send Timeout Response?", "type": "main", "index": 0}]]
+        },
+        "Send Timeout Response?": {
+            "main": [
+                [],
+                [{"node": "Return Processing", "type": "main", "index": 0}]
+            ]
+        },
+        "Error Handler": {
+            "main": [
+                [{"node": "Error Fallback Email", "type": "main", "index": 0}],
+                [{"node": "Error Slack Alert", "type": "main", "index": 0}]
+            ]
+        }
+    },
+    "active": true,
+    "settings": {
+        "executionOrder": "v1",
+        "saveExecutionProgress": true,
+        "saveDataSuccessExecution": "none",
+        "saveDataErrorExecution": "all",
+        "saveManualExecutions": true,
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": ""
+    },
+    "pinData": {},
+    "staticData": {
+        "global": {
+            "rate": {
+                "email": {},
+                "ip": {}
+            },
+            "persimmon": {}
+        }
+    },
+    "tags": [
+        {
+            "id": "1",
+            "name": "production",
+            "createdAt": "2024-01-01T00:00:00.000Z"
+        },
+        {
+            "id": "2",
+            "name": "demo",
+            "createdAt": "2024-01-01T00:00:00.000Z"
+        }
+    ]
+}

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXECUTIVE COMMAND CENTER</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000;
+            --white: #fff;
+            --red: #ff3b30;
+            --green: #34c759;
+            --yellow: #ffcc00;
+            --blue: #007aff;
+            --gray: #8e8e93;
+            --bg: #000;
+            --card: #0a0a0a;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: var(--bg);
+            color: var(--white);
+            line-height: 1.4;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 20px;
+        }
+
+        .time {
+            font-size: 48px;
+            font-weight: 200;
+            letter-spacing: -2px;
+        }
+
+        .status {
+            text-align: right;
+        }
+
+        .mrr {
+            font-size: 36px;
+            font-weight: 600;
+            color: var(--red);
+        }
+
+        .mrr.positive {
+            color: var(--green);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--blue);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray);
+        }
+
+        .metric {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '→';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        .action-card:hover::before {
+            right: 15px;
+            opacity: 1;
+        }
+
+        .urgent {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 59, 48, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #1a1a1a;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--green);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .tasks {
+            list-style: none;
+        }
+
+        .task {
+            padding: 12px;
+            border-left: 3px solid #1a1a1a;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .task:hover {
+            border-color: var(--blue);
+            padding-left: 18px;
+        }
+
+        .task.done {
+            opacity: 0.4;
+            text-decoration: line-through;
+        }
+
+        .task.critical {
+            border-color: var(--red);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-right: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag.red { background: var(--red); }
+        .tag.green { background: var(--green); }
+        .tag.yellow { background: var(--yellow); color: var(--black); }
+
+        .big-metric {
+            font-size: 72px;
+            font-weight: 200;
+            letter-spacing: -3px;
+            line-height: 1;
+        }
+
+        .focus-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .focus-content {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .focus-task {
+            font-size: 48px;
+            font-weight: 200;
+            margin-bottom: 30px;
+        }
+
+        .focus-timer {
+            font-size: 120px;
+            font-weight: 100;
+            letter-spacing: -5px;
+        }
+
+        .btn {
+            background: var(--blue);
+            color: var(--white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 122, 255, 0.4);
+        }
+
+        .shortcuts {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card);
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 12px;
+            opacity: 0.3;
+            transition: opacity 0.2s ease;
+        }
+
+        .shortcuts:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .time {
+                font-size: 32px;
+            }
+            .mrr {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="time" id="clock">3:15 AM</div>
+            <div class="status">
+                <div class="mrr" id="mrr">$0 MRR</div>
+                <div style="color: var(--gray); font-size: 14px;">Day 234 without revenue</div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- URGENT ACTION -->
+            <div class="card action-card urgent" onclick="executeAction('sleep')">
+                <div class="card-title">IMMEDIATE ACTION</div>
+                <div class="metric">GO TO SLEEP</div>
+                <div>Internship in 4h 45m</div>
+            </div>
+
+            <!-- NEXT MONEY MOVE -->
+            <div class="card">
+                <div class="card-title">NEXT MONEY MOVE</div>
+                <div class="metric">Deploy FeelSharper</div>
+                <div class="tag green">READY</div>
+                <div class="tag">30 MIN</div>
+                <div class="tag">$2K/MO</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 85%"></div>
+                </div>
+            </div>
+
+            <!-- HEALTH STATUS -->
+            <div class="card">
+                <div class="card-title">HEALTH</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Sleep Debt</span>
+                    <span style="color: var(--red)">-28 hrs</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Shoulder</span>
+                    <span style="color: var(--yellow)">25%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Energy</span>
+                    <span style="color: var(--red)">Manic</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TODAY'S BATTLE PLAN -->
+        <div class="card" style="margin-bottom: 20px;">
+            <div class="card-header">
+                <div class="card-title">TODAY'S BATTLE PLAN</div>
+                <div class="tag red">0/5 DONE</div>
+            </div>
+            <ul class="tasks" id="tasks">
+                <li class="task critical" onclick="toggleTask(this)">
+                    <strong>NOW:</strong> Sleep (4+ hours minimum)
+                </li>
+                <li class="task" onclick="toggleTask(this)">
+                    <strong>EVENING:</strong> Deploy FeelSharper to Vercel
+                </li>
+                <li class="task" onclick="toggleTask(this)">
+                    <strong>NIGHT:</strong> Get first paying customer
+                </li>
+                <li class="task" onclick="toggleTask(this)">
+                    <strong>BEFORE BED:</strong> Set up AI course landing page
+                </li>
+                <li class="task" onclick="toggleTask(this)">
+                    <strong>TRACK:</strong> Update revenue dashboard
+                </li>
+            </ul>
+        </div>
+
+        <div class="grid">
+            <!-- OPPORTUNITY PIPELINE -->
+            <div class="card">
+                <div class="card-title">TOP OPPORTUNITIES</div>
+                <div style="margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>AI Math Course</span>
+                        <span style="color: var(--green)">$50K</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Libertarian Tech</span>
+                        <span style="color: var(--green)">$30K</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Music Academy</span>
+                        <span style="color: var(--green)">$40K</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Video Agency</span>
+                        <span style="color: var(--green)">$30K</span>
+                    </div>
+                </div>
+                <button class="btn" onclick="viewAllOpportunities()">View All 36 Ideas</button>
+            </div>
+
+            <!-- QUICK STATS -->
+            <div class="card">
+                <div class="card-title">EXECUTION METRICS</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <div class="metric">0%</div>
+                        <div style="color: var(--gray); font-size: 12px;">Execution Rate</div>
+                    </div>
+                    <div>
+                        <div class="metric">36</div>
+                        <div style="color: var(--gray); font-size: 12px;">Ideas Generated</div>
+                    </div>
+                    <div>
+                        <div class="metric">3</div>
+                        <div style="color: var(--gray); font-size: 12px;">Products Ready</div>
+                    </div>
+                    <div>
+                        <div class="metric">19d</div>
+                        <div style="color: var(--gray); font-size: 12px;">Until Tennis</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOCUS MODE -->
+            <div class="card action-card" onclick="enterFocusMode()">
+                <div class="card-title">FOCUS MODE</div>
+                <div class="metric">ENTER FLOW</div>
+                <div>25-minute deep work sprint</div>
+            </div>
+        </div>
+
+        <!-- COMMAND LINE -->
+        <div class="card" style="background: #000; border: 1px solid #333;">
+            <div class="card-title" style="color: var(--green);">QUICK ACTIONS</div>
+            <div style="font-family: 'Courier New', monospace; color: var(--green);">
+                <div>$ deploy-feelsharper <span style="color: var(--gray);"># 30 min to $2K MRR</span></div>
+                <div>$ launch-ai-course <span style="color: var(--gray);"># Start $50K product</span></div>
+                <div>$ get-first-customer <span style="color: var(--gray);"># Break the $0 curse</span></div>
+                <div>$ sleep-now <span style="color: var(--red);"># CRITICAL: Do this first</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOCUS MODE OVERLAY -->
+    <div class="focus-mode" id="focusMode">
+        <div class="focus-content">
+            <div class="focus-task" id="focusTask">Deploy FeelSharper</div>
+            <div class="focus-timer" id="focusTimer">25:00</div>
+            <button class="btn" onclick="exitFocusMode()" style="margin-top: 30px;">Exit Focus</button>
+        </div>
+    </div>
+
+    <!-- KEYBOARD SHORTCUTS -->
+    <div class="shortcuts">
+        <div><strong>Shortcuts:</strong></div>
+        <div>Space: Next Task</div>
+        <div>F: Focus Mode</div>
+        <div>R: Refresh Data</div>
+        <div>1-5: Quick Actions</div>
+    </div>
+
+    <script>
+        // Real-time clock
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const displayHours = hours % 12 || 12;
+            document.getElementById('clock').textContent = `${displayHours}:${minutes} ${ampm}`;
+
+            // Update urgency based on time
+            if (hours >= 2 && hours < 6) {
+                document.querySelector('.urgent').style.borderColor = 'var(--red)';
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Task management
+        function toggleTask(task) {
+            task.classList.toggle('done');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const tasks = document.querySelectorAll('.task');
+            const done = document.querySelectorAll('.task.done').length;
+            const total = tasks.length;
+            const percentage = (done / total) * 100;
+            
+            // Update progress displays
+            document.querySelector('.tag.red').textContent = `${done}/${total} DONE`;
+            
+            // Check if first task (sleep) is done to enable others
+            if (tasks[0].classList.contains('done')) {
+                tasks.forEach((task, index) => {
+                    if (index > 0) task.style.opacity = '1';
+                });
+            }
+        }
+
+        // Focus mode
+        let focusInterval;
+        let focusTime = 25 * 60; // 25 minutes
+
+        function enterFocusMode() {
+            document.getElementById('focusMode').style.display = 'flex';
+            startFocusTimer();
+        }
+
+        function exitFocusMode() {
+            document.getElementById('focusMode').style.display = 'none';
+            clearInterval(focusInterval);
+            focusTime = 25 * 60;
+        }
+
+        function startFocusTimer() {
+            focusInterval = setInterval(() => {
+                focusTime--;
+                const minutes = Math.floor(focusTime / 60);
+                const seconds = focusTime % 60;
+                document.getElementById('focusTimer').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (focusTime <= 0) {
+                    clearInterval(focusInterval);
+                    alert('Focus session complete! Take a 5-minute break.');
+                    exitFocusMode();
+                }
+            }, 1000);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case ' ':
+                    e.preventDefault();
+                    document.querySelector('.task:not(.done)')?.click();
+                    break;
+                case 'f':
+                case 'F':
+                    enterFocusMode();
+                    break;
+                case 'r':
+                case 'R':
+                    location.reload();
+                    break;
+                case '1':
+                    executeAction('sleep');
+                    break;
+                case '2':
+                    executeAction('deploy');
+                    break;
+            }
+        });
+
+        // Action execution
+        function executeAction(action) {
+            switch(action) {
+                case 'sleep':
+                    alert('Setting sleep timer for 4 hours. Good night!');
+                    // Could integrate with system notifications
+                    break;
+                case 'deploy':
+                    alert('Opening deployment guide for FeelSharper...');
+                    break;
+            }
+        }
+
+        // Simulate MRR updates
+        function updateMRR() {
+            const mrr = localStorage.getItem('mrr') || 0;
+            const mrrElement = document.getElementById('mrr');
+            mrrElement.textContent = `$${mrr} MRR`;
+            if (mrr > 0) {
+                mrrElement.classList.add('positive');
+            }
+        }
+        updateMRR();
+
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            updateClock();
+            updateMRR();
+        }, 30000);
+
+        // View all opportunities
+        function viewAllOpportunities() {
+            window.location.href = './BUSINESS_IDEAS.md';
+        }
+    </script>
+</body>
+</html>
