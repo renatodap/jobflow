@@ -1,0 +1,82 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --iron-black: #0A0A0B;
+  --iron-orange: #FF4500;
+  --iron-white: #FFFFFF;
+  --iron-gray: #4A4A4A;
+}
+
+@theme {
+  --color-iron-black: #0A0A0B;
+  --color-iron-orange: #FF4500;
+  --color-iron-white: #FFFFFF;
+  --color-iron-gray: #4A4A4A;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-iron-black text-iron-white;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove all rounded corners - brutal design */
+* {
+  border-radius: 0 !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-heading uppercase tracking-wider;
+}
+
+/* Focus states */
+*:focus {
+  outline: 2px solid var(--iron-orange);
+  outline-offset: 2px;
+}
+
+/* Buttons */
+button {
+  @apply transition-transform active:scale-95;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-iron-black;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-iron-gray;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-iron-orange;
+}
+
+/* Selection */
+::selection {
+  @apply bg-iron-orange text-iron-white;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
